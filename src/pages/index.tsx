@@ -7,11 +7,13 @@ import HomepageFeatures from '@site/src/components/HomepageFeatures';
 import Heading from '@theme/Heading';
 
 import styles from './index.module.css';
+import Iridescence from '../components/Backgrounds/Iridescence/Iridescence';
+import DarkVeil from '../components/Backgrounds/DarkVeil/DarkVeil';
 
 function HomepageHeader() {
   const {siteConfig} = useDocusaurusContext();
   return (
-    <header className={clsx('hero hero--primary', styles.heroBanner)}>
+    <header>
       <div className="container">
         <Heading as="h1" className="hero__title">
           {siteConfig.title}
@@ -35,8 +37,18 @@ export default function Home(): ReactNode {
     <Layout
       title={`Hello from ${siteConfig.title}`}
       description="Description will go into a meta tag in <head />">
+              <Iridescence
+    color={[0.2, 0.8, 0.6]}
+    mouseReact={false}
+    amplitude={0.1}
+    speed={0.4}
+  />
+  {/* <DarkVeil hueShift={55} speed={0.4} warpAmount={3}/> */}
       <HomepageHeader />
+
       <main>
+
+
         <HomepageFeatures />
       </main>
     </Layout>
