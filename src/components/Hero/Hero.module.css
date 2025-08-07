@@ -1,0 +1,88 @@
+:global(:root) {
+  --hero-bg: url('../../assets/background-dark.png');
+}
+
+:global(:root[data-theme='light']) {
+  --hero-bg: url('../../assets/background-light.png');
+  --hero-text: #0b2f78;
+}
+
+:global([data-theme='light']) .hero h1,
+:global([data-theme='light']) .hero h2 {
+  color: var(--hero-text);
+  text-shadow: 0 0 15px rgba(130, 183, 239, 0.7), 0 0 30px #dfcf1f;
+}
+
+:global([data-theme='light']) .textLoop {
+  color: #a83106;
+  text-shadow: none;
+}
+
+.parallax {
+  min-height: 100vh;
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  color: var(--hero-text, #dee3f0);
+}
+
+.hero {
+  text-align: center;
+  backdrop-filter: blur(2px);
+  padding: 2rem;
+  animation: fadeIn 1.5s ease-out both;
+}
+
+.hero h1 {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.5rem;
+  color: #5ec2e7;
+  text-shadow: 0 0 15px rgba(94, 194, 231, 0.7), 0 0 30px rgba(94, 194, 231, 0.4);
+}
+
+.hero h2 {
+  font-family: 'Audiowide', sans-serif;
+  font-size: clamp(1rem, 2vw, 1.5rem);
+  font-weight: 400;
+  line-height: 1.4;
+  margin: 0 auto 2.5rem;
+  max-width: 800px;
+  color: #aebdd8;
+}
+
+.textLoop {
+  font-family: 'Audiowide', sans-serif;
+  font-size: clamp(1.2rem, 3vw, 2rem);
+  font-weight: 700;
+  color: #ffdf7e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.textLoopWord {
+  display: inline-block;
+  min-width: 6ch;
+  text-align: left;
+  transition: min-width 0.2s;
+}
+
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

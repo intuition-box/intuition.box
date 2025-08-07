@@ -5,8 +5,9 @@ import type * as Preset from '@docusaurus/preset-classic';
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
 const config: Config = {
-  title: 'My Site',
-  tagline: 'Dinosaurs are cool',
+  title: 'FABLAB.b0x',
+  // tagline: 'AN ONLINE COMMUNITY WHERE ANYONE CAN CREATE SHARE AND BUILD OPEN PROJECTS FOR THE COMMON GOOD.',
+  tagline: 'AN ONLINE COMMUNITY FOR BUILDING AND SHARING OPEN PROJECTS',
   favicon: 'img/favicon.ico',
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
@@ -71,9 +72,14 @@ const config: Config = {
 
   themeConfig: {
     // Replace with your project's social card
+    colorMode: {
+      defaultMode: 'dark',
+      disableSwitch: false,
+      respectPrefersColorScheme: false,
+    },
     image: 'img/docusaurus-social-card.jpg',
     navbar: {
-      title: 'My Site',
+      title: 'FABLAB.b0x',
       logo: {
         alt: 'My Site Logo',
         src: 'img/logo.svg',

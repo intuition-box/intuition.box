@@ -5,6 +5,8 @@ import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
 import HomepageFeatures from '@site/src/components/HomepageFeatures';
 import Heading from '@theme/Heading';
+import Hero from '../components/Hero/Hero';
+import SciFiPanel from '../components/Panels/SciFiPanel';
 
 import styles from './index.module.css';
 import Iridescence from '../components/Backgrounds/Iridescence/Iridescence';
@@ -19,13 +21,13 @@ function HomepageHeader() {
           {siteConfig.title}
         </Heading>
         <p className="hero__subtitle">{siteConfig.tagline}</p>
-        <div className={styles.buttons}>
+        {/* <div className={styles.buttons}>
           <Link
             className="button button--secondary button--lg"
             to="/docs/intro">
             Docusaurus Tutorial - 5min ⏱️
           </Link>
-        </div>
+        </div> */}
       </div>
     </header>
   );
@@ -37,19 +39,23 @@ export default function Home(): ReactNode {
     <Layout
       title={`Hello from ${siteConfig.title}`}
       description="Description will go into a meta tag in <head />">
-              <Iridescence
-    color={[0.2, 0.8, 0.6]}
-    mouseReact={false}
-    amplitude={0.1}
-    speed={0.4}
-  />
+              {/* <Iridescence
+                color={[0.2, 0.8, 0.6]}
+                mouseReact={false}
+                amplitude={0.1}
+                speed={0.4}
+              /> */}
   {/* <DarkVeil hueShift={55} speed={0.4} warpAmount={3}/> */}
-      <HomepageHeader />
-
+      {/* <HomepageHeader /> */}  
       <main>
-
-
-        <HomepageFeatures />
+        <Hero />
+        <SciFiPanel>
+          <h2>THE FABLAB NETWORK</h2>
+          <p>
+            Compteur + liste des contributeurs
+          </p>
+        </SciFiPanel>
+        {/* <HomepageFeatures /> */}
       </main>
     </Layout>
   );
