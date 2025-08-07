@@ -104,7 +104,7 @@ p, li, .audiowide {
   box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.13);
   backdrop-filter: blur(13px) saturate(1.1);
   -webkit-backdrop-filter: blur(13px) saturate(1.1);
-  border-bottom: 1.5px solid rgba(255,255,255,0.2);
+  border-top: 1.5px solid rgba(255,255,255,0.2);
   transition: background 0.3s, box-shadow 0.3s, border 0.3s;
   color: rgb(0, 0, 0);
 }

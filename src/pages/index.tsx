@@ -7,6 +7,7 @@ import HomepageFeatures from '@site/src/components/HomepageFeatures';
 import Heading from '@theme/Heading';
 import Hero from '../components/Hero/Hero';
 import SciFiPanel from '../components/Panels/SciFiPanel';
+import TargetCursor from '../components/TextAnimations/TargetCursor/TargetCursor';
 
 import styles from './index.module.css';
 import Iridescence from '../components/Backgrounds/Iridescence/Iridescence';
@@ -48,8 +49,12 @@ export default function Home(): ReactNode {
   {/* <DarkVeil hueShift={55} speed={0.4} warpAmount={3}/> */}
       {/* <HomepageHeader /> */}  
       <main>
+        <TargetCursor 
+            spinDuration={2}
+            hideDefaultCursor={true}
+          />
         <Hero />
-        <SciFiPanel>
+        <SciFiPanel variant='large' >
           <h2>THE FABLAB NETWORK</h2>
           <p>
             Compteur + liste des contributeurs
