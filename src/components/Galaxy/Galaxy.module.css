@@ -4,7 +4,6 @@
   height: 80vh;
   max-height: 850px;
   min-height: 600px;
-  overflow: visible;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -14,16 +13,13 @@
 
 .boxesContainer {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   pointer-events: none;
 }
 
 .boxSubtitle {
   font-size: 1rem;
-  margin: 0 0 0.3rem 0;
+  margin-bottom: 0.3rem;
   font-weight: bold;
   font-family: 'Orbitron', Arial, sans-serif;
 }
@@ -38,20 +34,12 @@
 .orbit,
 .orbitProjects {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   pointer-events: none;
   z-index: 2;
 }
 
-.orbit {
-  z-index: 2;
-}
-.orbitProjects {
-  z-index: 3;
-}
+.orbitProjects { z-index: 3; }
 
 .contributor,
 .project {
@@ -65,7 +53,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #ffffff;
+  color: #fff;
   user-select: none;
 }
 
@@ -73,8 +61,8 @@
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.1));
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+  background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.6), rgba(255,255,255,0.1));
+  box-shadow: 0 2px 6px rgba(0,0,0,0.4);
   font-size: 0.6rem;
 }
 
@@ -82,23 +70,14 @@
   width: 32px;
   height: 32px;
   border-radius: 6px;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.05));
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+  background: linear-gradient(135deg, rgba(255,255,255,0.6), rgba(255,255,255,0.05));
+  box-shadow: 0 2px 6px rgba(0,0,0,0.4);
   font-size: 0.6rem;
 }
 
 @keyframes orbitSpin {
-  from {
-    transform: rotate(0deg) translateX(var(--orbit-radius)) rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg) translateX(var(--orbit-radius)) rotate(-360deg);
-  }
-}
-
-.contributor:hover,
-.project:hover {
-  z-index: 3;
+  from { transform: rotate(0deg) translateX(var(--orbit-radius)) rotate(0deg); }
+  to { transform: rotate(360deg) translateX(var(--orbit-radius)) rotate(-360deg); }
 }
 
 .centralCircle {
@@ -114,7 +93,6 @@
   justify-content: center;
   z-index: 15;
   pointer-events: none;
-  overflow: visible;
 }
 
 .centralCircle::before,
@@ -125,24 +103,15 @@
   border-radius: 50%;
 }
 
-/* Noyau lumineux */
+/* glowing core */
 .centralCircle::before {
-  background: radial-gradient(
-    circle,
-    var(--sun-core) 0%,
-    var(--sun-mid) 35%,
-    transparent 70%
-  );
+  background: radial-gradient(circle, var(--sun-core) 0%, var(--sun-mid) 35%, transparent 70%);
   filter: blur(12px);
 }
 
-/* Rayonnement animé */
+/* animated halo */
 .centralCircle::after {
-  background: radial-gradient(
-    circle,
-    var(--sun-core) 0%,
-    transparent 70%
-  );
+  background: radial-gradient(circle, var(--sun-core) 0%, transparent 70%);
   filter: blur(25px);
   animation: starPulse 4s ease-in-out infinite;
   opacity: 0.5;
@@ -150,10 +119,9 @@
 
 @keyframes starPulse {
   0%, 100% { transform: scale(1); opacity: 0.7; }
-  50%      { transform: scale(1.15); opacity: 1; }
+  50% { transform: scale(1.15); opacity: 1; }
 }
 
-/* Texte au centre */
 .centralCircle h2 {
   position: relative;
   z-index: 1;
@@ -162,71 +130,109 @@
   color: var(--sun-text);
 }
 
+/* theme variables */
 :root[data-theme='light'] {
   --sun-core: rgba(255, 255, 180, 0.9);
   --sun-mid: rgba(255, 170, 50, 0.8);
   --sun-text: #4a2b00;
+
+  --dot-bg: linear-gradient( to bottom right, rgba(255,255,255,0.65), rgba(255,255,255,0.35) );
+  --dot-border: rgba(255,255,255,0.8);
+  --dot-shadow: 0 18px 40px rgba(0,0,0,0.18);
+  --dot-text: #000;
+  --dot-sheen: rgba(255,255,255,0.65);
+  --dot-noise: rgba(0,0,0,0.04);
 }
 
 :root[data-theme='dark'] {
   --sun-core: rgba(200, 235, 255, 1);
   --sun-mid: rgba(94, 194, 231, 0.8);
   --sun-text: #0b2545;
+
+  --dot-bg: rgba(255,255,255,0.12);
+  --dot-border: rgba(255,255,255,0.25);
+  --dot-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  --dot-text: #fff;
+  --dot-sheen: rgba(255,255,255,0.28);
+  --dot-noise: rgba(255,255,255,0.03);
 }
 
-.diamondCard {
+/* dotbox glassmorphism */
+.dotbox {
   position: absolute;
   top: 50%;
   left: 50%;
   width: 200px;
-  min-height: 90px;
-  padding: 0.8rem;
+  min-height: 96px;
+  padding: 0.9rem 1rem;
   box-sizing: border-box;
-  background: rgba(255, 255, 255, 0.12);
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: var(--dot-bg);
+  border: 1px solid var(--dot-border);
   border-radius: 16px;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-  color: #ffffff;
+  backdrop-filter: blur(14px) saturate(1.15);
+  -webkit-backdrop-filter: blur(14px) saturate(1.15);
+  box-shadow: var(--dot-shadow);
+  color: var(--dot-text);
   overflow: hidden;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
   pointer-events: auto;
   cursor: pointer;
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* Lift the diamond cards above orbiting items */
   z-index: 5;
 }
 
-/* Title in the card. */
-.diamondCardTitle {
-  font-size: 1.3rem;
+.dotbox::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(120px 80px at 6% 8%, var(--dot-sheen), transparent 60%);
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+
+.dotbox::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background:
+    linear-gradient(transparent 0, rgba(255,255,255,0.02) 100%),
+    repeating-linear-gradient(0deg, transparent 0 1px, var(--dot-noise) 1px 2px);
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.dotboxTitle {
+  font-size: 1.28rem;
   margin: 0;
   font-family: 'Orbitron', Arial, sans-serif;
 }
 
-.diamondCardContent {
+.dotboxContent {
   width: 100%;
   opacity: 0;
   max-height: 0;
   overflow: hidden;
-  transition: opacity 0.3s ease, max-height 0.3s ease;
-  margin-top: 0.4rem;
+  transition: opacity 0.25s ease, max-height 0.25s ease;
+  margin-top: 0.42rem;
 }
 
-.diamondCard:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+.dotbox:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 22px 52px rgba(0,0,0,0.28);
+  border-color: rgba(255,255,255,0.9);
 }
 
-.diamondCard:hover .diamondCardContent {
+.dotbox:hover .dotboxContent {
   opacity: 1;
-  max-height: 200px;
+  max-height: 220px;
 }
 
-.taskCard {
+/* projectCard */
+.projectCard {
   position: fixed;
   z-index: 100;
   width: 320px;
@@ -234,11 +240,11 @@
   border-radius: 20px;
   overflow: hidden;
   box-shadow: 0.063em 0.75em 1.563em rgba(0, 0, 0, 0.78);
-  color: #ffffff;
+  color: #fff;
   font-family: 'Nunito', sans-serif;
 }
 
-.taskCardHeader {
+.projectCardHeader {
   width: 100%;
   display: flex;
   align-items: center;
@@ -246,24 +252,24 @@
   padding: 0.8em 1em;
 }
 
-.taskDate {
-  color: #dddddd;
+.projectDate {
+  color: #ddd;
   font-size: 0.9rem;
 }
 
-.taskIcon {
-  color: #ffffff;
+.projectIcon {
+  color: #fff;
   width: 24px;
   height: 24px;
   cursor: pointer;
 }
 
-.taskCardBody {
+.projectCardBody {
   padding: 1em 1.5em;
   text-align: left;
 }
 
-.taskCardBody h3 {
+.projectCardBody h3 {
   margin-top: 0.5em;
   margin-bottom: 0.3em;
   font-size: 1.3rem;
@@ -271,54 +277,47 @@
   font-weight: 600;
 }
 
-.taskCardBody p {
+.projectCardBody p {
   margin-bottom: 0.5em;
   font-size: 1rem;
-  color: #dddddd;
+  color: #ddd;
 }
 
-/* Progress layout for task cards */
-.taskProgress {
-  margin-top: 1em;
-}
+.projectProgress { margin-top: 1em; }
 
-.taskProgress span:first-of-type {
-  color: #ffffff;
+.projectProgress span:first-of-type {
+  color: #fff;
   text-align: left;
   font-weight: 600;
-  width: 100%;
   display: block;
   margin-bottom: 0.3em;
 }
 
-.taskProgress span {
+.projectProgress span {
   margin-top: 0.3em;
   text-align: right;
   display: block;
-  color: #ffffff;
+  color: #fff;
 }
 
-.taskProgressBar {
+.projectProgressBar {
   position: relative;
   width: 100%;
   background: #363636;
   height: 0.5em;
-  display: block;
   border-radius: 3px;
   overflow: hidden;
 }
 
-.taskProgressBarFill {
+.projectProgressBarFill {
   position: absolute;
   top: 0;
   left: 0;
   height: 100%;
-  width: 0%;
   border-radius: 3px;
 }
 
-.taskCardFooter {
-  position: relative;
+.projectCardFooter {
   width: 100%;
   border-top: 1px solid #292929;
   display: flex;
@@ -330,18 +329,18 @@
   border-bottom-right-radius: 20px;
 }
 
-.taskCardFooter ul {
+.projectCardFooter ul {
   display: flex;
   align-items: center;
 }
 
-.taskCardFooter ul li {
+.projectCardFooter ul li {
   list-style: none;
   display: flex;
   margin-right: -10px;
 }
 
-.taskCardFooter ul li span {
+.projectCardFooter ul li span {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -349,26 +348,20 @@
   width: 28px;
   height: 28px;
   font-size: 0.8rem;
-  color: #ffffff;
+  color: #fff;
 }
 
-/* Buttons within the task card footer */
-.taskBtnAdd {
+.projectBtnAdd {
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  color: #ffffff;
+  color: #fff;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
 }
 
-.taskBtnAdd svg {
-  width: 16px;
-  height: 16px;
-}
+.projectBtnAdd svg { width: 16px; height: 16px; }
 
-.cursorActive {
-  cursor: none;
-}
+.cursorActive { cursor: none; }

@@ -245,16 +245,16 @@ const Galaxy: React.FC = () => {
         <h2>FABLAB.BOX</h2>
       </div>
 
-      {/* Diamond cards */}
+      {/* Cards .box */}
       <div className={styles.boxesContainer}>
         {boxes.map((box, index) => (
           <div
             key={box.id}
-            className={`${styles.diamondCard} cursor-target`}
+            className={`${styles.dotbox} cursor-target`}
             style={getBoxStyle(index)}
           >
-            <h3 className={styles.diamondCardTitle}>{box.id}</h3>
-            <div className={styles.diamondCardContent}>
+            <h3 className={styles.dotboxTitle}>{box.id}</h3>
+            <div className={styles.dotboxContent}>
               <div className={styles.boxSubtitle}>{box.title}</div>
               <p className={styles.boxSummary}>{box.summary}</p>
             </div>
@@ -313,7 +313,7 @@ const Galaxy: React.FC = () => {
       {selectedProject && (
         <div
           ref={cardRef}
-          className={`${styles.taskCard} cursor-target`}
+          className={`${styles.projectCard} cursor-target`}
           style={{
             left: cardPos.x,
             top: cardPos.y,
@@ -330,30 +330,30 @@ const Galaxy: React.FC = () => {
             scheduleHideCard(220);
           }}
         >
-          <div className={styles.taskCardHeader}>
-            <div className={styles.taskDate}>{selectedProject.date}</div>
-            <svg className={styles.taskIcon} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+          <div className={styles.projectCardHeader}>
+            <div className={styles.projectDate}>{selectedProject.date}</div>
+            <svg className={styles.projectIcon} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
               <path fillRule="evenodd" d="M10.5 6a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Zm0 6a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Zm0 6a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Z" clipRule="evenodd" />
             </svg>
           </div>
-          <div className={styles.taskCardBody}>
+          <div className={styles.projectCardBody}>
             <h3>{selectedProject.title}</h3>
             <p>{selectedProject.desc}</p>
-            <div className={styles.taskProgress}>
+            <div className={styles.projectProgress}>
               <span>Progress</span>
-              <div className={styles.taskProgressBar}>
-                <div className={styles.taskProgressBarFill} style={{ width: `${selectedProject.progress}%`, background: selectedProject.color }} />
+              <div className={styles.projectProgressBar}>
+                <div className={styles.projectProgressBarFill} style={{ width: `${selectedProject.progress}%`, background: selectedProject.color }} />
               </div>
               <span>{selectedProject.progress}%</span>
             </div>
           </div>
-          <div className={styles.taskCardFooter}>
+          <div className={styles.projectCardFooter}>
             <ul>
               {selectedProject.participants.map((p, idx) => (
                 <li key={idx}><span style={{ backgroundColor: p.color }}>{p.name}</span></li>
               ))}
               <li>
-                <div className={styles.taskBtnAdd} style={{ background: selectedProject.color }}>
+                <div className={styles.projectBtnAdd} style={{ background: selectedProject.color }}>
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                     <path fillRule="evenodd" d="M12 3.75a.75.75 0 0 1 .75.75v6.75h6.75a.75.75 0 0 1 0 1.5h-6.75v6.75a.75.75 0 0 1-1.5 0v-6.75H4.5a.75.75 0 0 1 0-1.5h6.75V4.5a.75.75 0 0 1 .75-.75Z" clipRule="evenodd" />
                   </svg>
