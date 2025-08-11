@@ -29,30 +29,10 @@ interface ProjectFull extends Project {
 }
 
 const boxes: BoxConfig[] = [
-  {
-    id: 'thp.box',
-    title: 'The Hacking Project',
-    summary:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam dui arcu, bibendum eu nulla sed, imperdiet condimentum ligula. Cras at lobortis lacus.",
-  },
-  {
-    id: 'gnosis.box',
-    title: 'Gnosis Platform',
-    summary:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam dui arcu, bibendum eu nulla sed, imperdiet condimentum ligula. Cras at lobortis lacus.",
-  },
-  {
-    id: 'intuition.box',
-    title: 'Intuition Engine',
-    summary:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam dui arcu, bibendum eu nulla sed, imperdiet condimentum ligula. Cras at lobortis lacus.",
-  },
-  {
-    id: 'colony.box',
-    title: 'Colony',
-    summary:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam dui arcu, bibendum eu nulla sed, imperdiet condimentum ligula. Cras at lobortis lacus.",
-  },
+  { id: 'thp.box', title: 'The Hacking Project', summary: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam dui arcu, bibendum eu nulla sed, imperdiet condimentum ligula. Cras at lobortis lacus.' },
+  { id: 'gnosis.box', title: 'Gnosis Platform', summary: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam dui arcu, bibendum eu nulla sed, imperdiet condimentum ligula. Cras at lobortis lacus.' },
+  { id: 'intuition.box', title: 'Intuition Engine', summary: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam dui arcu, bibendum eu nulla sed, imperdiet condimentum ligula. Cras at lobortis lacus.' },
+  { id: 'colony.box', title: 'Colony', summary: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam dui arcu, bibendum eu nulla sed, imperdiet condimentum ligula. Cras at lobortis lacus.' },
 ];
 
 const contributors: Contributor[] = [
@@ -67,58 +47,10 @@ const contributors: Contributor[] = [
 ];
 
 const projects: ProjectFull[] = [
-  {
-    id: 'project1',
-    title: 'Projet 1',
-    desc: 'Description',
-    date: 'Last update',
-    category: 'Category',
-    progress: 90,
-    color: '#01c3a8',
-    participants: [
-      { name: 'JP', color: '#ffb4b4' },
-      { name: 'MS', color: '#a7d8ff' },
-    ],
-  },
-  {
-    id: 'project2',
-    title: 'Projet 2',
-    desc: 'Description',
-    date: 'Last update',
-    category: 'Category',
-    progress: 30,
-    color: '#ffb741',
-    participants: [
-      { name: 'AH', color: '#94e2c4' },
-      { name: 'SD', color: '#ffa7d6' },
-    ],
-  },
-  {
-    id: 'project3',
-    title: 'Project 3',
-    desc: 'Description',
-    date: 'Last update',
-    category: 'Category',
-    progress: 50,
-    color: '#a63d2a',
-    participants: [
-      { name: 'VT', color: '#ffe4a7' },
-      { name: 'XR', color: '#aef3e3' },
-    ],
-  },
-  {
-    id: 'project4',
-    title: 'Projet 4',
-    desc: 'Description',
-    date: 'Last update',
-    category: 'Category',
-    progress: 20,
-    color: '#1890ff',
-    participants: [
-      { name: 'YP', color: '#ffc7a7' },
-      { name: 'LK', color: '#c7a7ff' },
-    ],
-  },
+  { id: 'project1', title: 'Projet 1', desc: 'Description', date: 'Last update', category: 'Category', progress: 90, color: '#01c3a8', participants: [{ name: 'JP', color: '#ffb4b4' }, { name: 'MS', color: '#a7d8ff' }] },
+  { id: 'project2', title: 'Projet 2', desc: 'Description', date: 'Last update', category: 'Category', progress: 30, color: '#ffb741', participants: [{ name: 'AH', color: '#94e2c4' }, { name: 'SD', color: '#ffa7d6' }] },
+  { id: 'project3', title: 'Project 3', desc: 'Description', date: 'Last update', category: 'Category', progress: 50, color: '#a63d2a', participants: [{ name: 'VT', color: '#ffe4a7' }, { name: 'XR', color: '#aef3e3' }] },
+  { id: 'project4', title: 'Projet 4', desc: 'Description', date: 'Last update', category: 'Category', progress: 20, color: '#1890ff', participants: [{ name: 'YP', color: '#ffc7a7' }, { name: 'LK', color: '#c7a7ff' }] },
 ];
 
 const Galaxy: React.FC = () => {
@@ -137,14 +69,16 @@ const Galaxy: React.FC = () => {
       60,
       container.clientWidth / container.clientHeight,
       0.1,
-      1000,
+      1000
     );
+    // Vue de dessus
     camera.position.set(0, 15, 0);
     camera.up.set(0, 0, -1);
     camera.lookAt(0, 0, 0);
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(container.clientWidth, container.clientHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     container.appendChild(renderer.domElement);
 
     // Star field
@@ -153,16 +87,16 @@ const Galaxy: React.FC = () => {
     const starCount = 4000;
     const starPositions = new Float32Array(starCount * 3);
     const starColors = new Float32Array(starCount * 3);
-    const colorInside = colorMode === 'light'
-      ? new THREE.Color(0x181822)
-      : new THREE.Color(0xffffff);
+
+    const colorInside = colorMode === 'light' ? new THREE.Color(0x181822) : new THREE.Color(0xffffff);
 
     const colorOutside = colorMode === 'light'
       ? new THREE.Color(0x0a0a19)
-      : new THREE.Color(0x8888ff);
+      : new THREE.Color(0x8a9cff);
 
     const branchCount = 5;
     const maxRadius = 8;
+
     for (let i = 0; i < starCount; i++) {
       const i3 = i * 3;
       const radius = Math.random() * maxRadius;
@@ -171,42 +105,52 @@ const Galaxy: React.FC = () => {
       const spinAngle = radius * 0.5;
       const randomOffset = (Math.random() - 0.5) * 0.4;
       const angle = baseAngle + spinAngle + randomOffset;
+
       starPositions[i3] = Math.sin(angle) * radius + (Math.random() - 0.5);
       starPositions[i3 + 1] = (Math.random() - 0.5) * 0.5;
       starPositions[i3 + 2] = Math.cos(angle) * radius + (Math.random() - 0.5);
+
       const mixedColor = colorInside.clone();
       mixedColor.lerp(colorOutside, radius / maxRadius);
       starColors[i3] = mixedColor.r;
       starColors[i3 + 1] = mixedColor.g;
       starColors[i3 + 2] = mixedColor.b;
     }
+
     const starGeometry = new THREE.BufferGeometry();
     starGeometry.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
     starGeometry.setAttribute('color', new THREE.BufferAttribute(starColors, 3));
+
     const starMaterial = new THREE.PointsMaterial({
-      size: 0.05,
+      size: colorMode === 'light' ? 0.07 : 0.05,
       vertexColors: true,
       sizeAttenuation: true,
+      transparent: true,
+      opacity: colorMode === 'light' ? 0.9 : 1.0
     });
+
     const starField = new THREE.Points(starGeometry, starMaterial);
     starGroup.add(starField);
 
-    function animate() {
+    const animate = () => {
       rafId.current = requestAnimationFrame(animate);
       starGroup.rotation.y += 0.0005;
       renderer.render(scene, camera);
-    }
+    };
     animate();
 
-    function onResize() {
+    // Resize
+    const onResize = () => {
       const width = container.clientWidth;
       const height = container.clientHeight;
       camera.aspect = width / height;
       camera.updateProjectionMatrix();
       renderer.setSize(width, height);
-    }
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    };
     window.addEventListener('resize', onResize);
 
+    // Cleanup
     return () => {
       window.removeEventListener('resize', onResize);
       if (rafId.current != null) cancelAnimationFrame(rafId.current);
@@ -218,12 +162,8 @@ const Galaxy: React.FC = () => {
   }, [colorMode]);
 
   // GALAXY UI INTERACTIF
-  const [hoveredBox, setHoveredBox] = useState<number | null>(null);
   const [selectedProject, setSelectedProject] = useState<ProjectFull | null>(null);
   const [cardPos, setCardPos] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
-
-  const handleBoxEnter = (_index: number) => {};
-  const handleBoxLeave = () => {};
 
   const handleProjectClick = (e: MouseEvent<HTMLDivElement>, project: ProjectFull) => {
     e.preventDefault();
@@ -234,9 +174,7 @@ const Galaxy: React.FC = () => {
 
   useEffect(() => {
     const handleDocClick = () => setSelectedProject(null);
-    if (selectedProject) {
-      document.addEventListener('click', handleDocClick);
-    }
+    if (selectedProject) document.addEventListener('click', handleDocClick);
     return () => document.removeEventListener('click', handleDocClick);
   }, [selectedProject]);
 
@@ -248,13 +186,11 @@ const Galaxy: React.FC = () => {
     const ry = 280;
     const x = rx * Math.cos(angle);
     const y = ry * Math.sin(angle);
-    return {
-      transform: `translate(-50%, -50%) translate(${x}px, ${y}px)`,
-    };
+    return { transform: `translate(-50%, -50%) translate(${x}px, ${y}px)` };
   };
 
   const getContributorStyle = (index: number): React.CSSProperties => {
-    const duration = 60;
+    const duration = 85;
     const radius = 300;
     const delay = -(duration / contributors.length) * index;
     return {
@@ -266,7 +202,7 @@ const Galaxy: React.FC = () => {
   };
 
   const getProjectStyle = (index: number): React.CSSProperties => {
-    const duration = 50;
+    const duration = 70;
     const radius = 420;
     const delay = -(duration / projects.length) * index;
     return {
@@ -297,15 +233,7 @@ const Galaxy: React.FC = () => {
       {/* Three.js galaxy background */}
       <div
         ref={bgRef}
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          zIndex: 0,
-          pointerEvents: 'none',
-        }}
+        style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 0, pointerEvents: 'none' }}
       />
 
       {/* Central circle */}
@@ -320,8 +248,6 @@ const Galaxy: React.FC = () => {
             key={box.id}
             className={`${styles.diamondCard} cursor-target`}
             style={getBoxStyle(index)}
-            onMouseEnter={() => handleBoxEnter(index)}
-            onMouseLeave={handleBoxLeave}
           >
             <h3 className={styles.diamondCardTitle}>{box.id}</h3>
             <div className={styles.diamondCardContent}>
@@ -368,23 +294,14 @@ const Galaxy: React.FC = () => {
           style={{
             left: cardPos.x,
             top: cardPos.y,
-            background: 'radial-gradient(ellipse at right top, ' + selectedProject.color + '80 0%, #151419 45%, #151419 100%)',
+            background: `radial-gradient(ellipse at right top, ${selectedProject.color}80 0%, #151419 45%, #151419 100%)`,
           }}
           onClick={(e) => e.stopPropagation()}
         >
           <div className={styles.taskCardHeader}>
             <div className={styles.taskDate}>{selectedProject.date}</div>
-            <svg
-              className={styles.taskIcon}
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-            >
-              <path
-                fillRule="evenodd"
-                d="M10.5 6a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Zm0 6a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Zm0 6a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Z"
-                clipRule="evenodd"
-              />
+            <svg className={styles.taskIcon} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+              <path fillRule="evenodd" d="M10.5 6a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Zm0 6a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Zm0 6a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Z" clipRule="evenodd" />
             </svg>
           </div>
           <div className={styles.taskCardBody}>
@@ -393,10 +310,7 @@ const Galaxy: React.FC = () => {
             <div className={styles.taskProgress}>
               <span>Progress</span>
               <div className={styles.taskProgressBar}>
-                <div
-                  className={styles.taskProgressBarFill}
-                  style={{ width: `${selectedProject.progress}%`, background: selectedProject.color }}
-                />
+                <div className={styles.taskProgressBarFill} style={{ width: `${selectedProject.progress}%`, background: selectedProject.color }} />
               </div>
               <span>{selectedProject.progress}%</span>
             </div>
@@ -404,22 +318,12 @@ const Galaxy: React.FC = () => {
           <div className={styles.taskCardFooter}>
             <ul>
               {selectedProject.participants.map((p, idx) => (
-                <li key={idx}>
-                  <span style={{ backgroundColor: p.color }}>{p.name}</span>
-                </li>
+                <li key={idx}><span style={{ backgroundColor: p.color }}>{p.name}</span></li>
               ))}
               <li>
                 <div className={styles.taskBtnAdd} style={{ background: selectedProject.color }}>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M12 3.75a.75.75 0 0 1 .75.75v6.75h6.75a.75.75 0 0 1 0 1.5h-6.75v6.75a.75.75 0 0 1-1.5 0v-6.75H4.5a.75.75 0 0 1 0-1.5h6.75V4.5a.75.75 0 0 1 .75-.75Z"
-                      clipRule="evenodd"
-                    />
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path fillRule="evenodd" d="M12 3.75a.75.75 0 0 1 .75.75v6.75h6.75a.75.75 0 0 1 0 1.5h-6.75v6.75a.75.75 0 0 1-1.5 0v-6.75H4.5a.75.75 0 0 1 0-1.5h6.75V4.5a.75.75 0 0 1 .75-.75Z" clipRule="evenodd" />
                   </svg>
                 </div>
               </li>
@@ -429,11 +333,7 @@ const Galaxy: React.FC = () => {
       )}
 
       {cursorActive && (
-        <TargetCursor
-          targetSelector=".galaxy-scope .cursor-target"
-          spinDuration={5}
-          hideDefaultCursor={false}
-        />
+        <TargetCursor targetSelector=".galaxy-scope .cursor-target" spinDuration={5} hideDefaultCursor={false} />
       )}
     </div>
   );
