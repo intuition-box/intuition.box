@@ -58,6 +58,7 @@ const Galaxy: React.FC = () => {
   const bgRef = useRef<HTMLDivElement>(null);
   const { colorMode } = useColorMode();
   const rafId = useRef<number | null>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const container = bgRef.current;
@@ -165,19 +166,6 @@ const Galaxy: React.FC = () => {
   const [selectedProject, setSelectedProject] = useState<ProjectFull | null>(null);
   const [cardPos, setCardPos] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
 
-  const handleProjectClick = (e: MouseEvent<HTMLDivElement>, project: ProjectFull) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setSelectedProject(project);
-    setCardPos({ x: e.clientX + 20, y: e.clientY + 20 });
-  };
-
-  useEffect(() => {
-    const handleDocClick = () => setSelectedProject(null);
-    if (selectedProject) document.addEventListener('click', handleDocClick);
-    return () => document.removeEventListener('click', handleDocClick);
-  }, [selectedProject]);
-
   const getBoxStyle = (index: number): React.CSSProperties => {
     const diamondAngles = [-90, 0, 180, 90];
     const angleDeg = diamondAngles[index % diamondAngles.length];
@@ -278,11 +266,20 @@ const Galaxy: React.FC = () => {
         {projects.map((proj, index) => (
           <div
             key={proj.id}
+            data-role="project" 
             className={`${styles.project} cursor-target`}
             style={getProjectStyle(index)}
-            onMouseEnter={pauseOrbit}
-            onMouseLeave={resumeOrbit}
-            onClick={(e) => handleProjectClick(e, proj)}
+            onMouseEnter={(e) => {
+              pauseOrbit(e);
+              setSelectedProject(proj);
+              setCardPos({ x: e.clientX + 20, y: e.clientY + 20 });
+            }}
+            onMouseLeave={(e) => {
+              resumeOrbit(e);
+              const next = e.relatedTarget as Node | null;
+              if (cardRef.current && next && cardRef.current.contains(next)) return;
+              setSelectedProject(null);
+            }}
           />
         ))}
       </div>
@@ -290,11 +287,21 @@ const Galaxy: React.FC = () => {
       {/* Project popup */}
       {selectedProject && (
         <div
+          ref={cardRef}
+          data-role="project-card"
           className={`${styles.taskCard} cursor-target`}
           style={{
             left: cardPos.x,
             top: cardPos.y,
             background: `radial-gradient(ellipse at right top, ${selectedProject.color}80 0%, #151419 45%, #151419 100%)`,
+            pointerEvents: 'auto',
+          }}
+          onMouseEnter={() => {
+          }}
+          onMouseLeave={(e) => {
+            const nextEl = e.relatedTarget as Element | null;
+            if (nextEl && nextEl.closest('[data-role="project"]')) return;
+            setSelectedProject(null);
           }}
           onClick={(e) => e.stopPropagation()}
         >

@@ -166,49 +166,6 @@
   z-index: 3;
 }
 
-/* Project detail card that appears when a project is clicked. */
-.projectCard {
-  position: fixed;
-  z-index: 100;
-  width: 240px;
-  padding: 1rem;
-  background: rgba(255, 255, 255, 0.14);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  border-radius: 16px;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-  color: #ffffff;
-}
-
-.projectCard h4 {
-  margin: 0 0 0.5rem 0;
-  font-size: 1.1rem;
-  font-family: 'Orbitron', Arial, sans-serif;
-}
-
-.projectCard p {
-  margin: 0 0 0.5rem 0;
-  font-size: 0.85rem;
-  line-height: 1.3;
-  font-family: 'Audiowide', Arial, sans-serif;
-}
-
-.projectCard button {
-  background: rgba(94, 194, 231, 0.3);
-  border: 1px solid rgba(94, 194, 231, 0.6);
-  padding: 0.3rem 0.8rem;
-  border-radius: 8px;
-  color: #ffffff;
-  font-family: 'Audiowide', Arial, sans-serif;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.projectCard button:hover {
-  background: rgba(94, 194, 231, 0.5);
-}
-
 .centralCircle {
   position: absolute;
   top: 50%;
