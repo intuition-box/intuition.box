@@ -12,21 +12,6 @@
   margin-bottom: 10rem;
 }
 
-.centralText {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 10;
-  font-size: 5rem;
-  letter-spacing: 2px;
-  color: #e6f7ff;
-  text-shadow: 0 0 15px rgba(94, 194, 231, 0.8), 0 0 30px rgba(94, 194, 231, 0.5);
-  user-select: none;
-  pointer-events: none;
-  font-family: 'Orbitron', Arial, sans-serif;
-}
-
 .boxesContainer {
   position: absolute;
   top: 0;
@@ -34,42 +19,6 @@
   width: 100%;
   height: 100%;
   pointer-events: none;
-}
-
-.box {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 180px;
-  min-height: 110px;
-  padding: 1rem;
-  box-sizing: border-box;
-  background: rgba(255, 255, 255, 0.12);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  border-radius: 16px;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-  color: #ffffff;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  overflow: hidden;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  pointer-events: auto;
-  cursor: pointer;
-}
-
-.boxTitle {
-  font-size: 1.4rem;
-  margin: 0;
-  font-family: 'Orbitron', Arial, sans-serif;
-}
-
-.boxDetails {
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  margin-top: 0.5rem;
 }
 
 .boxSubtitle {
@@ -84,15 +33,6 @@
   font-size: 0.85rem;
   line-height: 1.3;
   font-family: 'Audiowide', Arial, sans-serif;
-}
-
-.boxActive {
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
-  z-index: 5;
-}
-
-.boxActive .boxDetails {
-  opacity: 1;
 }
 
 .orbit,
@@ -154,11 +94,6 @@
   to {
     transform: rotate(360deg) translateX(var(--orbit-radius)) rotate(-360deg);
   }
-}
-
-/* Pause the orbit animation when hovered. */
-.paused {
-  animation-play-state: paused !important;
 }
 
 .contributor:hover,
@@ -432,14 +367,6 @@
 .taskBtnAdd svg {
   width: 16px;
   height: 16px;
-}
-
-.taskBtnCountdown {
-  background: #222127;
-  color: #ffffff;
-  border-radius: 2em;
-  padding: 0.5em 1.2em;
-  white-space: nowrap;
 }
 
 .cursorActive {

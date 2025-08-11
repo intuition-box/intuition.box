@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState, MouseEvent } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import * as THREE from 'three';
 import styles from './Galaxy.module.css';
 import { useColorMode } from '@docusaurus/theme-common';
@@ -59,6 +59,22 @@ const Galaxy: React.FC = () => {
   const { colorMode } = useColorMode();
   const rafId = useRef<number | null>(null);
   const cardRef = useRef<HTMLDivElement>(null);
+  const hideTimer = useRef<number | null>(null);
+
+  const cancelHideCard = () => {
+    if (hideTimer.current !== null) {
+      window.clearTimeout(hideTimer.current);
+      hideTimer.current = null;
+    }
+  };
+
+  const scheduleHideCard = (delay = 250) => {
+    cancelHideCard();
+    hideTimer.current = window.setTimeout(() => {
+      setSelectedProject(null);
+    }, delay);
+  };
+  useEffect(() => () => cancelHideCard(), []);
 
   useEffect(() => {
     const container = bgRef.current;
@@ -270,15 +286,24 @@ const Galaxy: React.FC = () => {
             className={`${styles.project} cursor-target`}
             style={getProjectStyle(index)}
             onMouseEnter={(e) => {
+              cancelHideCard();
               pauseOrbit(e);
               setSelectedProject(proj);
-              setCardPos({ x: e.clientX + 20, y: e.clientY + 20 });
+              setCardPos({ x: e.clientX + 12, y: e.clientY + 12 });
             }}
             onMouseLeave={(e) => {
               resumeOrbit(e);
               const next = e.relatedTarget as Node | null;
-              if (cardRef.current && next && cardRef.current.contains(next)) return;
-              setSelectedProject(null);
+              if (cardRef.current && next && cardRef.current.contains(next)) {
+                cancelHideCard();
+                return;
+              }
+              scheduleHideCard(250);
+            }}
+            onMouseMove={(e) => {
+              if (selectedProject?.id === proj.id) {
+                setCardPos({ x: e.clientX + 20, y: e.clientY + 20 });
+              }
             }}
           />
         ))}
@@ -288,7 +313,6 @@ const Galaxy: React.FC = () => {
       {selectedProject && (
         <div
           ref={cardRef}
-          data-role="project-card"
           className={`${styles.taskCard} cursor-target`}
           style={{
             left: cardPos.x,
@@ -296,14 +320,15 @@ const Galaxy: React.FC = () => {
             background: `radial-gradient(ellipse at right top, ${selectedProject.color}80 0%, #151419 45%, #151419 100%)`,
             pointerEvents: 'auto',
           }}
-          onMouseEnter={() => {
-          }}
+          onMouseEnter={cancelHideCard}
           onMouseLeave={(e) => {
             const nextEl = e.relatedTarget as Element | null;
-            if (nextEl && nextEl.closest('[data-role="project"]')) return;
-            setSelectedProject(null);
+            if (nextEl && nextEl.closest('[data-role="project"]')) {
+              cancelHideCard();
+              return;
+            }
+            scheduleHideCard(220);
           }}
-          onClick={(e) => e.stopPropagation()}
         >
           <div className={styles.taskCardHeader}>
             <div className={styles.taskDate}>{selectedProject.date}</div>
