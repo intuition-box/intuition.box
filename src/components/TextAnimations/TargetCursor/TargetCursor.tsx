@@ -26,6 +26,7 @@ const TargetCursor: React.FC<TargetCursorProps> = ({
     [],
   );
 
+  const [overTarget, setOverTarget] = React.useState(false);
   const moveCursor = useCallback((x: number, y: number) => {
     if (!cursorRef.current) return;
     gsap.to(cursorRef.current, {
@@ -40,9 +41,6 @@ const TargetCursor: React.FC<TargetCursorProps> = ({
     if (!cursorRef.current) return;
 
     const originalCursor = document.body.style.cursor;
-    if (hideDefaultCursor) {
-      document.body.style.cursor = "none";
-    }
 
     const cursor = cursorRef.current;
     cornersRef.current = cursor.querySelectorAll<HTMLDivElement>(
@@ -160,6 +158,7 @@ const TargetCursor: React.FC<TargetCursorProps> = ({
       }
 
       activeTarget = target;
+      setOverTarget(true);
 
       gsap.killTweensOf(cursorRef.current, "rotation");
       spinTl.current?.pause();
@@ -248,6 +247,7 @@ const TargetCursor: React.FC<TargetCursorProps> = ({
       const leaveHandler = () => {
         activeTarget = null;
         isAnimatingToTarget = false;
+        setOverTarget(false);
 
         if (cornersRef.current) {
           const corners = Array.from(cornersRef.current);
@@ -330,6 +330,15 @@ const TargetCursor: React.FC<TargetCursorProps> = ({
       document.body.style.cursor = originalCursor;
     };
   }, [targetSelector, spinDuration, moveCursor, constants, hideDefaultCursor]);
+
+  useEffect(() => {
+    if (hideDefaultCursor) {
+      document.body.style.cursor = overTarget ? "none" : "auto";
+    }
+    return () => {
+      document.body.style.cursor = "auto";
+    };
+  }, [hideDefaultCursor, overTarget]);
 
   useEffect(() => {
     if (!cursorRef.current || !spinTl.current) return;

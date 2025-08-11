@@ -1,7 +1,6 @@
 import React from "react";
 import { useColorMode } from "@docusaurus/theme-common";
 import "./CustomThemeToggle.css";
-import TargetCursor from "../TextAnimations/TargetCursor/TargetCursor";
 
 export default function CustomThemeToggle() {
   const { colorMode, setColorMode } = useColorMode();
@@ -27,9 +26,7 @@ export default function CustomThemeToggle() {
           <div className="track-lines">
             <div className="track-line"></div>
           </div>
-          <div className="toggle-thumb cursor-target">
-            {/* <-- Ajoute le composant ici */}
-            <TargetCursor spinDuration={2} hideDefaultCursor={true} />
+          <div className="toggle-thumb">
             <div className="thumb-core"></div>
             <div className="thumb-inner"></div>
             <div className="thumb-scan"></div>

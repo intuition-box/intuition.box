@@ -11,6 +11,7 @@ type SciFiPanelProps = {
 
 const SciFiPanel: React.FC<SciFiPanelProps> = ({ children, className = "", style, variant = 'default' }) => (
   <div className={`${styles.panel} ${styles[variant]}`} style={style}>
+    <div className={styles.halo} />
     <svg className={styles.bgShape} viewBox="0 0 420 210" preserveAspectRatio="none">
         <polygon points="
           0,0
@@ -23,7 +24,7 @@ const SciFiPanel: React.FC<SciFiPanelProps> = ({ children, className = "", style
           175,200
           50,200
           0,170
-        " ><div></div></polygon>
+        " ></polygon>
     </svg>
     <div className={styles.content}>
       {children}
