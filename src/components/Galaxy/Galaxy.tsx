@@ -8,7 +8,6 @@ import TargetCursor from '../TextAnimations/TargetCursor/TargetCursor';
 interface BoxConfig {
   id: string;
   title: string;
-  summary: string;
 }
 interface Project {
   id: string;
@@ -29,10 +28,10 @@ interface ProjectFull extends Project {
 }
 
 const boxes: BoxConfig[] = [
-  { id: 'thp.box', title: 'The Hacking Project', summary: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam dui arcu, bibendum eu nulla sed, imperdiet condimentum ligula. Cras at lobortis lacus.' },
-  { id: 'gnosis.box', title: 'Gnosis Platform', summary: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam dui arcu, bibendum eu nulla sed, imperdiet condimentum ligula. Cras at lobortis lacus.' },
-  { id: 'intuition.box', title: 'Intuition Engine', summary: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam dui arcu, bibendum eu nulla sed, imperdiet condimentum ligula. Cras at lobortis lacus.' },
-  { id: 'colony.box', title: 'Colony', summary: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam dui arcu, bibendum eu nulla sed, imperdiet condimentum ligula. Cras at lobortis lacus.' },
+  { id: 'thp.box', title: 'The Hacking Project' },
+  { id: 'gnosis.box', title: 'Gnosis Platform' },
+  { id: 'intuition.box', title: 'Intuition Engine' },
+  { id: 'colony.box', title: 'Colony' },
 ];
 
 const contributors: Contributor[] = [
@@ -255,8 +254,32 @@ const Galaxy: React.FC = () => {
           >
             <h3 className={styles.dotboxTitle}>{box.id}</h3>
             <div className={styles.dotboxContent}>
-              <div className={styles.boxSubtitle}>{box.title}</div>
-              <p className={styles.boxSummary}>{box.summary}</p>
+              <div className={styles.dotboxMetrics}>
+                {/* LEFT: Projects */}
+                <div className={styles.metricsBlock}>
+                  <div className={styles.metricsTitle}>projects</div>
+                  <div className={styles.metricsRow}>
+                    <div className={styles.stack}>
+                      <div className={`${styles.badge} ${styles.badgeProject}`} />
+                      <div className={`${styles.badge} ${styles.badgeProject}`} />
+                    </div>
+                    <span className={styles.metricsPlus}>+9</span>
+                  </div>
+                </div>
+
+                {/* RIGHT: Contributors */}
+                <div className={styles.metricsBlock}>
+                  <div className={styles.metricsTitle}>contributors</div>
+                  <div className={styles.metricsRow}>
+                    <div className={styles.stack}>
+                      <div className={`${styles.badge} ${styles.badgeContrib}`} />
+                      <div className={`${styles.badge} ${styles.badgeContrib}`} />
+                      <div className={`${styles.badge} ${styles.badgeContrib}`} />
+                    </div>
+                    <span className={styles.metricsPlus}>+7</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         ))}
