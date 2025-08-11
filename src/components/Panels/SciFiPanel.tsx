@@ -6,12 +6,12 @@ type SciFiPanelProps = {
   className?: string;
   style?: React.CSSProperties;
   variant?: "default" | "small" | "large";
-  light?: boolean;
+  halo?: boolean;
 };
 
-const SciFiPanel: React.FC<SciFiPanelProps> = ({ children, className = "", style, variant = 'default' }) => (
-  <div className={`${styles.panel} ${styles[variant]}`} style={style}>
-    <div className={styles.halo} />
+const SciFiPanel: React.FC<SciFiPanelProps> = ({ children, className = "", style, variant = 'default', halo = false }) => (
+  <div className={`${styles.panel} ${styles[variant]}`} style={style} data-halo={halo ? "true" : "false"}>
+    {halo === true && <div className={styles.halo} aria-hidden="true" />}
     <svg className={styles.bgShape} viewBox="0 0 420 210" preserveAspectRatio="none">
         <polygon points="
           0,0

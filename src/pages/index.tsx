@@ -51,14 +51,16 @@ export default function Home(): ReactNode {
       {/* <HomepageHeader /> */}  
       <main>
         <Hero />
-        <SciFiPanel variant='large' >
+        <SciFiPanel variant='large' halo={true}>
           <h2>THE FABLAB NETWORK</h2>
           <p>
             Compteur + liste des contributeurs
           </p>
         </SciFiPanel>
         <Galaxy/>
-        {/* <HomepageFeatures /> */}
+        <SciFiPanel variant='small' >
+          <h2>PARTNERS</h2>
+        </SciFiPanel>
       </main>
     </Layout>
   );

@@ -48,8 +48,8 @@ const boxes: BoxConfig[] = [
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam dui arcu, bibendum eu nulla sed, imperdiet condimentum ligula. Cras at lobortis lacus.",
   },
   {
-    id: 'new.box',
-    title: 'New Box',
+    id: 'colony.box',
+    title: 'Colony',
     summary:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam dui arcu, bibendum eu nulla sed, imperdiet condimentum ligula. Cras at lobortis lacus.",
   },
