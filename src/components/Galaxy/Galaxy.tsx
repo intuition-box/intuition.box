@@ -7,7 +7,8 @@ import TargetCursor from '../TextAnimations/TargetCursor/TargetCursor';
 // Interfaces
 interface BoxConfig {
   id: string;
-  title: string;
+  // title: string;
+  summary: string;
 }
 interface Project {
   id: string;
@@ -27,11 +28,18 @@ interface ProjectFull extends Project {
   participants: { name: string; color: string }[];
 }
 
+// const boxes: BoxConfig[] = [
+//   { id: 'thp.box', title: 'The Hacking Project', summary: 'Learn to code by building projects' },
+//   { id: 'gnosis.box', title: 'Gnosis Platform', summary: 'Decentralized knowledge sharing' },
+//   { id: 'intuition.box', title: 'Intuition Engine', summary: 'AI-driven insights and recommendations' },
+//   { id: 'colony.box', title: 'Colony', summary: 'Collaborative project management and governance' },
+// ];
+
 const boxes: BoxConfig[] = [
-  { id: 'thp.box', title: 'The Hacking Project' },
-  { id: 'gnosis.box', title: 'Gnosis Platform' },
-  { id: 'intuition.box', title: 'Intuition Engine' },
-  { id: 'colony.box', title: 'Colony' },
+  { id: 'thp.box', summary: 'Learn to code by building projects' },
+  { id: 'gnosis.box', summary: 'Decentralized knowledge sharing' },
+  { id: 'intuition.box', summary: 'AI-driven insights and recommendations' },
+  { id: 'colony.box', summary: 'Collaborative project management and governance' },
 ];
 
 const contributors: Contributor[] = [
@@ -254,8 +262,10 @@ const Galaxy: React.FC = () => {
           >
             <h3 className={styles.dotboxTitle}>{box.id}</h3>
             <div className={styles.dotboxContent}>
+              {/* <div className={styles.dotboxSubtitle}>{box.title}</div> */}
+              <p className={styles.dotboxSummary}>{box.summary}</p>
+              {/* LEFT: Projects */}
               <div className={styles.dotboxMetrics}>
-                {/* LEFT: Projects */}
                 <div className={styles.metricsBlock}>
                   <div className={styles.metricsTitle}>projects</div>
                   <div className={styles.metricsRow}>
