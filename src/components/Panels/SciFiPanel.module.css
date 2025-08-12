@@ -77,8 +77,9 @@
   padding: 1rem 1.2rem;
 }
 .large {
-  max-width: 1000px !important;
+  max-width: 1100px !important;
   padding: 3rem 4rem;
+  margin-bottom: 10rem;
 }
 
 /* Glass effect variables and theme adaptation */
