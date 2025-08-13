@@ -35,7 +35,7 @@ export default function ProjectsWithCard({ projects }: { projects: Project[] }) 
   const hideTimer = useRef<number | null>(null);
 
   const cancelHide = () => { if (hideTimer.current) { clearTimeout(hideTimer.current); hideTimer.current = null; } };
-  const scheduleHide = (ms = 250) => {
+  const scheduleHide = (ms = 400) => {
     cancelHide();
     hideTimer.current = window.setTimeout(() => setSelected(null), ms);
   };
@@ -55,7 +55,7 @@ export default function ProjectsWithCard({ projects }: { projects: Project[] }) 
               resume(e);
               const next = (e.relatedTarget ?? null);
               if (cardRef.current && next && next instanceof Node && cardRef.current.contains(next)) { cancelHide(); return; }
-              scheduleHide(250);
+              scheduleHide(400);
             }}
           />
         ))}

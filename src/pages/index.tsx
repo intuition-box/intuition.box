@@ -9,6 +9,7 @@ import Heading from '@theme/Heading';
 import Hero from '../components/Hero/Hero';
 import SciFiPanel from '../components/Panels/SciFiPanel';
 import Galaxy from '../components/Galaxy/Galaxy';
+import WhyPanel from '../components/Panels/WhyPanel';
 
 import styles from './index.module.css';
 import Iridescence from '../components/Backgrounds/Iridescence/Iridescence';
@@ -61,61 +62,7 @@ export default function Home(): ReactNode {
         <SciFiPanel variant='small' >
           <h2>PARTNERS</h2>
         </SciFiPanel>
-        <SciFiPanel variant='large'>
-          <h2>WHY FABLAB ?</h2>
-          <div className="why-wrapper">
-            <div className="why-card">
-              <h3>Context & Origin</h3>
-              <p>The FabLab Charter</p>
-
-              <div className="charter-acc">
-                <details className="charter-row" open>
-                  <summary>What is a fab lab?</summary>
-                  <p>Fab labs are a global network of <span className="strike">local</span> labs, enabling invention by providing access to tools for digital fabrication.</p>
-                </details>
-
-                <details className="charter-row">
-                  <summary>What's in a fab lab?</summary>
-                  <p>Fab labs share an evolving inventory of core capabilities to make (almost) anything, allowing people and projects to be shared.</p>
-                </details>
-
-                <details className="charter-row">
-                  <summary>What does the fab lab network provide?</summary>
-                  <p>Operational, educational, technical, financial, and logistical assistance beyond what's available within one lab.</p>
-                </details>
-
-                <details className="charter-row">
-                  <summary>Who can use a fab lab?</summary>
-                  <p>Fab labs are available as a community resource, offering open access for individuals as well as scheduled access for programs.</p>
-                </details>
-
-                <details className="charter-row">
-                  <summary>What are your responsibilities?</summary>
-                  <ul className="charter-bullets">
-                    <li><strong>safety</strong>: not hurting people or machines</li>
-                    <li><strong>operations</strong>: assisting with cleaning, maintaining, and improving the lab</li>
-                    <li><strong>knowledge</strong>: contributing to documentation and instruction</li>
-                  </ul>
-                </details>
-
-                <details className="charter-row">
-                  <summary>Who owns fab lab inventions?</summary>
-                  <p>Designs and processes developed in fab labs can be protected and sold however an inventor chooses, but should remain available for individuals to use and learn from.</p>
-                </details>
-
-                <details className="charter-row">
-                  <summary>How can businesses use a fab lab?</summary>
-                  <p>Commercial activities can be prototyped and incubated in a fab lab, but they must not conflict with other uses, they should grow beyond rather than within the lab, and they are expected to benefit the inventors, labs, and networks that contribute to their success.</p>
-                </details>
-              </div>
-            </div>
-
-            <div className="why-card">
-              <h3>Our Values</h3>
-              <p>Ethereum org values exemple</p>
-            </div>
-          </div>
-        </SciFiPanel>
+        <WhyPanel />
         <SciFiPanel variant='large'>
           <h2>WHAT FABLAB OFFERS ?</h2>
         </SciFiPanel>
