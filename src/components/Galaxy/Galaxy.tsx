@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import * as THREE from 'three';
+import GalaxyBackground from './GalaxyBackground';
 import styles from './Galaxy.module.css';
 import { useColorMode } from '@docusaurus/theme-common';
 import TargetCursor from '../TextAnimations/TargetCursor/TargetCursor';
@@ -62,9 +62,6 @@ const projects: ProjectFull[] = [
 
 const Galaxy: React.FC = () => {
   const [cursorActive, setCursorActive] = useState(false);
-  const bgRef = useRef<HTMLDivElement>(null);
-  const { colorMode } = useColorMode();
-  const rafId = useRef<number | null>(null);
   const cardRef = useRef<HTMLDivElement>(null);
   const hideTimer = useRef<number | null>(null);
 
@@ -82,108 +79,6 @@ const Galaxy: React.FC = () => {
     }, delay);
   };
   useEffect(() => () => cancelHideCard(), []);
-
-  useEffect(() => {
-    const container = bgRef.current;
-    if (!container) return;
-
-    // Three.js: Scene, camera, renderer
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(
-      60,
-      container.clientWidth / container.clientHeight,
-      0.1,
-      1000
-    );
-    // Vue de dessus
-    camera.position.set(0, 15, 0);
-    camera.up.set(0, 0, -1);
-    camera.lookAt(0, 0, 0);
-
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setSize(container.clientWidth, container.clientHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    container.appendChild(renderer.domElement);
-
-    // Star field
-    const starGroup = new THREE.Group();
-    scene.add(starGroup);
-    const starCount = 4000;
-    const starPositions = new Float32Array(starCount * 3);
-    const starColors = new Float32Array(starCount * 3);
-
-    const colorInside = colorMode === 'light' ? new THREE.Color(0x181822) : new THREE.Color(0xffffff);
-
-    const colorOutside = colorMode === 'light'
-      ? new THREE.Color(0x0a0a19)
-      : new THREE.Color(0x8a9cff);
-
-    const branchCount = 5;
-    const maxRadius = 8;
-
-    for (let i = 0; i < starCount; i++) {
-      const i3 = i * 3;
-      const radius = Math.random() * maxRadius;
-      const branch = i % branchCount;
-      const baseAngle = (branch / branchCount) * Math.PI * 2;
-      const spinAngle = radius * 0.5;
-      const randomOffset = (Math.random() - 0.5) * 0.4;
-      const angle = baseAngle + spinAngle + randomOffset;
-
-      starPositions[i3] = Math.sin(angle) * radius + (Math.random() - 0.5);
-      starPositions[i3 + 1] = (Math.random() - 0.5) * 0.5;
-      starPositions[i3 + 2] = Math.cos(angle) * radius + (Math.random() - 0.5);
-
-      const mixedColor = colorInside.clone();
-      mixedColor.lerp(colorOutside, radius / maxRadius);
-      starColors[i3] = mixedColor.r;
-      starColors[i3 + 1] = mixedColor.g;
-      starColors[i3 + 2] = mixedColor.b;
-    }
-
-    const starGeometry = new THREE.BufferGeometry();
-    starGeometry.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
-    starGeometry.setAttribute('color', new THREE.BufferAttribute(starColors, 3));
-
-    const starMaterial = new THREE.PointsMaterial({
-      size: colorMode === 'light' ? 0.07 : 0.05,
-      vertexColors: true,
-      sizeAttenuation: true,
-      transparent: true,
-      opacity: colorMode === 'light' ? 0.9 : 1.0
-    });
-
-    const starField = new THREE.Points(starGeometry, starMaterial);
-    starGroup.add(starField);
-
-    const animate = () => {
-      rafId.current = requestAnimationFrame(animate);
-      starGroup.rotation.y += 0.0005;
-      renderer.render(scene, camera);
-    };
-    animate();
-
-    // Resize
-    const onResize = () => {
-      const width = container.clientWidth;
-      const height = container.clientHeight;
-      camera.aspect = width / height;
-      camera.updateProjectionMatrix();
-      renderer.setSize(width, height);
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    };
-    window.addEventListener('resize', onResize);
-
-    // Cleanup
-    return () => {
-      window.removeEventListener('resize', onResize);
-      if (rafId.current != null) cancelAnimationFrame(rafId.current);
-      container.removeChild(renderer.domElement);
-      starGeometry.dispose();
-      starMaterial.dispose();
-      renderer.dispose();
-    };
-  }, [colorMode]);
 
   // GALAXY UI INTERACTIF
   const [selectedProject, setSelectedProject] = useState<ProjectFull | null>(null);
@@ -241,16 +136,8 @@ const Galaxy: React.FC = () => {
       onMouseEnter={() => setCursorActive(true)}
       onMouseLeave={() => setCursorActive(false)}
     >
-      {/* Three.js galaxy background */}
-      <div
-        ref={bgRef}
-        style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 0, pointerEvents: 'none' }}
-      />
-
-      {/* Central circle */}
-      <div className={styles.centralCircle}>
-        <h2>FABLAB.BOX</h2>
-      </div>
+    {/* Three.js galaxy background */}
+    <GalaxyBackground title="FABLAB.BOX" />
 
       {/* Cards .box */}
       <div className={styles.boxesContainer}>
@@ -264,6 +151,7 @@ const Galaxy: React.FC = () => {
             <div className={styles.dotboxContent}>
               {/* <div className={styles.dotboxSubtitle}>{box.title}</div> */}
               <p className={styles.dotboxSummary}>{box.summary}</p>
+              
               {/* LEFT: Projects */}
               <div className={styles.dotboxMetrics}>
                 <div className={styles.metricsBlock}>
