@@ -3,6 +3,8 @@ import GalaxyBackground from './GalaxyBackground';
 import styles from './Galaxy.module.css';
 import TargetCursor from '../TextAnimations/TargetCursor/TargetCursor';
 import BoxCards from './BoxCards';
+import ContributorsOrbit from "./Contributors";
+import ProjectsWithCard from "./Projects";
 
 // Interfaces
 interface BoxConfig {
@@ -55,73 +57,6 @@ const projects: ProjectFull[] = [
 
 const Galaxy: React.FC = () => {
   const [cursorActive, setCursorActive] = useState(false);
-  const cardRef = useRef<HTMLDivElement>(null);
-  const hideTimer = useRef<number | null>(null);
-
-  const cancelHideCard = () => {
-    if (hideTimer.current !== null) {
-      window.clearTimeout(hideTimer.current);
-      hideTimer.current = null;
-    }
-  };
-
-  const scheduleHideCard = (delay = 250) => {
-    cancelHideCard();
-    hideTimer.current = window.setTimeout(() => {
-      setSelectedProject(null);
-    }, delay);
-  };
-  useEffect(() => () => cancelHideCard(), []);
-
-  // GALAXY UI INTERACTIF
-  const [selectedProject, setSelectedProject] = useState<ProjectFull | null>(null);
-  const [cardPos, setCardPos] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
-
-  const getBoxStyle = (index: number): React.CSSProperties => {
-    const diamondAngles = [-90, 0, 180, 90];
-    const angleDeg = diamondAngles[index % diamondAngles.length];
-    const angle = (angleDeg * Math.PI) / 180;
-    const rx = 350;
-    const ry = 280;
-    const x = rx * Math.cos(angle);
-    const y = ry * Math.sin(angle);
-    return { transform: `translate(-50%, -50%) translate(${x}px, ${y}px)` };
-  };
-
-  const getContributorStyle = (index: number): React.CSSProperties => {
-    const duration = 85;
-    const radius = 300;
-    const delay = -(duration / contributors.length) * index;
-    return {
-      '--orbit-radius': `${radius}px`,
-      animationDelay: `${delay}s`,
-      animationDuration: `${duration}s`,
-      backgroundColor: contributors[index].color || undefined,
-    } as React.CSSProperties;
-  };
-
-  const getProjectStyle = (index: number): React.CSSProperties => {
-    const duration = 70;
-    const radius = 420;
-    const delay = -(duration / projects.length) * index;
-    return {
-      '--orbit-radius': `${radius}px`,
-      animationDelay: `${delay}s`,
-      animationDuration: `${duration}s`,
-      backgroundColor: projects[index].color || undefined,
-    } as React.CSSProperties;
-  };
-
-  const pauseOrbit = (e: React.MouseEvent<HTMLDivElement>) => {
-    const el = e.currentTarget as HTMLElement;
-    el.style.animationPlayState = 'paused';
-    el.style.webkitAnimationPlayState = 'paused';
-  };
-  const resumeOrbit = (e: React.MouseEvent<HTMLDivElement>) => {
-    const el = e.currentTarget as HTMLElement;
-    el.style.animationPlayState = 'running';
-    el.style.webkitAnimationPlayState = 'running';
-  };
 
   return (
     <div
@@ -129,111 +64,11 @@ const Galaxy: React.FC = () => {
       onMouseEnter={() => setCursorActive(true)}
       onMouseLeave={() => setCursorActive(false)}
     >
-    {/* Three.js galaxy background */}
+
     <GalaxyBackground title="FABLAB.BOX" />
     <BoxCards items={boxes} />
-
-      {/* Contributors orbit */}
-      <div className={styles.orbit}>
-        {contributors.map((contrib, index) => (
-          <div
-            key={contrib.id}
-            className={`${styles.contributor} cursor-target`}
-            style={getContributorStyle(index)}
-            onMouseEnter={pauseOrbit}
-            onMouseLeave={resumeOrbit}
-          >
-            {contrib.name}
-          </div>
-        ))}
-      </div>
-
-      {/* Projects orbit */}
-      <div className={styles.orbitProjects}>
-        {projects.map((proj, index) => (
-          <div
-            key={proj.id}
-            data-role="project" 
-            className={`${styles.project} cursor-target`}
-            style={getProjectStyle(index)}
-            onMouseEnter={(e) => {
-              cancelHideCard();
-              pauseOrbit(e);
-              setSelectedProject(proj);
-              setCardPos({ x: e.clientX + 12, y: e.clientY + 12 });
-            }}
-            onMouseLeave={(e) => {
-              resumeOrbit(e);
-              const next = e.relatedTarget as Node | null;
-              if (cardRef.current && next && cardRef.current.contains(next)) {
-                cancelHideCard();
-                return;
-              }
-              scheduleHideCard(250);
-            }}
-            onMouseMove={(e) => {
-              if (selectedProject?.id === proj.id) {
-                setCardPos({ x: e.clientX + 20, y: e.clientY + 20 });
-              }
-            }}
-          />
-        ))}
-      </div>
-
-      {/* Project popup */}
-      {selectedProject && (
-        <div
-          ref={cardRef}
-          className={`${styles.projectCard} cursor-target`}
-          style={{
-            left: cardPos.x,
-            top: cardPos.y,
-            background: `radial-gradient(ellipse at right top, ${selectedProject.color}80 0%, #151419 45%, #151419 100%)`,
-            pointerEvents: 'auto',
-          }}
-          onMouseEnter={cancelHideCard}
-          onMouseLeave={(e) => {
-            const nextEl = e.relatedTarget as Element | null;
-            if (nextEl && nextEl.closest('[data-role="project"]')) {
-              cancelHideCard();
-              return;
-            }
-            scheduleHideCard(220);
-          }}
-        >
-          <div className={styles.projectCardHeader}>
-            <div className={styles.projectDate}>{selectedProject.date}</div>
-            <svg className={styles.projectIcon} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-              <path fillRule="evenodd" d="M10.5 6a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Zm0 6a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Zm0 6a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Z" clipRule="evenodd" />
-            </svg>
-          </div>
-          <div className={styles.projectCardBody}>
-            <h3>{selectedProject.title}</h3>
-            <p>{selectedProject.desc}</p>
-            <div className={styles.projectProgress}>
-              <span>Progress</span>
-              <div className={styles.projectProgressBar}>
-                <div className={styles.projectProgressBarFill} style={{ width: `${selectedProject.progress}%`, background: selectedProject.color }} />
-              </div>
-              <span>{selectedProject.progress}%</span>
-            </div>
-          </div>
-          <div className={styles.projectCardFooter}>
-            <ul>
-              {selectedProject.participants.map((p, idx) => (
-                <li key={idx}><span style={{ backgroundColor: p.color }}>{p.name}</span></li>
-              ))}
-              <li>
-                <div className={styles.projectBtnAdd} style={{ background: selectedProject.color }}>
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                    <path fillRule="evenodd" d="M12 3.75a.75.75 0 0 1 .75.75v6.75h6.75a.75.75 0 0 1 0 1.5h-6.75v6.75a.75.75 0 0 1-1.5 0v-6.75H4.5a.75.75 0 0 1 0-1.5h6.75V4.5a.75.75 0 0 1 .75-.75Z" clipRule="evenodd" />
-                  </svg>
-                </div>
-              </li>
-            </ul>
-          </div>
-        </div>
-      )}
+    <ContributorsOrbit contributors={contributors} />
+    <ProjectsWithCard projects={projects} />
 
       {cursorActive && (
         <TargetCursor targetSelector=".galaxy-scope .cursor-target" spinDuration={5} hideDefaultCursor={false} />
