@@ -172,7 +172,7 @@ p, li, .audiowide {
   gap: .75rem;
 }
 
-/* Bloc accordéon */
+/* Fablab charter part */
 .charter-row{
   border: 1px solid rgba(255,255,255,.14);
   border-radius: 12px;
@@ -186,7 +186,7 @@ p, li, .audiowide {
   box-shadow: 0 6px 18px rgba(0, 40, 80, .35);
 }
 
-/* Titre (summary) */
+/* summary */
 .charter-row > summary{
   list-style: none;
   cursor: pointer;
@@ -200,7 +200,6 @@ p, li, .audiowide {
 }
 .charter-row > summary::-webkit-details-marker{ display: none; }
 
-/* Chevrons custom */
 .charter-row > summary::before{
   content:"";
   width: .9rem; height: .9rem;
@@ -214,14 +213,12 @@ p, li, .audiowide {
   transform: rotate(45deg);
 }
 
-/* Corps */
 .charter-row > p{
-  padding: 0 1rem 1rem 2.2rem; /* indent sous le chevron */
+  padding: 0 1rem 1rem 2.2rem;
   margin: 0;
   opacity: .95;
 }
 
-/* Texte barré pour ce qui ne correspond pas */
 .strike{
   text-decoration: line-through;
   opacity: .7;
@@ -229,7 +226,7 @@ p, li, .audiowide {
 
 .charter-row > ul.charter-bullets{
   margin: 0;
-  padding: 0 1rem 1rem 2.2rem; /* même indent que le <p> */
+  padding: 0 1rem 1rem 2.2rem;
   list-style: disc;
   opacity: .95;
 }
