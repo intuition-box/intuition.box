@@ -1,8 +1,8 @@
 import React, { useRef, useEffect, useState } from 'react';
 import GalaxyBackground from './GalaxyBackground';
 import styles from './Galaxy.module.css';
-import { useColorMode } from '@docusaurus/theme-common';
 import TargetCursor from '../TextAnimations/TargetCursor/TargetCursor';
+import BoxCards from './BoxCards';
 
 // Interfaces
 interface BoxConfig {
@@ -27,13 +27,6 @@ interface ProjectFull extends Project {
   progress: number;
   participants: { name: string; color: string }[];
 }
-
-// const boxes: BoxConfig[] = [
-//   { id: 'thp.box', title: 'The Hacking Project', summary: 'Learn to code by building projects' },
-//   { id: 'gnosis.box', title: 'Gnosis Platform', summary: 'Decentralized knowledge sharing' },
-//   { id: 'intuition.box', title: 'Intuition Engine', summary: 'AI-driven insights and recommendations' },
-//   { id: 'colony.box', title: 'Colony', summary: 'Collaborative project management and governance' },
-// ];
 
 const boxes: BoxConfig[] = [
   { id: 'thp.box', summary: 'Learn to code by building projects' },
@@ -138,50 +131,7 @@ const Galaxy: React.FC = () => {
     >
     {/* Three.js galaxy background */}
     <GalaxyBackground title="FABLAB.BOX" />
-
-      {/* Cards .box */}
-      <div className={styles.boxesContainer}>
-        {boxes.map((box, index) => (
-          <div
-            key={box.id}
-            className={`${styles.dotbox} cursor-target`}
-            style={getBoxStyle(index)}
-          >
-            <h3 className={styles.dotboxTitle}>{box.id}</h3>
-            <div className={styles.dotboxContent}>
-              {/* <div className={styles.dotboxSubtitle}>{box.title}</div> */}
-              <p className={styles.dotboxSummary}>{box.summary}</p>
-              
-              {/* LEFT: Projects */}
-              <div className={styles.dotboxMetrics}>
-                <div className={styles.metricsBlock}>
-                  <div className={styles.metricsTitle}>projects</div>
-                  <div className={styles.metricsRow}>
-                    <div className={styles.stack}>
-                      <div className={`${styles.badge} ${styles.badgeProject}`} />
-                      <div className={`${styles.badge} ${styles.badgeProject}`} />
-                    </div>
-                    <span className={styles.metricsPlus}>+9</span>
-                  </div>
-                </div>
-
-                {/* RIGHT: Contributors */}
-                <div className={styles.metricsBlock}>
-                  <div className={styles.metricsTitle}>contributors</div>
-                  <div className={styles.metricsRow}>
-                    <div className={styles.stack}>
-                      <div className={`${styles.badge} ${styles.badgeContrib}`} />
-                      <div className={`${styles.badge} ${styles.badgeContrib}`} />
-                      <div className={`${styles.badge} ${styles.badgeContrib}`} />
-                    </div>
-                    <span className={styles.metricsPlus}>+7</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
+    <BoxCards items={boxes} />
 
       {/* Contributors orbit */}
       <div className={styles.orbit}>
