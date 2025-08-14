@@ -10,6 +10,7 @@ import Hero from '../components/Hero/Hero';
 import SciFiPanel from '../components/Panels/SciFiPanel';
 import Galaxy from '../components/Galaxy/Galaxy';
 import WhyPanel from '../components/Panels/WhyPanel';
+import OffersPanel from '../components/Panels/OffersPanel';
 
 import styles from './index.module.css';
 import Iridescence from '../components/Backgrounds/Iridescence/Iridescence';
@@ -63,9 +64,7 @@ export default function Home(): ReactNode {
           <h2>PARTNERS</h2>
         </SciFiPanel>
         <WhyPanel />
-        <SciFiPanel variant='large'>
-          <h2>WHAT FABLAB OFFERS ?</h2>
-        </SciFiPanel>
+        <OffersPanel />
       </main>
     </Layout>
   );
