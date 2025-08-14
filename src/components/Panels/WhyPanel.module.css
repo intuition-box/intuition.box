@@ -233,14 +233,13 @@
   font-weight: 400;
 }
 
-/* cta manifesto */
-.manifestoBtn {
+/* cta manifesto & all org values */
+.ctaBtn {
   margin-top: 1.5rem;
   padding: 0.85rem 1.8rem;
   font-family: "Orbitron", sans-serif;
   font-weight: 700;
   font-size: 1rem;
-  letter-spacing: 0.03em;
   text-transform: uppercase;
 
   color: var(--btn-text);
@@ -255,17 +254,17 @@
   transition: transform 0.15s ease, box-shadow 0.15s ease,
     border-color 0.15s ease, color 0.15s ease;
 }
-.manifestoBtn:hover {
+.ctaBtn:hover {
   transform: translateY(-2px);
   box-shadow: var(--glass-inset),
     0 6px 20px color-mix(in srgb, var(--btn-text) 40%, transparent);
 }
-.manifestoBtn:focus-visible {
+.ctaBtn:focus-visible {
   outline: none;
   box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.15),
     0 0 0 6px color-mix(in srgb, var(--btn-text) 35%, transparent);
 }
-.manifestoBtn:active {
+.ctaBtn:active {
   transform: translateY(0);
   box-shadow: var(--glass-inset),
     0 3px 8px color-mix(in srgb, var(--btn-text) 30%, transparent);

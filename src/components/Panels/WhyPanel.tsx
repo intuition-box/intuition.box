@@ -87,7 +87,7 @@ export default function WhyPanel() {
               </li>
             ))}
           </ul>
-          <button className={styles.manifestoBtn}>
+          <button className={styles.ctaBtn}>
             Read the FabLab.b0x Manifesto
           </button>
         </section>
@@ -295,6 +295,9 @@ export default function WhyPanel() {
               </p>
             </details>
           </div>
+          <button className={styles.ctaBtn}>
+            See all organisation values
+          </button>
         </section>
       </div>
     </SciFiPanel>
