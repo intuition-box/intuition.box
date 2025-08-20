@@ -133,3 +133,70 @@ p, li, .audiowide {
 [data-theme='dark'] .footer__link-item {
   color: #ffffff;
 }
+
+/*
+ * Unified glass and theme variables for panels, cards and call-to-actions.
+ * These variables centralize the colours and surface styles used throughout
+ * the site so that panels such as Blog, Why, Offers and Events can
+ * consistently pick up the same appearance in both light and dark modes.
+ */
+
+/* Dark theme defaults */
+:root {
+  /* Primary accent colour used for borders and highlights */
+  --accent-main: #5ec2e7;
+  /* Base text colour on glass surfaces */
+  --ink: #dee3f0;
+
+  /* Status colours for ticks and crosses */
+  --ok: #22f063;
+  --bad: #ff0033;
+
+  /* Button text colour; tied to accent */
+  --btn-text: var(--accent-main);
+
+  /* Unified glass backdrop: subtle radial gradient for dark mode */
+  --glass-bg: radial-gradient(120% 140% at 10% 10%,
+                    rgba(255,255,255,0.08) 0%,
+                    rgba(255,255,255,0.04) 45%,
+                    rgba(255,255,255,0.03) 100%);
+  /* Glass border: use accent colour for borders */
+  --glass-border: 0.5px solid var(--accent-main);
+  /* Thin inset highlight inside glass surfaces */
+  --glass-inset: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  /* Outer shadow for cards and panels */
+  --glass-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+}
+
+/* Light theme overrides */
+[data-theme='light'] {
+  /* Warmer accent for light mode */
+  --accent-main: #a83106;
+  /* Darker text on light surfaces */
+  --ink: #000;
+
+  /* Status colours adjust slightly in light mode */
+  --ok: #009a4a;
+  --bad: #ff0033;
+
+  /* Button text tracks accent */
+  --btn-text: var(--accent-main);
+
+  /* Glass backdrop: linear gradient for light mode */
+  --glass-bg: linear-gradient(
+      to bottom right,
+      rgb(255 255 255 / 40%),
+      rgb(255 255 255 / 20%)
+  );
+  /* Border always follows accent colour */
+  --glass-border: 0.5px solid var(--accent-main);
+  /* Slightly lighter shadow for light mode */
+  --glass-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+}
+
+a,
+a:hover,
+a:focus,
+a:active {
+  text-decoration: none;
+}

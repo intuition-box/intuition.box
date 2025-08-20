@@ -1,39 +1,3 @@
-:global(:root) {
-  --accent-main: #5ec2e7;
-  --ink: #dee3f0;
-
-  --ok: #22f063;
-  --bad: #ff0033;
-
-  --btn-text: #5ec2e7;
-
-  --glass-bg: radial-gradient(120% 140% at 10% 10%,
-                rgba(255,255,255,0.08) 0%,
-                rgba(255,255,255,0.04) 45%,
-                rgba(255,255,255,0.03) 100%);
-  --glass-border: var(--accent-main);
-  --glass-inset: inset 0 1px 0 rgba(255, 255, 255, 0.06);
-  --glass-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
-}
-
-:global(:root[data-theme="light"]) {
-  --accent-main: #a83106;
-  --ink: #000;
-
-  --ok: #009a4a;
-  --bad: #ff0033;
-
-  --btn-text: #a83106;
-
-  --glass-bg: linear-gradient(
-      to bottom right,
-      rgb(255 255 255 / 40%),
-      rgb(255 255 255 / 20%)
-  );
-
-  --glass-border: var(--accent-main);
-}
-
 .grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -52,17 +16,15 @@
   padding: 1.5rem;
   backdrop-filter: blur(10px) saturate(1.15);
   -webkit-backdrop-filter: blur(10px) saturate(1.15);
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.06),
-    rgba(255, 255, 255, 0.04)
-  );
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35),
-    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  /* unified glass styling */
+  background: var(--glass-bg);
+  border: var(--glass-border);
+  box-shadow: 0 0 2px var(--glass-border),
+    0 0 6px color-mix(in srgb, var(--glass-border) 30%, transparent),
+    var(--glass-inset), var(--glass-shadow);
   transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
   margin-bottom: 4rem;
-  color: var(--ink, #fff);
+  color: var(--ink);
 }
 .card:hover {
   transform: translateY(-4px);
@@ -235,12 +197,17 @@
 
 /* cta manifesto & all org values */
 .ctaBtn {
-  margin-top: 1.5rem;
+  margin: 1.5rem auto 0;
   padding: 0.85rem 1.8rem;
   font-family: "Orbitron", sans-serif;
   font-weight: 700;
   font-size: 1rem;
   text-transform: uppercase;
+
+  display: block;
+  width: fit-content;
+  text-align: center;
+  align-self: center;
 
   color: var(--btn-text);
   border: 1px solid var(--btn-text);
@@ -254,20 +221,11 @@
   transition: transform 0.15s ease, box-shadow 0.15s ease,
     border-color 0.15s ease, color 0.15s ease;
 }
+
 .ctaBtn:hover {
   transform: translateY(-2px);
   box-shadow: var(--glass-inset),
-    0 6px 20px color-mix(in srgb, var(--btn-text) 40%, transparent);
-}
-.ctaBtn:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.15),
-    0 0 0 6px color-mix(in srgb, var(--btn-text) 35%, transparent);
-}
-.ctaBtn:active {
-  transform: translateY(0);
-  box-shadow: var(--glass-inset),
-    0 3px 8px color-mix(in srgb, var(--btn-text) 30%, transparent);
+              0 6px 20px color-mix(in srgb, var(--btn-text) 40%, transparent);
 }
 
 /* org values */
@@ -284,7 +242,6 @@
   -webkit-backdrop-filter: blur(6px) saturate(1.1);
   color: var(--ink);
 
-  /* resting glow */
   box-shadow: 0 0 2px var(--glass-border),
     0 0 6px color-mix(in srgb, var(--glass-border) 30%, transparent),
     var(--glass-inset), var(--glass-shadow);
@@ -341,9 +298,9 @@
 
 /* org values vote */
 .voteSummary {
-  margin-left: auto; /* pousse à droite */
+  margin-left: auto;
   display: flex;
-  flex-direction: column; /* un au-dessus de l'autre */
+  flex-direction: column;
   gap: 0.25rem;
 }
 
@@ -381,5 +338,5 @@
 }
 
 :global(:root[data-theme="light"]) .voteMiniNumber {
-  color: #000; /* noir en mode clair */
+  color: #000;
 }

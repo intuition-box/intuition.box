@@ -12,6 +12,8 @@ import Galaxy from '../components/Galaxy/Galaxy';
 import WhyPanel from '../components/Panels/WhyPanel';
 import OffersPanel from '../components/Panels/OffersPanel';
 import BlogPanel from '../components/Panels/BlogPanel';
+import EventGrid from "@site/src/components/Events/EventGrid";
+import { EVENTS } from "@site/src/components/Events/events.data";
 
 import styles from './index.module.css';
 import Iridescence from '../components/Backgrounds/Iridescence/Iridescence';
@@ -67,6 +69,7 @@ export default function Home(): ReactNode {
         <WhyPanel />
         <OffersPanel />
         <BlogPanel limit={3} />
+        <EventGrid events={EVENTS} />
       </main>
     </Layout>
   );

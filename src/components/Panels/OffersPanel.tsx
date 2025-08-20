@@ -32,11 +32,11 @@ export default function OffersPanel() {
           const Tag: any = !isGhost && it.href ? "a" : "div";
           return (
             <Tag key={isGhost ? `ghost-${i}` : it.id}
-                 className={`${styles.card} ${isGhost ? styles.ghost : ""}`}
-                 style={style}
-                 href={!isGhost ? it.href : undefined}
-                 target={!isGhost && it.href?.startsWith("http") ? "_blank" : undefined}
-                 rel={!isGhost && it.href?.startsWith("http") ? "noreferrer" : undefined}>
+                className={`${styles.card} ${isGhost ? styles.ghost : ""}`}
+                style={style}
+                href={!isGhost ? it.href : undefined}
+                target={!isGhost && it.href?.startsWith("http") ? "_blank" : undefined}
+                rel={!isGhost && it.href?.startsWith("http") ? "noreferrer" : undefined}>
               {!isGhost && (
                 <div className={styles.inner}>
                   {it.icon && <div className={styles.icon}>{it.icon}</div>}

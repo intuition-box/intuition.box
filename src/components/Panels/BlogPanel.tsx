@@ -1,4 +1,3 @@
-// src/components/Panels/BlogPanel.tsx
 import React from "react";
 import Link from "@docusaurus/Link";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
@@ -70,9 +69,9 @@ export default function BlogPanel({
             <article className={styles.card}>
               <div className={clsx(styles.media, styles.mediaPlaceholder)} />
               <div className={styles.body}>
-                <h3 className={styles.postTitle}>Aucun article</h3>
+                <h3 className={styles.postTitle}>No article</h3>
                 <p className={styles.desc}>
-                  Ajoute des fichiers dans <code>/blog</code>.
+                  Add an article in <code>/blog</code>.
                 </p>
               </div>
             </article>

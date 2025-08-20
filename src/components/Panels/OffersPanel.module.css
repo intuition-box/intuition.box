@@ -16,27 +16,22 @@
 .card {
   position: relative;
   border-radius: 16px;
-  background: radial-gradient(120% 140% at 10% 10%,
-                rgba(255,255,255,0.08) 0%,
-                rgba(255,255,255,0.04) 45%,
-                rgba(255,255,255,0.03) 100%);
-  border: 1px solid rgba(255,255,255,.12);
-  box-shadow: 0 12px 30px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.06);
+  background: var(--glass-bg);
+  border: var(--glass-border);
+  box-shadow: 0 0 2px var(--glass-border),
+              0 0 6px color-mix(in srgb, var(--glass-border) 30%, transparent),
+              var(--glass-inset), var(--glass-shadow);
   backdrop-filter: blur(10px) saturate(1.12);
   -webkit-backdrop-filter: blur(10px) saturate(1.12);
   transition: transform .18s ease;
   padding: 1rem;
   text-decoration: none;
-  color: inherit;
+  color: var(--ink);
 }
-.card:hover { transform: translateY(-2px); }
-
-:global(:root[data-theme="light"]) .card {
-  background: linear-gradient(
-    to bottom right,
-      rgb(255 255 255 / 40%),
-      rgb(255 255 255 / 20%)
-  );
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 36px rgba(0,0,0,.42);
+  border-color: var(--accent-main);
 }
 
 .inner { display: flex; flex-direction: column; gap: 0.4rem; }
