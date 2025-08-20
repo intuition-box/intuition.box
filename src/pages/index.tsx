@@ -11,6 +11,7 @@ import SciFiPanel from '../components/Panels/SciFiPanel';
 import Galaxy from '../components/Galaxy/Galaxy';
 import WhyPanel from '../components/Panels/WhyPanel';
 import OffersPanel from '../components/Panels/OffersPanel';
+import BlogPanel from '../components/Panels/BlogPanel';
 
 import styles from './index.module.css';
 import Iridescence from '../components/Backgrounds/Iridescence/Iridescence';
@@ -65,6 +66,7 @@ export default function Home(): ReactNode {
         </SciFiPanel>
         <WhyPanel />
         <OffersPanel />
+        <BlogPanel limit={3} />
       </main>
     </Layout>
   );

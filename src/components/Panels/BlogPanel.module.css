@@ -1,0 +1,115 @@
+.header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.title {
+  margin: 0 auto;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  font-family: "Orbitron", sans-serif;
+}
+
+.grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(12, 1fr);
+}
+
+.card {
+  position: relative;
+  grid-column: span 6;
+  display: grid;
+  grid-template-rows: 160px auto;
+  border-radius: 16px;
+  overflow: hidden;
+
+  background: var(--glass-bg);
+  border: var(--glass-border);
+  box-shadow: 0 0 2px var(--glass-border),
+              0 0 6px color-mix(in srgb, var(--glass-border) 30%, transparent),
+              var(--glass-inset), var(--glass-shadow);
+  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+}
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 36px rgba(0,0,0,.42);
+  border-color: var(--accent-main);
+}
+
+.cardLink { position: absolute; inset: 0; }
+
+.media {
+  background-size: cover;
+  background-position: center;
+  min-height: 160px;
+}
+.mediaPlaceholder {
+  background: linear-gradient(135deg, rgba(255,255,255,.08), rgba(255,255,255,.02));
+}
+
+.body { padding: 1rem 1rem 1.2rem; }
+
+.postTitle a {
+  margin: .2rem 0 .4rem;
+  font-size: clamp(1rem, .95rem + .4vw, 1.2rem);
+  line-height: 1.35;
+  font-family: "Audiowide", Arial, sans-serif;
+  color: #ffdf7e;
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  font-size: .9rem;
+  opacity: .85;
+  margin-bottom: .35rem;
+}
+.dot { opacity: .6; }
+
+.desc {
+  margin: .2rem 0 .8rem;
+  font-size: .95rem;
+  opacity: .9;
+}
+
+@media (max-width: 996px) {
+  .card { grid-column: span 12; grid-template-rows: 180px auto; }
+  .media { min-height: 180px; }
+}
+@media (min-width: 1400px) {
+  .card { grid-column: span 4; }
+}
+
+/* CTA (see all) */
+.actions {
+  margin-top: 2rem;
+  text-align: center;
+}
+.seeAll {
+  display: inline-block;
+  padding: 0.85rem 1.8rem;
+  font-family: "Orbitron", sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  text-transform: uppercase;
+  margin-bottom: 5rem;
+
+  color: var(--btn-text);
+  border: 1px solid var(--btn-text);
+  border-radius: 999px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(6px) saturate(1.1);
+  -webkit-backdrop-filter: blur(6px) saturate(1.1);
+  box-shadow: var(--glass-inset),
+              0 4px 15px color-mix(in srgb, var(--btn-text) 25%, transparent);
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease,
+              border-color 0.15s ease, color 0.15s ease;
+}
+.seeAll:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--glass-inset),
+              0 6px 20px color-mix(in srgb, var(--btn-text) 40%, transparent);
+}
