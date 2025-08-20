@@ -42,7 +42,7 @@ export default function EventCard({
 }) {
   const { day, weekday, month, range } = formatDateRange(item.date, item.endDate);
   const isPast = new Date(item.endDate ?? item.date).getTime() < Date.now();
-  const ctaText = item.ctaLabel ?? (isPast ? "Replay" : "Register");
+  const ctaText = item.ctaLabel ?? "Register";
 
   const CardTag = item.href ? ("a" as const) : ("div" as const);
   const tagProps = item.href
@@ -59,19 +59,27 @@ export default function EventCard({
     >
       <div className={styles.overlay} />
 
-      <div className={styles.datePill} aria-hidden="true">
-        <div className={styles.weekday}>{weekday}</div>
-        <div className={styles.day}>{range ? range : day}</div>
-        {!range && <div className={styles.month}>{month}</div>}
-      </div>
+      {!isPast ? (
+        <div className={styles.datePill} aria-hidden="true">
+          <div className={styles.weekday}>{weekday}</div>
+          <div className={styles.day}>{range ? range : day}</div>
+          {!range && <div className={styles.month}>{month}</div>}
+        </div>
+      ) : (
+        <div className={`${styles.datePill} ${styles.pastBadge}`} aria-hidden="true">
+          <div className={styles.weekday}>REPLAY</div>
+        </div>
+      )}
 
       <div className={styles.info} role="img" aria-label="More info">i</div>
 
       <div className={styles.content}>
         <h3 className={styles.title}>{item.title}</h3>
-        <div className={styles.ctaRow}>
-          <span className={styles.cta}>{ctaText}</span>
-        </div>
+        {!isPast && (
+          <div className={styles.ctaRow}>
+            <span className={styles.cta}>{ctaText}</span>
+          </div>
+        )}
       </div>
     </CardTag>
   );

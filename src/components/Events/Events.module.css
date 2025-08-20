@@ -1,7 +1,29 @@
 /* eventgrid */
 .wrap { margin: 2rem 0 4rem; }
-
 .tailSpacer { height: 6rem; }
+
+.section { margin: 0 0 2.25rem; }
+.sectionTitle {
+  margin: 0 0 .75rem;
+  text-transform: uppercase;
+  letter-spacing: .02em;
+  font-family: "Orbitron", sans-serif;
+}
+
+.sectionDivider {
+  height: 2px;
+  margin: 1.25rem 0 1.75rem;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    color-mix(in srgb, var(--accent-main) 45%, transparent) 20%,
+    color-mix(in srgb, var(--accent-main) 65%, transparent) 50%,
+    color-mix(in srgb, var(--accent-main) 45%, transparent) 80%,
+    transparent 100%
+  );
+  opacity: .7;
+  border-radius: 2px;
+}
 
 .grid {
   display: grid;
@@ -20,14 +42,15 @@
   border-radius: 16px;
   overflow: hidden;
   text-decoration: none;
+  color: var(--ink);
 
   background: var(--glass-bg);
   border: var(--glass-border);
-  box-shadow: 0 0 2px var(--glass-border),
-              0 0 6px color-mix(in srgb, var(--glass-border) 30%, transparent),
-              var(--glass-inset), var(--glass-shadow);
+  box-shadow:
+    0 0 2px var(--glass-border),
+    0 0 6px color-mix(in srgb, var(--glass-border) 30%, transparent),
+    var(--glass-inset), var(--glass-shadow);
   transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
-  color: var(--ink);
 }
 .card:hover {
   transform: translateY(-2px);
@@ -38,7 +61,6 @@
 @media (min-width: 1400px) { .card { grid-column: span 4; } }
 @media (max-width: 996px)  { .card { grid-column: span 12; grid-template-rows: 180px auto; } }
 
-/* background image area */
 .card::before {
   content: "";
   grid-row: 1 / span 1;
@@ -60,6 +82,7 @@
 }
 @media (max-width: 996px) { .overlay { height: 180px; } }
 
+/* date pill */
 .datePill {
   position: absolute;
   top: 10px;
@@ -76,8 +99,36 @@
   text-align: center;
 }
 .weekday { font: 600 12px/1.2 "Orbitron", sans-serif; padding: 6px 8px; }
-.day     { font: 800 24px/1.1 "Orbitron", sans-serif; padding-top: 4px; }
+.day     { font: 800 24px/1.1 "Orbitron", sans-serif; padding-top: 4px; text-shadow: 0 0 2px rgba(255,255,255,.25); }
 .month   { font: 600 12px/1.2 "Orbitron", sans-serif; padding: 4px 0 8px; }
+
+:global(:root[data-theme="light"]) .datePill {
+  background: rgb(255 255 255 / 18%);
+  color: #0b2f78;
+  border: 1px solid color-mix(in srgb, #0b2f78 40%, transparent);
+  box-shadow: 0 10px 28px rgba(0,0,0,.28);
+}
+
+:global(:root[data-theme="light"]) .pastBadge {
+  background: var(--glass-bg);
+  color: var(--btn-text);
+  border: 1px solid color-mix(in srgb, var(--bad) 50%, transparent);
+  box-shadow: 0 8px 18px rgba(0,0,0,.25);
+}
+
+:global(:root[data-theme="light"]) .info {
+  background: var(--glass-bg);
+  color: var(--btn-text);
+  border: 1px solid color-mix(in srgb, var(--bad) 50%, transparent);
+  box-shadow: 0 8px 18px rgba(0,0,0,.25);
+}
+
+.pastBadge {
+  text-transform: uppercase;
+  padding: 2px 0;
+}
+.pastBadge .weekday { padding: 6px 8px; }
+.pastBadge .day, .pastBadge .month { display: none; }
 
 .info {
   position: absolute;
@@ -91,6 +142,7 @@
 }
 .card:hover .info { opacity: 1; transform: scale(1.02); }
 
+/* contenu */
 .content {
   padding: 1rem 1rem 1.2rem;
   display: grid;
@@ -106,9 +158,8 @@
 }
 :global(:root[data-theme="light"]) .title { color: #0b2f78; }
 
-.ctaRow {
-  display: flex;
-}
+.ctaRow { display: flex; }
+
 .cta {
   justify-content: center;
   padding: 0.7rem 1.2rem;
@@ -131,8 +182,7 @@
   box-shadow: var(--glass-inset),
               0 4px 15px color-mix(in srgb, var(--btn-text) 25%, transparent);
   transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease, color .15s ease;
-
-  text-decoration: none;
+  text-decoration: none; /* jamais souligné */
 }
 
 .cta:hover {
@@ -140,9 +190,4 @@
   box-shadow: var(--glass-inset),
               0 6px 20px color-mix(in srgb, var(--btn-text) 40%, transparent);
 }
-
-.cta:hover,
-.cta:focus,
-.cta:active {
-  text-decoration: none;
-}
+.cta:focus, .cta:active { text-decoration: none; }

@@ -12,7 +12,7 @@
 
 .grid {
   display: grid;
-  gap: 1rem;
+  gap: 14px;
   grid-template-columns: repeat(12, 1fr);
 }
 
@@ -20,7 +20,7 @@
   position: relative;
   grid-column: span 6;
   display: grid;
-  grid-template-rows: 160px auto;
+  grid-template-rows: 160px 1fr;
   border-radius: 16px;
   overflow: hidden;
 

@@ -28,20 +28,22 @@ export default function EventGrid({
 
       <section className={styles.wrap}>
         {upcoming.length > 0 && (
-          <>
-            <h3>UPCOMING</h3>
+          <section className={`${styles.section} ${styles.upcoming}`}>
             <div className={styles.grid}>
               {upcoming.map(ev => <EventCard key={ev.id} item={ev} />)}
             </div>
-          </>
+          </section>
         )}
 
         {past.length > 0 && (
           <>
-            <h3>REPLAY</h3>
-            <div className={styles.grid}>
-              {past.map(ev => <EventCard key={ev.id} item={ev} />)}
-            </div>
+            <div className={styles.sectionDivider} aria-hidden />
+            <section className={`${styles.section} ${styles.replay}`}>
+              <h3 className={styles.sectionTitle}>Past Events</h3>
+              <div className={styles.grid}>
+                {past.map(ev => <EventCard key={ev.id} item={ev} />)}
+              </div>
+            </section>
           </>
         )}
 
