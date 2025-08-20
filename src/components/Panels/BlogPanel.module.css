@@ -58,6 +58,10 @@
   color: #ffdf7e;
 }
 
+:global(:root[data-theme="light"]) .postTitle a {
+  color: #0b2f78
+}
+
 .meta {
   display: flex;
   align-items: center;
