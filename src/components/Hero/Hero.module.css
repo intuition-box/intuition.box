@@ -1,9 +1,4 @@
-:global(:root) {
-  --hero-bg: url('../../assets/background-dark.png');
-}
-
 :global(:root[data-theme='light']) {
-  --hero-bg: url('../../assets/background-light.png');
   --hero-text: #0b2f78;
 }
 
@@ -20,9 +15,8 @@
 
 .parallax {
   min-height: 100vh;
-  background-attachment: fixed;
-  background-position: center;
-  background-repeat: no-repeat;
+  background-position: inherit;
+  background-repeat: inherit;
   background-size: cover;
   display: flex;
   align-items: center;
@@ -75,7 +69,6 @@
   transition: min-width 0.2s;
 }
 
-
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -84,5 +77,11 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .parallax {
+    background-attachment: scroll;
   }
 }

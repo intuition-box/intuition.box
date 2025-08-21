@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import SciFiPanel from "./SciFiPanel";
 import styles from "./OffersPanel.module.css";
-import { useAutoGrid } from "../../hooks/useAutoGrid";
+import { useAutoGrid, useIsMobile } from "../../hooks/useAutoGrid";
 
 type OfferItem = { id: string; title: string; desc?: string; href?: string; icon?: React.ReactNode; };
 
@@ -17,7 +17,61 @@ export default function OffersPanel() {
     { id:"finance", title:"finance", desc:"Lorem ipsum", href:"#", icon:<>💰</> },
   ];
 
+  const isMobile = useIsMobile();
   const layout = useAutoGrid(items, { rows: 3, step: 2, minPerItem: 4, autoTall: true, tallRows: 2 });
+
+// mobile
+  const visibleItems = useMemo(() => items, [items]);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const [index, setIndex] = useState(0);
+  const scrollEndTO = useRef<number | null>(null);
+
+  const scrollTo = (i: number) => {
+    const el = trackRef.current;
+    if (!el) return;
+    const clamped = Math.max(0, Math.min(i, visibleItems.length - 1));
+    const child = el.children.item(clamped) as HTMLElement | null;
+    if (child) child.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+    setIndex(clamped);
+  };
+
+  const snapToClosest = () => {
+    const el = trackRef.current; if (!el) return;
+    const tr = el.getBoundingClientRect();
+    const center = tr.left + tr.width / 2;
+    let best = 0, bestDist = Infinity;
+    for (let i = 0; i < el.children.length; i++) {
+      const r = (el.children[i] as HTMLElement).getBoundingClientRect();
+      const c = r.left + r.width / 2;
+      const d = Math.abs(c - center);
+      if (d < bestDist) { bestDist = d; best = i; }
+    }
+    setIndex(best);
+    const child = el.children.item(best) as HTMLElement | null;
+    if (child) child.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+  };
+
+  const onTrackScroll = () => {
+    const el = trackRef.current; if (!el) return;
+    const tr = el.getBoundingClientRect();
+    const center = tr.left + tr.width / 2;
+    let best = 0, bestDist = Infinity;
+    for (let i = 0; i < el.children.length; i++) {
+      const r = (el.children[i] as HTMLElement).getBoundingClientRect();
+      const c = r.left + r.width / 2;
+      const d = Math.abs(c - center);
+      if (d < bestDist) { bestDist = d; best = i; }
+    }
+    setIndex(best);
+
+    if (scrollEndTO.current) window.clearTimeout(scrollEndTO.current);
+    scrollEndTO.current = window.setTimeout(snapToClosest, 80);
+  };
+
+  useEffect(() => {
+    if (!isMobile) return;
+    requestAnimationFrame(() => scrollTo(0));
+  }, [isMobile]);
 
   return (
     <SciFiPanel variant="large">
@@ -26,28 +80,79 @@ export default function OffersPanel() {
         <p className={styles.subtitle}>Short description</p>
       </header>
 
-      <div className={styles.grid}>
-        {layout.map(({ data, style, isGhost }, i) => {
-          const it = data as OfferItem;
-          const Tag: any = !isGhost && it.href ? "a" : "div";
-          return (
-            <Tag key={isGhost ? `ghost-${i}` : it.id}
+{/* desktop */}
+      {!isMobile && (
+        <div className={styles.grid}>
+          {layout.map(({ data, style, isGhost }, i) => {
+            const it = data as OfferItem;
+            const Tag: any = !isGhost && it.href ? "a" : "div";
+            return (
+              <Tag key={isGhost ? `ghost-${i}` : it.id}
                 className={`${styles.card} ${isGhost ? styles.ghost : ""}`}
                 style={style}
                 href={!isGhost ? it.href : undefined}
                 target={!isGhost && it.href?.startsWith("http") ? "_blank" : undefined}
-                rel={!isGhost && it.href?.startsWith("http") ? "noreferrer" : undefined}>
-              {!isGhost && (
-                <div className={styles.inner}>
-                  {it.icon && <div className={styles.icon}>{it.icon}</div>}
-                  <h3 className={styles.title}>{it.title}</h3>
-                  {it.desc && <p className={styles.desc}>{it.desc}</p>}
-                </div>
-              )}
-            </Tag>
-          );
-        })}
-      </div>
+                rel={!isGhost && it.href?.startsWith("http") ? "noreferrer" : undefined}
+              >
+                {!isGhost && (
+                  <div className={styles.inner}>
+                    {it.icon && <div className={styles.icon}>{it.icon}</div>}
+                    <h3 className={styles.title}>{it.title}</h3>
+                    {it.desc && <p className={styles.desc}>{it.desc}</p>}
+                  </div>
+                )}
+              </Tag>
+            );
+          })}
+        </div>
+      )}
+
+      {/* Mobile */}
+      {isMobile && (
+        <div className={styles.carousel} aria-roledescription="carousel">
+          <div
+            className={styles.track}
+            ref={trackRef}
+            onScroll={onTrackScroll}
+            tabIndex={0}
+            aria-label="Offers Carousel"
+          >
+            {visibleItems.map((it) => {
+              const Tag: any = it.href ? "a" : "div";
+              return (
+                <Tag key={it.id}
+                  className={`${styles.card} ${styles.slide}`}
+                  href={it.href}
+                  target={it.href?.startsWith("http") ? "_blank" : undefined}
+                  rel={it.href?.startsWith("http") ? "noreferrer" : undefined}
+                >
+                  <div className={styles.inner}>
+                    {it.icon && <div className={styles.icon}>{it.icon}</div>}
+                    <h3 className={styles.title}>{it.title}</h3>
+                    {it.desc && <p className={styles.desc}>{it.desc}</p>}
+                  </div>
+                </Tag>
+              );
+            })}
+          </div>
+
+          <div className={styles.controls}>
+            <button className={styles.navBtn} onClick={() => scrollTo(index - 1)} aria-label="Previous">‹</button>
+            <div className={styles.dots} role="tablist" aria-label="Slides">
+              {visibleItems.map((_, i) => (
+                <button
+                  key={i}
+                  className={`${styles.dot} ${i === index ? styles.dotActive : ""}`}
+                  aria-selected={i === index}
+                  role="tab"
+                  onClick={() => scrollTo(i)}
+                />
+              ))}
+            </div>
+            <button className={styles.navBtn} onClick={() => scrollTo(index + 1)} aria-label="Next">›</button>
+          </div>
+        </div>
+      )}
     </SciFiPanel>
   );
 }
