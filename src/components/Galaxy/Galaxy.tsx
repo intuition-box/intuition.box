@@ -5,6 +5,7 @@ import TargetCursor from '../TextAnimations/TargetCursor/TargetCursor';
 import BoxCards from './BoxCards';
 import ContributorsOrbit from "./Contributors";
 import ProjectsWithCard from "./Projects";
+import { useIsMobile } from "../../hooks/useAutoGrid";
 
 // Interfaces
 interface BoxConfig {
@@ -57,12 +58,13 @@ const projects: ProjectFull[] = [
 
 const Galaxy: React.FC = () => {
   const [cursorActive, setCursorActive] = useState(false);
+  const isMobile = useIsMobile();
 
   return (
     <div
       className={`${styles.galaxyWrapper} galaxy-scope ${cursorActive ? styles.cursorActive : ''}`}
-      onMouseEnter={() => setCursorActive(true)}
-      onMouseLeave={() => setCursorActive(false)}
+      onMouseEnter={() => { if (!isMobile) setCursorActive(true); }}
+      onMouseLeave={() => { if (!isMobile) setCursorActive(false); }}
     >
 
     <GalaxyBackground title="FABLAB.BOX" />
@@ -70,7 +72,7 @@ const Galaxy: React.FC = () => {
     <ContributorsOrbit contributors={contributors} />
     <ProjectsWithCard projects={projects} />
 
-      {cursorActive && (
+      {!isMobile && cursorActive && (
         <TargetCursor targetSelector=".galaxy-scope .cursor-target" spinDuration={5} hideDefaultCursor={false} />
       )}
     </div>

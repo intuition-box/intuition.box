@@ -33,6 +33,12 @@
   background-image: url("../Backgrounds/dark_galaxy.svg");
 }
 
+@media (max-width: 640px) {
+  .galaxyBg {
+    background-size: 250%;
+  }
+}
+
 .centralCircle {
   position: absolute;
   top: 50%;
@@ -287,7 +293,7 @@
 }
 .projectDate { color: #ddd; font-size: 0.9rem; }
 .projectIcon { color: #fff; width: 24px; height: 24px; cursor: pointer; }
-.projectCardBody { padding: 1em 1.5em; text-align: left; }
+.projectCardBody { padding: 1em 1.5em; text-align: left; color: #fff;}
 .projectCardBody h3 {
   margin-top: 0.5em;
   margin-bottom: 0.3em;
