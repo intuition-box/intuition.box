@@ -340,3 +340,82 @@
 :global(:root[data-theme="light"]) .voteMiniNumber {
   color: #000;
 }
+
+/* responsive design */
+.desktopOnly { display: block; }
+.mobileOnly { display: none; }
+
+@media (max-width: 768px) {
+  .grid { grid-template-columns: 1fr; }
+
+  .desktopOnly { display: none; }
+  .mobileOnly { display: block; }
+
+  .card { padding: 1rem; margin-bottom: 1rem; }
+  .cardTitle { font-size: 1.05rem; }
+  .cardIntro { margin-bottom: 0.6rem; }
+  .checkItem { padding: 0.5rem 0.7rem; }
+  .accordion { gap: 0.6rem; }
+}
+
+.moreMobile {
+  display: none;
+  text-align: left;
+  margin-top: 0.8rem;
+}
+.moreBtn::-webkit-details-marker { display: none; }
+
+@media (max-width: 768px) {
+  .moreMobile { display: block; }
+
+  .card:nth-of-type(2) {
+    margin-bottom: 4rem;
+  }
+
+  .whenClosed { display: inline; }
+  .whenOpen { display: none; }
+  .moreMobile[open] .whenClosed { display: none; }
+  .moreMobile[open] .whenOpen { display: inline; }
+
+  .checklist .checkItem:not(:first-child) { display: none; }
+  .moreMobile[open] ~ .checklist .checkItem { display: grid; }
+
+  .accordion .accordionItem:nth-child(n + 3) { display: none; }
+  .moreMobile[open] ~ .accordion .accordionItem { display: block; }
+
+  .moreBtn {
+    list-style: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.55rem 1rem;
+    border-radius: 999px;
+    border: 1px solid var(--btn-text);
+    background: var(--glass-bg);
+    color: var(--btn-text);
+    font-family: "Orbitron", sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    cursor: pointer;
+    box-shadow: var(--glass-inset), 0 4px 15px color-mix(in srgb, var(--btn-text) 25%, transparent);
+    transition: transform .15s ease, box-shadow .15s ease;
+  }
+  .moreBtn::after {
+    content: "";
+    width: 10px; height: 10px;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: rotate(-45deg);
+    transition: transform .2s ease;
+  }
+  .moreMobile[open] .moreBtn::after { transform: rotate(45deg); }
+
+  .voteMiniNumber { white-space: nowrap; }
+
+  /* see more / less */
+  .revealWrap .checklist .checkItem:not(:first-child) { display: none; }
+  .revealWrap .accordion .accordionItem:nth-child(n + 3) { display: none; }
+
+  .revealWrap:has(.moreMobile[open]) .checklist .checkItem { display: grid; }
+  .revealWrap:has(.moreMobile[open]) .accordion .accordionItem { display: block; }
+}
