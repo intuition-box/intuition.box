@@ -105,6 +105,60 @@
 .bgShape polygon {
   fill: var(--panel-fill-color);
   stroke: var(--panel-stroke-color);
-  stroke-width: 2;  /* Ajuste l’épaisseur ici */
+  stroke-width: 2;
+}
+
+/* ----- MOBILE ONLY (≤640px) ----- */
+@media (max-width: 640px) {
+  .panel {
+    width: calc(100% - 1rem);
+    max-width: none !important;
+    min-width: 0;
+    box-sizing: border-box;
+
+    margin: 1rem 0.5rem;
+    padding: 1rem 0.9rem;
+    border-radius: 18px;
+  }
+
+  .small {
+    padding: 0.6rem;
+    max-width: 70% !important;
+    margin-inline: auto;
+  }
+  .large {
+    padding: 1.2rem;
+    margin-bottom: 2.5rem;
+    width: calc(100% - 1rem) !important;
+    max-width: none !important;
+  }
+
+  .content {
+    align-items: stretch;
+    gap: 0.75rem;
+    overflow-wrap: anywhere;
+  }
+  .content > * { max-width: 100%; }
+  .content img,
+  .content video,
+  .content iframe,
+  .content table { max-width: 100%; height: auto; }
+
+  .bgShape { inset: 0; width: 100%; height: 100%; }
+
+  .halo {
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(92vw, 560px);
+    height: min(70vw, 520px);
+    top: -12vw;
+    filter: blur(32px);
+  }
+  :global([data-theme='light']) .halo {
+    width: min(94vw, 620px);
+    height: min(76vw, 560px);
+    top: -14vw;
+    filter: blur(28px);
+  }
 }
 
