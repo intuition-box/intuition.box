@@ -19,6 +19,11 @@ function useBreakpointCols(): Cols {
   return cols;
 }
 
+export function useIsMobile() {
+  const cols = useBreakpointCols();
+  return cols === 4;
+}
+
 export type AutoGridOut<T> = { data: T; style: React.CSSProperties; isGhost?: boolean };
 
 type Opts = {
