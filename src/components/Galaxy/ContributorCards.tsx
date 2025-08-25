@@ -1,11 +1,11 @@
 import React from "react";
 import styles from "./Galaxy.module.css";
-import BoxCard from "./BoxCard";
+import ContributorCard from "./ContributorCard";
 
-export type BoxItem = { id: string; summary: string };
+export type ContributorItem = { id: string; summary: string };
 
-export type BoxCardsProps = {
-  items: BoxItem[];
+export type ContributorCardsProps = {
+  items: ContributorItem[];
   getStyle?: (index: number) => React.CSSProperties;
 };
 
@@ -19,11 +19,11 @@ const defaultGetStyle = (index: number): React.CSSProperties => {
   return { transform: `translate(-50%, -50%) translate(${x}px, ${y}px)` };
 };
 
-export default function BoxCards({ items, getStyle = defaultGetStyle }: BoxCardsProps) {
+export default function BoxCards({ items, getStyle = defaultGetStyle }: ContributorCardsProps) {
   return (
     <div className={styles.boxesContainer}>
       {items.map((b, i) => (
-        <BoxCard key={b.id} id={b.id} summary={b.summary} style={getStyle(i)} />
+        <ContributorCard key={b.id} id={b.id} summary={b.summary} style={getStyle(i)} />
       ))}
     </div>
   );

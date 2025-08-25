@@ -7,7 +7,7 @@ import Layout from '@theme/Layout';
 import HomepageFeatures from '@site/src/components/HomepageFeatures';
 import Heading from '@theme/Heading';
 import Hero from '../components/Hero/Hero';
-import SciFiPanel from '../components/Panels/SciFiPanel';
+import Panel from '../components/Panels/Panel';
 import Galaxy from '../components/Galaxy/Galaxy';
 import WhyPanel from '../components/Panels/WhyPanel';
 import OffersPanel from '../components/Panels/OffersPanel';
@@ -44,7 +44,7 @@ export default function Home(): ReactNode {
   const {siteConfig} = useDocusaurusContext();
   return (
     <Layout
-      title={`Hello from ${siteConfig.title}`}
+      title={`${siteConfig.title}`}
       description="Description will go into a meta tag in <head />">
               {/* <Iridescence
                 color={[0.2, 0.8, 0.6]}
@@ -56,16 +56,16 @@ export default function Home(): ReactNode {
       {/* <HomepageHeader /> */}  
       <main>
         <Hero />
-        <SciFiPanel variant='large' halo={true}>
-          <h2>THE FABLAB NETWORK</h2>
+        <Panel variant='large'>
+          <h2>THE INTUITION NETWORK</h2>
           <p>
             Compteur + liste des contributeurs
           </p>
-        </SciFiPanel>
+        </Panel>
         <Galaxy/>
-        <SciFiPanel variant='small' >
+        <Panel variant='small' >
           <h2>PARTNERS</h2>
-        </SciFiPanel>
+        </Panel>
         <WhyPanel />
         <OffersPanel />
         <BlogPanel limit={3} />

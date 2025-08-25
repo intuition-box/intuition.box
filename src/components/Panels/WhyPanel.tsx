@@ -1,5 +1,5 @@
 import React from "react";
-import SciFiPanel from "./SciFiPanel";
+import Panel from "./Panel";
 import styles from "./WhyPanel.module.css";
 import { useIsMobile } from "../../hooks/useAutoGrid";
 
@@ -17,8 +17,8 @@ const CHECK_ITEMS: string[] = [
 export default function WhyPanel() {
   const isMobile = useIsMobile();
   return (
-    <SciFiPanel variant="large">
-      <h2>WHY FABLAB ?</h2>
+    <Panel variant="large">
+      <h2>WHY INTUITION ?</h2>
 
       <div className={styles.grid}>
         <section className={styles.card}>
@@ -98,7 +98,7 @@ export default function WhyPanel() {
           </div>
 
           <button className={styles.ctaBtn}>
-            Read the FabLab.b0x Manifesto
+            Read the FabLab Manifesto
           </button>
         </section>
 
@@ -368,6 +368,6 @@ export default function WhyPanel() {
           <button className={styles.ctaBtn}>See all organisation values</button>
         </section>
       </div>
-    </SciFiPanel>
+    </Panel>
   );
 }

@@ -4,7 +4,7 @@ import { useColorMode } from "@docusaurus/theme-common";
 
 type Props = { title?: string };
 
-const GalaxyBackground: React.FC<Props> = ({ title = "FABLAB.BOX" }) => {
+const GalaxyBackground: React.FC<Props> = ({ title = "INTUITION.BOX" }) => {
   const { colorMode } = useColorMode();
 
   return (

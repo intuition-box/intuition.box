@@ -9,7 +9,7 @@ const loopWords = [
   'designers',
   'coders',
   'artists',
-  'visionaries',
+  'builders',
   'tinkerers',
   'everyone',
   'you',
@@ -53,12 +53,12 @@ export default function Hero() {
   return (
     <div className={styles.parallax}>
       <section className={styles.hero}>
-        <h1>FABLAB.BOX</h1>
+        <h1>INTUITION.BOX</h1>
         <h2>
           An online community where anyone can create, share, and build open projects for the common good.
         </h2>
         <h3 className={styles.textLoop}>
-          A space for&nbsp;
+          A hub for&nbsp;
           <span className={styles.textLoopWord}>{loopNode}</span>
         </h3>
       </section>

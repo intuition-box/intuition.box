@@ -55,7 +55,7 @@
   font-size: clamp(1rem, .95rem + .4vw, 1.2rem);
   line-height: 1.35;
   font-family: "Audiowide", Arial, sans-serif;
-  color: #ffdf7e;
+  color: rgb(0, 0, 255);
 }
 
 :global(:root[data-theme="light"]) .postTitle a {
@@ -98,7 +98,6 @@
   font-weight: 700;
   font-size: 1rem;
   text-transform: uppercase;
-  margin-bottom: 5rem;
 
   color: var(--btn-text);
   border: 1px solid var(--btn-text);

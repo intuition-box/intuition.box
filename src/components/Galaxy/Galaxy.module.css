@@ -9,6 +9,7 @@
   justify-content: center;
   padding-bottom: 8rem;
   margin-bottom: 10rem;
+  margin-block-start: clamp(40px, 6vw, 120px);
 }
 
 .galaxyBg {

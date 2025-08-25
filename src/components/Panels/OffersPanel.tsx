@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import SciFiPanel from "./SciFiPanel";
+import Panel from "./Panel";
 import styles from "./OffersPanel.module.css";
 import { useAutoGrid, useIsMobile } from "../../hooks/useAutoGrid";
 
@@ -74,9 +74,9 @@ export default function OffersPanel() {
   }, [isMobile]);
 
   return (
-    <SciFiPanel variant="large">
+    <section className={styles.wrap}>
       <header className={styles.header}>
-        <h2 className={styles.h2}>WHAT FABLAB OFFERS ?</h2>
+        <h2 className={styles.h2}>WHAT INTUITION OFFERS ?</h2>
         <p className={styles.subtitle}>Short description</p>
       </header>
 
@@ -153,6 +153,6 @@ export default function OffersPanel() {
           </div>
         </div>
       )}
-    </SciFiPanel>
+    </section>
   );
 }

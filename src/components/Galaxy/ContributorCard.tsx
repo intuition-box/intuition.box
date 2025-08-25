@@ -1,15 +1,15 @@
 import React from "react";
 import styles from "./Galaxy.module.css";
 
-export type BoxCardProps = {
+export type ContributorCardProps = {
   id: string;
   summary: string;
   style?: React.CSSProperties;
 };
 
-export default function BoxCard({ id, summary, style }: BoxCardProps) {
+export default function ContributorCard({ id, summary, style }: ContributorCardProps) {
   return (
-    <div className={`${styles.dotbox} cursor-target`} style={style}>
+    <div className={`${styles.dotbox}`} style={style}>
       <h3 className={styles.dotboxTitle}>{id}</h3>
       <div className={styles.dotboxContent}>
         <p className={styles.dotboxSummary}>{summary}</p>

@@ -1,5 +1,5 @@
 /* eventgrid */
-.wrap { margin: 2rem 0 4rem; }
+.wrap { margin: 2rem 0 0rem; }
 .tailSpacer { height: 3rem; }
 
 .section { margin: 0 0 2.25rem; }
@@ -89,17 +89,17 @@
   left: 10px;
   border-radius: 12px;
   overflow: hidden;
-  background: rgba(10, 18, 26, .55);
+  background: rgb(0, 0, 255);
   backdrop-filter: blur(6px) saturate(1.1);
   -webkit-backdrop-filter: blur(6px) saturate(1.1);
   border: 1px solid rgba(255,255,255,.16);
   box-shadow: 0 8px 22px rgba(0,0,0,.25);
-  color: #ffdf7e;
+  color: white;
   min-width: 64px;
   text-align: center;
 }
 .weekday { font: 600 12px/1.2 "Orbitron", sans-serif; padding: 6px 8px; }
-.day     { font: 800 24px/1.1 "Orbitron", sans-serif; padding-top: 4px; text-shadow: 0 0 2px rgba(255,255,255,.25); }
+.day     { font: 800 24px/1.1 "Orbitron", sans-serif; padding-top: 4px; }
 .month   { font: 600 12px/1.2 "Orbitron", sans-serif; padding: 4px 0 8px; }
 
 :global(:root[data-theme="light"]) .datePill {

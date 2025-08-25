@@ -1,203 +1,130 @@
-/**
- * Any CSS included here will be global. The classic template
- * bundles Infima by default. Infima is a CSS framework designed to
- * work well for content-centric websites.
- */
-@import url('https://fonts.googleapis.com/css2?family=Audiowide&family=Orbitron:wght@400..900&display=swap');
-/* You can override the default Infima variables here. */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+@font-face {
+  font-family: "Sansation";
+  src: local("Sansation");
+  font-weight: 300 700;
+  font-style: normal;
+}
+
+/* Base theme variables */
 :root {
-  --ifm-color-primary: #2e8555;
-  --ifm-color-primary-dark: #29784c;
-  --ifm-color-primary-darker: #277148;
-  --ifm-color-primary-darkest: #205d3b;
-  --ifm-color-primary-light: #33925d;
-  --ifm-color-primary-lighter: #359962;
-  --ifm-color-primary-lightest: #3cad6e;
+  /* Couleurs principales */
+  --accent-main: #ffffff;   /* blanc pur pour l’accent */
+  --ink: #f5f5f5;           /* texte blanc cassé pour lisibilité */
+
+  /* États (on garde les couleurs) */
+  --ok: #22f063;            /* vert */
+  --bad: #ff0033;           /* rouge */
+
+  /* Boutons */
+  --btn-text: var(--accent-main);
+
+  /* Fond global noir */
+  --ifm-background-color: #181818;
+  --ifm-background-surface-color: #000000;
+
+  /* Palette primaire en niveaux de gris */
+  --ifm-color-primary: #ffffff;
+  --ifm-color-primary-dark: #e0e0e0;
+  --ifm-color-primary-darker: #cccccc;
+  --ifm-color-primary-darkest: #999999;
+  --ifm-color-primary-light: #ffffff;
+  --ifm-color-primary-lighter: #ffffff;
+  --ifm-color-primary-lightest: #ffffff;
+
   --ifm-code-font-size: 95%;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+  --docusaurus-highlighted-code-line-bg: rgba(255, 255, 255, 0.07);
+
+  /* Styles “glass” unifiés */
+  --glass-bg: radial-gradient(120% 140% at 10% 10%,
+                    rgba(255,255,255,0.08) 0%,
+                    rgba(255,255,255,0.04) 45%,
+                    rgba(255,255,255,0.03) 100%);
+  --glass-border: 0.2px solid var(--accent-main);
+  --glass-inset: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  --glass-shadow: 0 12px 30px rgba(0, 0, 0, 0.7);
 }
 
-/* For readability concerns, you should choose a lighter palette in dark mode. */
-[data-theme='dark'] {
-  --ifm-color-primary: #25c2a0;
-  --ifm-color-primary-dark: #21af90;
-  --ifm-color-primary-darker: #1fa588;
-  --ifm-color-primary-darkest: #1a8870;
-  --ifm-color-primary-light: #29d5b0;
-  --ifm-color-primary-lighter: #32d8b4;
-  --ifm-color-primary-lightest: #4fddbf;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
-}
-
-
+/* Global background */
 html,
 body {
-  background-image: url('../assets/background-light.png');
+  background: #000000;
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
   background-repeat: no-repeat;
   min-height: 100%;
+  color: var(--ink);
 }
 
-html[data-theme='dark'],
-[data-theme='dark'] body {
-  background-image: url('../assets/background-dark.png');
-}
-
-:root {
-  --ifm-background-color: transparent;
-  --ifm-background-surface-color: transparent;
-}
-
-[data-theme='dark'] {
-  --ifm-background-color: transparent;
-  --ifm-background-surface-color: transparent;
-}
-
+/* Titres en Montserrat */
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Orbitron', sans-serif !important;
+  font-family: 'Montserrat', sans-serif !important;
   text-align: center;
-}
-p, li, .audiowide {
-  font-family: 'Audiowide', sans-serif !important;
+  color: var(--accent-main);
 }
 
-/* Make the outer wrapper and footer transparent so that the global
- * background shows through.  The !important flag ensures our style
- * wins over default theme styles.
- */
+/* Texte en Sansation (fallback sans-serif) */
+p, li, .sansation-regular {
+  font-family: 'Sansation', sans-serif !important;
+  color: var(--ink);
+}
+
+/* Conteneur principal transparent */
 .main-wrapper {
   background: transparent !important;
 }
 
-.audiowide {
-  font-family: "Audiowide", sans-serif;
-  font-weight: 400;
-  font-style: normal;
-}
-
-.orbitron {
-  font-family: "Orbitron", sans-serif;
+/* Utilitaires font */
+.montserrat {
+  font-family: "Montserrat", sans-serif;
   font-optical-sizing: auto;
   font-weight: 500;
   font-style: normal;
 }
 
+.sansation-light { font-family: "Sansation", sans-serif; font-weight: 300; }
+.sansation-regular { font-family: "Sansation", sans-serif; font-weight: 400; }
+.sansation-bold { font-family: "Sansation", sans-serif; font-weight: 700; }
+.sansation-light-italic { font-family: "Sansation", sans-serif; font-weight: 300; font-style: italic; }
+.sansation-regular-italic { font-family: "Sansation", sans-serif; font-weight: 400; font-style: italic; }
+.sansation-bold-italic { font-family: "Sansation", sans-serif; font-weight: 700; font-style: italic; }
+
+/* Navbar en verre noir/blanc */
 .navbar {
-  background: rgba(255, 255, 255, 0.15);
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.13);
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 32px 0 rgba(0,0,0,0.65);
   backdrop-filter: blur(13px) saturate(1.1);
   -webkit-backdrop-filter: blur(13px) saturate(1.1);
   border-bottom: 1.5px solid rgba(255,255,255,0.2);
   transition: background 0.3s, box-shadow 0.3s, border 0.3s;
-  font-family: 'Audiowide', Arial, sans-serif;
+  font-family: 'Montserrat', Arial, sans-serif;
+  color: var(--accent-main);
 }
 
-[data-theme='dark'] .navbar {
-  background: rgba(20, 26, 41, 0.62);
-  box-shadow: 0 8px 32px 0 #1e2330bb;
-  border-bottom: 1.5px solid #5ec2e733;
-}
-
+/* Footer en verre noir/blanc */
 .footer {
-  background: rgba(255, 255, 255, 0.15);
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.13);
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 -8px 32px 0 rgba(0,0,0,0.65);
+  border-top: 1.5px solid rgba(255,255,255,0.2);
   backdrop-filter: blur(13px) saturate(1.1);
   -webkit-backdrop-filter: blur(13px) saturate(1.1);
-  border-top: 1.5px solid rgba(255,255,255,0.2);
-  transition: background 0.3s, box-shadow 0.3s, border 0.3s;
-  color: rgb(0, 0, 0);
+  color: var(--ink);
 }
 .footer__title {
-  color: #0b2f78;
-  font-family: 'Orbitron', Arial, sans-serif;
+  color: var(--accent-main);
+  font-family: 'Montserrat', Arial, sans-serif;
 }
-
 .footer__link-item {
-  color: #000000;
+  color: var(--ink);
   font-weight: 100;
 }
 
-[data-theme='dark'] .footer {
-  background: rgba(20, 26, 41, 0.62);
-  box-shadow: 0 -8px 32px 0 #1e2330bb;
-  border-bottom: 1.5px solid #5ec2e733;
-  color: #ffffff;
-}
-
-[data-theme='dark'] .footer__title {
-  color: #5ec2e7;
-  font-family: 'Orbitron', Arial, sans-serif;
-}
-
-[data-theme='dark'] .footer__link-item {
-  color: #ffffff;
-}
-
-/*
- * Unified glass and theme variables for panels, cards and call-to-actions.
- * These variables centralize the colours and surface styles used throughout
- * the site so that panels such as Blog, Why, Offers and Events can
- * consistently pick up the same appearance in both light and dark modes.
- */
-
-/* Dark theme defaults */
-:root {
-  /* Primary accent colour used for borders and highlights */
-  --accent-main: #5ec2e7;
-  /* Base text colour on glass surfaces */
-  --ink: #dee3f0;
-
-  /* Status colours for ticks and crosses */
-  --ok: #22f063;
-  --bad: #ff0033;
-
-  /* Button text colour; tied to accent */
-  --btn-text: var(--accent-main);
-
-  /* Unified glass backdrop: subtle radial gradient for dark mode */
-  --glass-bg: radial-gradient(120% 140% at 10% 10%,
-                    rgba(255,255,255,0.08) 0%,
-                    rgba(255,255,255,0.04) 45%,
-                    rgba(255,255,255,0.03) 100%);
-  /* Glass border: use accent colour for borders */
-  --glass-border: 0.5px solid var(--accent-main);
-  /* Thin inset highlight inside glass surfaces */
-  --glass-inset: inset 0 1px 0 rgba(255, 255, 255, 0.06);
-  /* Outer shadow for cards and panels */
-  --glass-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
-}
-
-/* Light theme overrides */
-[data-theme='light'] {
-  /* Warmer accent for light mode */
-  --accent-main: #a83106;
-  /* Darker text on light surfaces */
-  --ink: #000;
-
-  /* Status colours adjust slightly in light mode */
-  --ok: #009a4a;
-  --bad: #ff0033;
-
-  /* Button text tracks accent */
-  --btn-text: var(--accent-main);
-
-  /* Glass backdrop: linear gradient for light mode */
-  --glass-bg: linear-gradient(
-      to bottom right,
-      rgb(255 255 255 / 40%),
-      rgb(255 255 255 / 20%)
-  );
-  /* Border always follows accent colour */
-  --glass-border: 0.5px solid var(--accent-main);
-  /* Slightly lighter shadow for light mode */
-  --glass-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
-}
-
+/* Liens */
 a,
 a:hover,
 a:focus,
 a:active {
+  color: var(--accent-main);
   text-decoration: none;
 }

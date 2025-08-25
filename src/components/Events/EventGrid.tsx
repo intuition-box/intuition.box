@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./Events.module.css";
 import EventCard, { EventItem } from "./EventCard";
-import SciFiPanel from "../Panels/SciFiPanel";
+import Panel from "../Panels/Panel";
 
 export default function EventGrid({
   events,
@@ -23,7 +23,7 @@ export default function EventGrid({
     .slice(0, 3);
 
   return (
-    <SciFiPanel variant="large">
+    <Panel variant="large">
       <h2>{title}</h2>
 
       <section className={styles.wrap}>
@@ -47,8 +47,7 @@ export default function EventGrid({
           </>
         )}
 
-        <div className={styles.tailSpacer} aria-hidden />
       </section>
-    </SciFiPanel>
+    </Panel>
   );
 }

@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./Galaxy.module.css";
 
-export type Contributor = { id: string; name: string; color?: string };
+export type Commit = { id: string; name: string; color?: string };
 
 const getStyle = (i: number, total: number, color?: string): React.CSSProperties => {
   const duration = 85, radius = 300, delay = -(duration / total) * i;
@@ -24,14 +24,14 @@ const resume = (e: React.MouseEvent<HTMLDivElement>) => {
   (el.style as any).webkitAnimationPlayState = "running";
 };
 
-export default function ContributorsOrbit({ contributors }: { contributors: Contributor[] }) {
+export default function CommitsOrbit({ commits }: { commits: Commit[] }) {
   return (
     <div className={styles.orbit}>
-      {contributors.map((c, i) => (
+      {commits.map((c, i) => (
         <div
           key={c.id}
-          className={`${styles.contributor} cursor-target`}
-          style={getStyle(i, contributors.length, c.color)}
+          className={`${styles.contributor}`}
+          style={getStyle(i, commits.length, c.color)}
           onMouseEnter={pause}
           onMouseLeave={resume}
         >

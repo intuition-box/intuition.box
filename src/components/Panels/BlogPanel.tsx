@@ -3,7 +3,7 @@ import Link from "@docusaurus/Link";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import clsx from "clsx";
 import styles from "./BlogPanel.module.css";
-import SciFiPanel from "./SciFiPanel";
+import Panel from "./Panel";
 import { useIsMobile } from "../../hooks/useAutoGrid";
 
 import blogList from "@site/.docusaurus/docusaurus-plugin-content-blog/default/blog-post-list-prop-default.json";
@@ -110,7 +110,7 @@ export default function BlogPanel({
   }, [isMobile]);
 
   return (
-    <SciFiPanel variant="large">
+    <Panel variant="large">
       <section className={clsx(styles.panel, className)}>
         <header className={styles.header}>
           <h2 className={styles.title}>LAST NEWS</h2>
@@ -217,6 +217,6 @@ export default function BlogPanel({
           <Link className={styles.seeAll} to={blogBasePath}>SEE ALL</Link>
         </div>
       </section>
-    </SciFiPanel>
+    </Panel>
   );
 }

@@ -3,12 +3,24 @@ import { useColorMode } from "@docusaurus/theme-common";
 import "./CustomThemeToggle.css";
 
 export default function CustomThemeToggle() {
-  const { colorMode, setColorMode } = useColorMode();
+  const { setColorMode } = useColorMode();
 
-  const checked = colorMode === "light";
+  // État purement visuel pour l’animation du switch (ON/OFF).
+  const [pretendLight, setPretendLight] = React.useState(false);
 
   const handleChange = () => {
-    setColorMode(checked ? "dark" : "light");
+    // Lance l’animation visuelle
+    setPretendLight(v => !v);
+
+    // Fait croire au thème "light" pour l'effet (breve)
+    setColorMode(pretendLight ? "dark" : "light");
+
+    // Puis on “bug” volontairement : on revient en sombre
+    // (attend un peu pour laisser l’anim se jouer)
+    window.setTimeout(() => {
+      setColorMode("dark");
+      setPretendLight(false); // on remet le switch côté OFF
+    }, 600); // ajuste si ton anim est plus longue/courte
   };
 
   return (
@@ -18,7 +30,7 @@ export default function CustomThemeToggle() {
           className="toggle-input"
           id="holo-toggle"
           type="checkbox"
-          checked={checked}
+          checked={pretendLight}
           onChange={handleChange}
           aria-label="Toggle theme"
         />

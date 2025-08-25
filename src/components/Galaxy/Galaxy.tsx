@@ -1,14 +1,13 @@
 import React, { useRef, useEffect, useState } from 'react';
 import GalaxyBackground from './GalaxyBackground';
 import styles from './Galaxy.module.css';
-import TargetCursor from '../TextAnimations/TargetCursor/TargetCursor';
-import BoxCards from './BoxCards';
-import ContributorsOrbit from "./Contributors";
+import ContributorCards from './ContributorCards';
+import CommitsOrbit from "./Commits";
 import ProjectsWithCard from "./Projects";
 import { useIsMobile } from "../../hooks/useAutoGrid";
 
 // Interfaces
-interface BoxConfig {
+interface Contributor {
   id: string;
   // title: string;
   summary: string;
@@ -19,7 +18,7 @@ interface Project {
   desc: string;
   color?: string;
 }
-interface Contributor {
+interface Commit {
   id: string;
   name: string;
   color?: string;
@@ -31,22 +30,22 @@ interface ProjectFull extends Project {
   participants: { name: string; color: string }[];
 }
 
-const boxes: BoxConfig[] = [
-  { id: 'thp.box', summary: 'Learn to code by building projects' },
-  { id: 'gnosis.box', summary: 'Decentralized knowledge sharing' },
-  { id: 'intuition.box', summary: 'AI-driven insights and recommendations' },
-  { id: 'colony.box', summary: 'Collaborative project management and governance' },
+const contrib: Contributor[] = [
+  { id: 'contrib1', summary: 'Learn to code by building projects' },
+  { id: 'contrib2', summary: 'Decentralized knowledge sharing' },
+  { id: 'contrib3', summary: 'AI-driven insights and recommendations' },
+  { id: 'contrib4', summary: 'Collaborative project management and governance' },
 ];
 
-const contributors: Contributor[] = [
-  { id: 'contrib1', name: 'AB', color: '#ffb4b4' },
-  { id: 'contrib2', name: 'CD', color: '#a7d8ff' },
-  { id: 'contrib3', name: 'EF', color: '#c7a7ff' },
-  { id: 'contrib4', name: 'GH', color: '#94e2c4' },
-  { id: 'contrib5', name: 'IJ', color: '#ffe4a7' },
-  { id: 'contrib6', name: 'KL', color: '#ffa7d6' },
-  { id: 'contrib7', name: 'MN', color: '#aef3e3' },
-  { id: 'contrib8', name: 'OP', color: '#ffc7a7' },
+const commits: Commit[] = [
+  { id: 'commit1', name: 'C1', color: '#ffb4b4' },
+  { id: 'commit2', name: 'C2', color: '#a7d8ff' },
+  { id: 'commit3', name: 'C3', color: '#c7a7ff' },
+  { id: 'commit4', name: 'C4', color: '#94e2c4' },
+  { id: 'commit5', name: 'C5', color: '#ffe4a7' },
+  { id: 'commit6', name: 'C6', color: '#ffa7d6' },
+  { id: 'commit7', name: 'C7', color: '#aef3e3' },
+  { id: 'commit8', name: 'C8', color: '#ffc7a7' },
 ];
 
 const projects: ProjectFull[] = [
@@ -57,24 +56,16 @@ const projects: ProjectFull[] = [
 ];
 
 const Galaxy: React.FC = () => {
-  const [cursorActive, setCursorActive] = useState(false);
   const isMobile = useIsMobile();
 
   return (
-    <div
-      className={`${styles.galaxyWrapper} galaxy-scope ${cursorActive ? styles.cursorActive : ''}`}
-      onMouseEnter={() => { if (!isMobile) setCursorActive(true); }}
-      onMouseLeave={() => { if (!isMobile) setCursorActive(false); }}
-    >
+    <div className={`${styles.galaxyWrapper} galaxy-scope`}>
 
-    <GalaxyBackground title="FABLAB.BOX" />
-    <BoxCards items={boxes} />
-    <ContributorsOrbit contributors={contributors} />
+    <GalaxyBackground title="INTUITION.BOX" />
+    <ContributorCards items={contrib} />
+    <CommitsOrbit commits={commits} />
     <ProjectsWithCard projects={projects} />
 
-      {!isMobile && cursorActive && (
-        <TargetCursor targetSelector=".galaxy-scope .cursor-target" spinDuration={5} hideDefaultCursor={false} />
-      )}
     </div>
   );
 };

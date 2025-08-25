@@ -5,7 +5,7 @@ import type * as Preset from '@docusaurus/preset-classic';
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
 const config: Config = {
-  title: 'FABLAB.b0x',
+  title: 'INTUITION.BOX',
   // tagline: 'AN ONLINE COMMUNITY WHERE ANYONE CAN CREATE SHARE AND BUILD OPEN PROJECTS FOR THE COMMON GOOD.',
   tagline: 'AN ONLINE COMMUNITY FOR BUILDING AND SHARING OPEN PROJECTS',
   favicon: 'img/favicon.ico',
@@ -79,7 +79,7 @@ const config: Config = {
     },
     image: 'img/docusaurus-social-card.jpg',
     navbar: {
-      title: 'FABLAB.b0x',
+      title: 'intuition.box',
       logo: {
         alt: 'My Site Logo',
         src: 'img/logo.svg',
