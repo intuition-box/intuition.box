@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./Galaxy.module.css";
 
-export type Commit = { id: string; name: string; color?: string };
+export type Commit = { id: string; name: string; url: string; color?: string };
 
 const getStyle = (i: number, total: number, color?: string): React.CSSProperties => {
   const duration = 85, radius = 300, delay = -(duration / total) * i;
@@ -25,15 +25,25 @@ const resume = (e: React.MouseEvent<HTMLDivElement>) => {
 };
 
 export default function CommitsOrbit({ commits }: { commits: Commit[] }) {
+  const open = (url: string) => window.open(url, "_blank", "noopener,noreferrer");
+
   return (
     <div className={styles.orbit}>
       {commits.map((c, i) => (
         <div
           key={c.id}
-          className={`${styles.contributor}`}
+          className={styles.commit}
           style={getStyle(i, commits.length, c.color)}
           onMouseEnter={pause}
           onMouseLeave={resume}
+          onClick={() => open(c.url)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(c.url); }
+          }}
+          role="link"
+          tabIndex={0}
+          aria-label="Open commit on GitHub"
+          title="Open commit on GitHub"
         >
           {c.name}
         </div>

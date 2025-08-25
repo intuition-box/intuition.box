@@ -1,73 +1,128 @@
-import React, { useRef, useEffect, useState } from 'react';
-import GalaxyBackground from './GalaxyBackground';
-import styles from './Galaxy.module.css';
-import ContributorCards from './ContributorCards';
+import React, { useEffect, useMemo, useState } from "react";
+import GalaxyBackground from "./GalaxyBackground";
+import styles from "./Galaxy.module.css";
+import ContributorCards from "./ContributorCards";
 import CommitsOrbit from "./Commits";
-import ProjectsWithCard from "./Projects";
-import { useIsMobile } from "../../hooks/useAutoGrid";
+import type { Commit as CommitOrbitType } from "./Commits";
+import ProjectsOrbit, { Project as ProjectFull } from "./ProjectsOrbit";
+import ProjectCard from "./ProjectCard";
+import { fetchHybridActivity, HybridResult } from "../../utils/gitActivity";
 
-// Interfaces
-interface Contributor {
+const ORG = "intuition-box";
+
+type ContributorCardItem = {
   id: string;
-  // title: string;
   summary: string;
-}
-interface Project {
-  id: string;
-  title: string;
-  desc: string;
-  color?: string;
-}
-interface Commit {
-  id: string;
-  name: string;
-  color?: string;
-}
-interface ProjectFull extends Project {
-  date: string;
-  category: string;
-  progress: number;
-  participants: { name: string; color: string }[];
-}
+  projects?: (string | { id: string; name: string; url?: string })[];
+  onClick?: () => void;
+  avatarUrl?: string;
+  profileUrl?: string;
+};
+type CommitItem = CommitOrbitType;
 
-const contrib: Contributor[] = [
-  { id: 'contrib1', summary: 'Learn to code by building projects' },
-  { id: 'contrib2', summary: 'Decentralized knowledge sharing' },
-  { id: 'contrib3', summary: 'AI-driven insights and recommendations' },
-  { id: 'contrib4', summary: 'Collaborative project management and governance' },
-];
+const participantColors = ["#ffb4b4","#a7d8ff","#c7a7ff","#94e2c4","#ffe4a7","#ffa7d6","#aef3e3","#ffc7a7"];
+const projectColors = ["#01c3a8","#ffb741","#a63d2a","#1890ff","#8a55e6","#f56c6c"];
+const commitColors = participantColors;
 
-const commits: Commit[] = [
-  { id: 'commit1', name: 'C1', color: '#ffb4b4' },
-  { id: 'commit2', name: 'C2', color: '#a7d8ff' },
-  { id: 'commit3', name: 'C3', color: '#c7a7ff' },
-  { id: 'commit4', name: 'C4', color: '#94e2c4' },
-  { id: 'commit5', name: 'C5', color: '#ffe4a7' },
-  { id: 'commit6', name: 'C6', color: '#ffa7d6' },
-  { id: 'commit7', name: 'C7', color: '#aef3e3' },
-  { id: 'commit8', name: 'C8', color: '#ffc7a7' },
-];
+export default function Galaxy() {
+  const [data, setData] = useState<HybridResult | null>(null);
 
-const projects: ProjectFull[] = [
-  { id: 'project1', title: 'Projet 1', desc: 'Description', date: 'Last update', category: 'Category', progress: 90, color: '#01c3a8', participants: [{ name: 'JP', color: '#ffb4b4' }, { name: 'MS', color: '#a7d8ff' }] },
-  { id: 'project2', title: 'Projet 2', desc: 'Description', date: 'Last update', category: 'Category', progress: 30, color: '#ffb741', participants: [{ name: 'AH', color: '#94e2c4' }, { name: 'SD', color: '#ffa7d6' }] },
-  { id: 'project3', title: 'Project 3', desc: 'Description', date: 'Last update', category: 'Category', progress: 50, color: '#a63d2a', participants: [{ name: 'VT', color: '#ffe4a7' }, { name: 'XR', color: '#aef3e3' }] },
-  { id: 'project4', title: 'Projet 4', desc: 'Description', date: 'Last update', category: 'Category', progress: 20, color: '#1890ff', participants: [{ name: 'YP', color: '#ffc7a7' }, { name: 'LK', color: '#c7a7ff' }] },
-];
+  useEffect(() => {
+    let cancel = false;
+    (async () => {
+      const res = await fetchHybridActivity(ORG, { repoLimit: 6, perRepoCommitList: 2 });
+      if (!cancel) setData(res);
+    })();
+    return () => { cancel = true; };
+  }, []);
 
-const Galaxy: React.FC = () => {
-  const isMobile = useIsMobile();
+  // Contributeurs
+  const contribItems: ContributorCardItem[] = useMemo(() => {
+    const src = data?.contributors ?? [];
+    const map = data?.contributorProjects ?? {};
+    return src.map(c => {
+      const login = c.login;
+      const projs = (map[login] || []).slice(0, 6).map((name: string) => ({
+        id: name,
+        name,
+        url: `https://github.com/${ORG}/${name}`
+      }));
+      return {
+        id: login,
+        summary: `Last activity: ${c.date.toISOString().slice(0,10)}`,
+        projects: projs,
+        avatarUrl: c.avatarUrl,
+        profileUrl: `https://github.com/${login}`,
+        onClick: () => window.open(`https://github.com/${login}`, "_blank", "noopener,noreferrer"),
+      };
+    });
+  }, [data]);
+
+  const projects: ProjectFull[] = useMemo(() => {
+    const src = (data?.projects ?? []).slice(0, 6);
+    return src.map((p: any, i: number) => ({
+      id: p.name,
+      title: p.name,
+      desc: "",
+      color: projectColors[i % projectColors.length],
+      date: (p.updatedAt || p.pushedAt || new Date()).toString(),
+      url: p.htmlUrl || `https://github.com/${ORG}/${p.name}`,
+      category: "",
+      participants: (p.topContributors ?? data?.contributors ?? []).slice(0, 4).map((c: any, j: number) => ({
+        name: c.login,
+        color: participantColors[j % participantColors.length],
+        avatarUrl: c.avatarUrl
+      })),
+    }));
+  }, [data]);
+
+  const commits: CommitItem[] = useMemo(() => {
+    type RawCommit = {
+      id?: string; sha?: string; message?: string;
+      htmlUrl?: string; url?: string; commitUrl?: string;
+      repo?: string;
+    };
+
+    const raw: RawCommit[] =
+      (data as any)?.recentCommits ??
+      (data as any)?.commits ??
+      [];
+
+    // 🔒 Pas de fallback: on ne garde QUE ceux avec URL
+    const out: CommitItem[] = [];
+    for (let i = 0; i < Math.min(raw.length, 8); i++) {
+      const c = raw[i];
+      const sha = c.sha ?? c.id ?? "";
+      const url =
+        c.htmlUrl ??
+        c.url ??
+        c.commitUrl ??
+        (sha && c.repo ? `https://github.com/${ORG}/${c.repo}/commit/${sha}` : undefined);
+
+      if (!url) continue; // ⚡️ skip si pas d’URL
+
+      out.push({
+        id: sha || `c-${i}`,
+        name: sha ? sha.slice(0, 7) : (c.message?.slice(0, 7) ?? "commit"),
+        url,
+        color: commitColors[i % commitColors.length],
+      });
+    }
+    return out;
+  }, [data]);
 
   return (
     <div className={`${styles.galaxyWrapper} galaxy-scope`}>
-
-    <GalaxyBackground title="INTUITION.BOX" />
-    <ContributorCards items={contrib} />
-    <CommitsOrbit commits={commits} />
-    <ProjectsWithCard projects={projects} />
-
+      <GalaxyBackground title="INTUITION.BOX" />
+      <ContributorCards items={contribItems} />
+      {commits.length > 0 && <CommitsOrbit commits={commits} />}
+      <ProjectsOrbit projects={projects} />
+      <ProjectCard projects={projects} />
+      {data?.error && (
+        <div style={{position:"absolute", bottom: 8, left: 8, fontSize: 12, opacity:.7}}>
+          {data.error}
+        </div>
+      )}
     </div>
   );
-};
-
-export default Galaxy;
+}
