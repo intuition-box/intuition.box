@@ -1,0 +1,270 @@
+{
+  "projects": [
+    {
+      "id": "graph",
+      "name": "Graph",
+      "description": "Graph API implementation",
+      "repositories": [
+        "Graph"
+      ]
+    },
+    {
+      "id": "api-mock",
+      "name": "API Mock",
+      "description": "Mock API for development",
+      "repositories": [
+        "mock-api"
+      ]
+    },
+    {
+      "id": "ia-assistant",
+      "name": "IA Assistant",
+      "description": "AI-powered assistant",
+      "repositories": [
+        "Claims-Assistant"
+      ]
+    },
+    {
+      "id": "extension",
+      "name": "Extension",
+      "description": "Browser extension",
+      "repositories": [
+        "Extension",
+        "Extension_GraphQL",
+        "Extension_Landing-Page",
+        "Overmind"
+      ]
+    },
+    {
+      "id": "plebs",
+      "name": "Plebs",
+      "description": "Personality insights platform",
+      "repositories": [
+        "MCP-Server",
+        "Plebs",
+        "Plebs-Agent"
+      ]
+    },
+    {
+      "id": "sofia",
+      "name": "Sofia",
+      "description": "Sofia platform",
+      "repositories": [
+        "Sofia",
+        "Sofia-landing-page"
+      ]
+    },
+    {
+      "id": "build-proof",
+      "name": "BuildProof",
+      "description": "Build verification system",
+      "repositories": [
+        "BuildProof",
+        "BuildProof-ColonyJS"
+      ]
+    },
+    {
+      "id": "n8n",
+      "name": "n8n",
+      "description": "Workflow automation",
+      "repositories": [
+        "n8n"
+      ]
+    },
+    {
+      "id": "banner",
+      "name": "Banner",
+      "description": "Banner management system",
+      "repositories": [
+        "banner"
+      ]
+    },
+    {
+      "id": "card",
+      "name": "Card",
+      "description": "Card management system",
+      "repositories": [
+        "Card"
+      ]
+    },
+    {
+      "id": "dice",
+      "name": "Dice",
+      "description": "Dice application",
+      "repositories": [
+        "Dice"
+      ]
+    },
+    {
+      "id": "flyer",
+      "name": "Flyer",
+      "description": "Flyer management system",
+      "repositories": [
+        "Flyer"
+      ]
+    },
+    {
+      "id": "intudex",
+      "name": "Intudex",
+      "description": "DEX and Staking Platform for INTUIT tokens on Intuition blockchain",
+      "repositories": [
+        "intudex"
+      ]
+    },
+    {
+      "id": "intuition-box",
+      "name": "Intuition Box",
+      "description": "Main intuition.box platform",
+      "repositories": []
+    },
+    {
+      "id": "intuitpark",
+      "name": "Intuitpark",
+      "description": "Intuitpark platform",
+      "repositories": [
+        "Intuitpark"
+      ]
+    },
+    {
+      "id": "km",
+      "name": "KM",
+      "description": "Knowledge management platform for 0xIntuition",
+      "repositories": [
+        "KM"
+      ]
+    },
+    {
+      "id": "nft",
+      "name": "NFT",
+      "description": "NFT management system",
+      "repositories": []
+    },
+    {
+      "id": "orbit-of-nonsense",
+      "name": "Orbit of Nonsense",
+      "description": "Orbit of Nonsense platform",
+      "repositories": []
+    },
+    {
+      "id": "pfp",
+      "name": "PFP",
+      "description": "Profile picture management",
+      "repositories": [
+        "PFP"
+      ]
+    },
+    {
+      "id": "pulse",
+      "name": "Pulse",
+      "description": "Get a Pulse for the Ethereum Application roadmap",
+      "repositories": [
+        "Pulse",
+        "Pulse-Demo-UX"
+      ]
+    },
+    {
+      "id": "pulse-demo-ux",
+      "name": "Pulse Demo UX",
+      "description": "Pulse demo user experience",
+      "repositories": []
+    },
+    {
+      "id": "quiz",
+      "name": "Quiz",
+      "description": "Quiz application",
+      "repositories": [
+        "Quiz"
+      ]
+    },
+    {
+      "id": "values",
+      "name": "Values",
+      "description": "A blueprint to let the community of any organization define its values",
+      "repositories": [
+        "Values"
+      ]
+    },
+    {
+      "id": "Builders Og",
+      "name": "Builders Og",
+      "description": "Project for builders-og",
+      "repositories": [
+        "builders-og"
+      ]
+    },
+    {
+      "id": "Game 2048",
+      "name": "Game 2048",
+      "description": "Project for Game-2048",
+      "repositories": [
+        "Game-2048"
+      ]
+    },
+    {
+      "id": "Guessnet",
+      "name": "Guessnet",
+      "description": "Project for Guessnet",
+      "repositories": [
+        "Guessnet"
+      ]
+    },
+    {
+      "id": "Intuition.Box",
+      "name": "Intuition.Box",
+      "description": "Project for intuition.box",
+      "repositories": [
+        "intuition.box"
+      ]
+    },
+    {
+      "id": "Nft",
+      "name": "Nft",
+      "description": "Project for nft",
+      "repositories": [
+        "nft"
+      ]
+    },
+    {
+      "id": "Oracle Lend",
+      "name": "Oracle Lend",
+      "description": "Project for Oracle-Lend",
+      "repositories": [
+        "Oracle-Lend",
+        "Oracle-Lend-Archive"
+      ]
+    },
+    {
+      "id": "Orbit Of Nonsense",
+      "name": "Orbit Of Nonsense",
+      "description": "Project for orbit-of-nonsense",
+      "repositories": [
+        "orbit-of-nonsense"
+      ]
+    },
+    {
+      "id": "Temple",
+      "name": "Temple",
+      "description": "A temple for those who follow their Intuition",
+      "repositories": [
+        "Temple"
+      ]
+    },
+    {
+      "id": "TNS",
+      "name": "TNS",
+      "description": "Project for TNS",
+      "repositories": [
+        "TNS"
+      ]
+    },
+    {
+      "id": "TrustPad",
+      "name": "TrustPad",
+      "description": "Project for TrustPad",
+      "repositories": [
+        "TrustPad"
+      ]
+    }
+  ],
+  "lastUpdated": "2025-08-24T17:45:56.208Z"
+}

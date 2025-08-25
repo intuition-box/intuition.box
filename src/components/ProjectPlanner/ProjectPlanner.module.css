@@ -1,0 +1,680 @@
+/* Main Container */
+.projectPlanner {
+  min-height: 100vh;
+  background: #f8fafc;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+}
+
+/* Weeks Bar - Sticky at top */
+.weeksBar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: white;
+  border-bottom: 2px solid #e2e8f0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.weeksContainer {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1rem 2rem;
+}
+
+.weeksTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1a202c;
+  margin: 0 0 1rem 0;
+}
+
+.weeksScroll {
+  display: flex;
+  gap: 2rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+}
+
+.monthGroup {
+  flex-shrink: 0;
+  min-width: 200px;
+}
+
+.monthLabel {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #4a5568;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.weeksInMonth {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.weekChip {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  cursor: grab;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  min-width: 80px;
+  text-align: center;
+}
+
+.weekChip:hover {
+  border-color: #3182ce;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  transform: translateY(-1px);
+}
+
+.weekChip.dragging {
+  opacity: 0.5;
+}
+
+.weekLabel {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #2d3748;
+  line-height: 1.2;
+}
+
+.weekDate {
+  font-size: 0.625rem;
+  color: #718096;
+  margin-top: 0.25rem;
+}
+
+/* Main Content Grid */
+.mainContent {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.mainGrid {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 2rem;
+  min-height: calc(100vh - 200px);
+}
+
+/* Projects Column - Sticky */
+.projectsColumn {
+  position: sticky;
+  top: 140px; /* Height of weeks bar */
+  height: fit-content;
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.projectsHeader {
+  padding: 1.5rem 1.5rem 1rem 1.5rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.projectsTitle {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1a202c;
+  margin: 0 0 0.25rem 0;
+}
+
+.projectsSubtitle {
+  font-size: 0.875rem;
+  color: #718096;
+  margin: 0 0 1rem 0;
+}
+
+.searchContainer {
+  margin-bottom: 1rem;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  transition: border-color 0.2s ease;
+  background: white;
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: #3182ce;
+  box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.1);
+}
+
+.searchInput::placeholder {
+  color: #a0aec0;
+}
+
+.projectsContainer {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.projectCard {
+  background: #f7fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 1rem;
+  cursor: grab;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.projectCard:hover {
+  border-color: #3182ce;
+  background: #ebf8ff;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.projectCard.dragging {
+  opacity: 0.5;
+}
+
+.projectName {
+  font-weight: 600;
+  color: #2d3748;
+  margin-bottom: 0.25rem;
+}
+
+.projectDescription {
+  font-size: 0.875rem;
+  color: #718096;
+  line-height: 1.4;
+  margin-bottom: 0.5rem;
+}
+
+.dragHint {
+  font-size: 0.75rem;
+  color: #a0aec0;
+  font-style: italic;
+  text-align: right;
+}
+
+/* Contributors Grid */
+.contributorsGrid {
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.contributorsHeader {
+  padding: 1.5rem 1.5rem 1rem 1.5rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.contributorsTitle {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1a202c;
+  margin: 0 0 0.25rem 0;
+}
+
+.contributorsSubtitle {
+  font-size: 0.875rem;
+  color: #718096;
+  margin: 0 0 1rem 0;
+}
+
+.noResults {
+  text-align: center;
+  color: #a0aec0;
+  font-style: italic;
+  padding: 2rem 1rem;
+  background: #f7fafc;
+  border: 1px dashed #e2e8f0;
+  border-radius: 8px;
+  margin: 1rem 0;
+}
+
+.loadingState {
+  text-align: center;
+  color: #718096;
+  padding: 2rem;
+  background: #f7fafc;
+  border: 2px dashed #e2e8f0;
+  border-radius: 8px;
+  margin: 1rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.loadingSpinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid #e2e8f0;
+  border-top: 3px solid #3182ce;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.contributorsContainer {
+  padding: 1.5rem;
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+}
+
+/* Contributor Cards */
+.contributorCard {
+  background: #f7fafc;
+  border: 2px dashed #cbd5e0;
+  border-radius: 12px;
+  padding: 1.25rem;
+  transition: all 0.2s ease;
+  min-height: 200px;
+  position: relative;
+}
+
+.contributorCard.dragOver {
+  border-color: #3182ce;
+  background: #ebf8ff;
+  border-style: solid;
+}
+
+.contributorCard.dragOver::before {
+  content: "Drop project here to assign";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(49, 130, 206, 0.9);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.contributorHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.contributorInfo {
+  flex: 1;
+}
+
+.contributorName {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #2d3748;
+  margin: 0 0 0.25rem 0;
+}
+
+.contributorMeta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.discord {
+  font-size: 0.75rem;
+  color: #7289da;
+  background: #f0f0ff;
+  padding: 0.125rem 0.5rem;
+  border-radius: 4px;
+  font-family: 'Monaco', 'Menlo', monospace;
+}
+
+.githubButton {
+  background: #24292e;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.githubButton:hover {
+  background: #0366d6;
+  color: white;
+  text-decoration: none;
+}
+
+.projectsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.emptyState {
+  text-align: center;
+  color: #a0aec0;
+  font-style: italic;
+  padding: 2rem 1rem;
+  border: 2px dashed #e2e8f0;
+  border-radius: 8px;
+}
+
+.addProjectZone {
+  text-align: center;
+  color: #a0aec0;
+  font-style: italic;
+  padding: 1rem;
+  border: 2px dashed #e2e8f0;
+  border-radius: 8px;
+  margin-top: 0.75rem;
+  transition: all 0.2s ease;
+  background: #fafafa;
+}
+
+.addProjectZone:hover {
+  border-color: #cbd5e0;
+  background: #f0f0f0;
+}
+
+/* Project Chips */
+.projectChip {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 0.75rem;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.projectChip.dragOver {
+  border-color: #38b2ac;
+  background: #e6fffa;
+  position: relative;
+}
+
+.projectChip.dragOver::before {
+  content: "Drop weeks here";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(56, 178, 172, 0.9);
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 0.75rem;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.projectChipHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.projectChipName {
+  font-weight: 600;
+  color: #2d3748;
+  font-size: 0.875rem;
+}
+
+.projectChipActions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.weekCount {
+  font-size: 0.75rem;
+  color: #718096;
+  background: #f1f5f9;
+  padding: 0.125rem 0.5rem;
+  border-radius: 4px;
+}
+
+.removeButton {
+  background: #fed7d7;
+  color: #c53030;
+  border: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.removeButton:hover {
+  background: #fc8181;
+  color: white;
+}
+
+.weekTags {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-height: 24px;
+}
+
+.monthGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+  max-width: 100%;
+}
+
+.dropHint {
+  color: #a0aec0;
+  font-size: 0.75rem;
+  font-style: italic;
+  padding: 0.25rem 0;
+}
+
+.monthGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 6px;
+  padding: 0.25rem;
+  min-width: fit-content;
+  max-width: 100%;
+}
+
+.monthLabel {
+  font-size: 0.625rem;
+  font-weight: 600;
+  color: #4a5568;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-align: center;
+  margin-bottom: 0.125rem;
+}
+
+.weekNumbers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.125rem;
+  justify-content: center;
+}
+
+.weekNumber {
+  background: #e6fffa;
+  color: #234e52;
+  font-size: 0.625rem;
+  padding: 0.125rem 0.25rem;
+  border-radius: 3px;
+  font-weight: 600;
+  border: 1px solid #b2f5ea;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+  .monthGroup {
+    padding: 0.125rem;
+  }
+  
+  .weekNumber {
+    font-size: 0.5rem;
+    padding: 0.125rem 0.125rem;
+  }
+  
+  .monthLabel {
+    font-size: 0.5rem;
+  }
+}
+
+.weekNumber:hover {
+  background: #b2f5ea;
+  border-color: #81e6d9;
+  transform: translateY(-1px);
+}
+
+.weekTooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #2d3748;
+  color: white;
+  padding: 0.5rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  z-index: 1000;
+  margin-bottom: 0.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.weekTooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 4px solid transparent;
+  border-top-color: #2d3748;
+}
+
+.weekTooltipYear {
+  font-size: 0.625rem;
+  color: #a0aec0;
+  margin-top: 0.125rem;
+  text-align: center;
+}
+
+/* Drag Overlay */
+.dragOverlay {
+  background: #2d3748;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-weight: 500;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  pointer-events: none;
+  z-index: 1000;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .mainGrid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .projectsColumn {
+    position: static;
+    order: 2;
+  }
+  
+  .contributorsGrid {
+    order: 1;
+  }
+  
+  .contributorsContainer {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .mainContent {
+    padding: 1rem;
+  }
+  
+  .weeksContainer {
+    padding: 1rem;
+  }
+  
+  .contributorsContainer {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .monthGroup {
+    min-width: 150px;
+  }
+  
+  .weekChip {
+    min-width: 60px;
+    padding: 0.375rem 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .weeksScroll {
+    gap: 1rem;
+  }
+  
+  .monthGroup {
+    min-width: 120px;
+  }
+  
+  .weekChip {
+    min-width: 50px;
+    padding: 0.25rem 0.375rem;
+  }
+  
+  .weekLabel {
+    font-size: 0.625rem;
+  }
+  
+  .contributorHeader {
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: stretch;
+  }
+  
+  .githubButton {
+    align-self: flex-start;
+  }
+}

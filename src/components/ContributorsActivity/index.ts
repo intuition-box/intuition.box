@@ -1,0 +1,1 @@
+export { ContributorsActivity } from './ContributorsActivity';

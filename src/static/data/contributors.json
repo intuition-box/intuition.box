@@ -1,0 +1,152 @@
+{
+  "AlexandreTedesco": {
+    "projects": {
+      "Graph": [
+        "2024-12-02",
+        "2024-12-09",
+        "2024-12-16"
+      ],
+      "API mock": [
+        "2024-11-25"
+      ]
+    }
+  },
+  "jeremie-olivier": {
+    "projects": {
+      "Graph": [
+        "2024-11-11",
+        "2024-11-25",
+        "2024-12-02",
+        "2024-12-09",
+        "2025-03-24"
+      ],
+      "API mock": [
+        "2024-11-11",
+        "2024-11-25"
+      ],
+      "BuildProof": [
+        "2024-12-23",
+        "2024-12-30"
+      ]
+    }
+  },
+  "ZealRa": {
+    "projects": {
+      "Graph": [
+        "2024-11-18",
+        "2024-11-25",
+        "2024-12-02",
+        "2024-12-09"
+      ],
+      "API mock": [
+        "2024-12-02",
+        "2024-12-09",
+        "2025-08-17"
+      ]
+    }
+  },
+  "Thibault Lenormand": {
+    "projects": {
+      "Graph": [
+        "2024-12-02",
+        "2024-12-09",
+        "2024-12-16",
+        "2025-07-20",
+        "2025-08-03"
+      ]
+    }
+  },
+  "MacDuPain": {
+    "projects": {
+      "Graph": [
+        "2024-12-02",
+        "2024-12-09",
+        "2024-12-16",
+        "2025-08-03"
+      ]
+    }
+  },
+  "maximelodato": {
+    "projects": {
+      "API mock": [
+        "2024-11-25",
+        "2024-12-02",
+        "2024-12-09",
+        "2025-08-17"
+      ]
+    }
+  },
+  "saulodigital": {
+    "projects": {
+      "BuildProof": [
+        "2024-12-02",
+        "2024-12-23",
+        "2024-12-30"
+      ]
+    }
+  },
+  "JamesDev292": {
+    "projects": {
+      "Graph": []
+    }
+  },
+  "Dev-Moulin": {
+    "projects": {
+      "IA Assistant": [
+        "2025-08-03"
+      ],
+      "Game 2048": [
+        "2025-08-03",
+        "2025-08-17"
+      ]
+    }
+  },
+  "Warzieram": {
+    "projects": {
+      "Game 2048": []
+    }
+  },
+  "AkaKwak": {
+    "projects": {
+      "IA Assistant": []
+    }
+  },
+  "Alexe": {
+    "projects": {
+      "Extension": []
+    }
+  },
+  "ZainebPadilla": {
+    "projects": {
+      "Banner": []
+    }
+  },
+  "Istarengwa": {
+    "projects": {
+      "Intudex": [
+        "2025-08-17"
+      ]
+    }
+  },
+  "stevenratton": {
+    "projects": {
+      "Flyer": [
+        "2025-08-10"
+      ]
+    }
+  },
+  "rchis": {
+    "projects": {
+      "Oracle Lend": [
+        "2025-08-24"
+      ]
+    }
+  },
+  "Nuel": {
+    "projects": {
+      "Oracle Lend": [
+        "2025-08-24"
+      ]
+    }
+  }
+}

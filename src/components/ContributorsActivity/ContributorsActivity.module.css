@@ -1,0 +1,325 @@
+/* Loading State */
+.loadingContainer {
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #0b0b09;
+  color: #f1f5f9;
+}
+
+.loadingSpinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid rgba(241, 245, 249, 0.2);
+  border-top: 3px solid #3182ce;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Main Container */
+.container {
+  min-height: 100vh;
+  width: 100%;
+  background: #0b0b09;
+  color: #f1f5f9;
+}
+
+/* Header / Timeline */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  backdrop-filter: blur(10px);
+  background: rgba(11, 11, 9, 0.7);
+}
+
+.headerContent {
+  max-width: 1152px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.timelineCard {
+  border-radius: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: linear-gradient(135deg, rgba(192, 38, 211, 0.6), rgba(147, 51, 234, 0.6));
+  padding: 1rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.timelineHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.timelineTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: 0.025em;
+  margin: 0;
+}
+
+.timelineRange {
+  font-size: 0.75rem;
+  opacity: 0.8;
+}
+
+.filterButtons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.filterButton {
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.3);
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.filterButton:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.filterButtonActive {
+  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.customDateInputs {
+  margin-top: 0.75rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+}
+
+@media (min-width: 640px) {
+  .customDateInputs {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.dateLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.875rem;
+}
+
+.dateInput {
+  width: 100%;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.3);
+  padding: 0.5rem 0.75rem;
+  color: white;
+}
+
+.dateInput:focus {
+  outline: none;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Body Container */
+.bodyContainer {
+  position: relative;
+  max-width: 1152px;
+  margin: 0 auto;
+  padding: 0 1rem 6rem;
+}
+
+.connectorsSvg {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+/* Sections */
+.section {
+  position: relative;
+  z-index: 10;
+  margin-top: 1.5rem;
+}
+
+.sectionTitle {
+  font-size: 1.125rem;
+  font-weight: 600;
+  opacity: 0.9;
+  margin: 0 0 0.75rem 0;
+}
+
+/* Contributors */
+.contributorsGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 640px) {
+  .contributorsGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.contributorCard {
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(30, 41, 59, 0.6);
+  padding: 1rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.contributorBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 0.75rem;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: white;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* Gradient classes for contributor badges */
+.contributorBadge.fromsky500tocyan500 {
+  background: linear-gradient(135deg, #0ea5e9, #06b6d4);
+}
+
+.contributorBadge.fromfuchsia500toviolet500 {
+  background: linear-gradient(135deg, #d946ef, #8b5cf6);
+}
+
+.contributorBadge.fromemerald500toteal500 {
+  background: linear-gradient(135deg, #10b981, #14b8a6);
+}
+
+.contributorBadge.fromorange500tored500 {
+  background: linear-gradient(135deg, #f97316, #ef4444);
+}
+
+.contributorBadge.fromindigo500topurple500 {
+  background: linear-gradient(135deg, #6366f1, #a855f7);
+}
+
+.contributorBadge.fromgreen500toemerald500 {
+  background: linear-gradient(135deg, #22c55e, #10b981);
+}
+
+.contributorBadge.frompink500torose500 {
+  background: linear-gradient(135deg, #ec4899, #f43f5e);
+}
+
+.contributorBadge.fromyellow500toorange500 {
+  background: linear-gradient(135deg, #eab308, #f97316);
+}
+
+.contributorBadge.fromteal500tocyan500 {
+  background: linear-gradient(135deg, #14b8a6, #06b6d4);
+}
+
+.contributorBadge.fromviolet500topurple500 {
+  background: linear-gradient(135deg, #8b5cf6, #a855f7);
+}
+
+.contributorStats {
+  margin-top: 0.75rem;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.statNumber {
+  font-size: 2.25rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.statLabel {
+  font-size: 0.75rem;
+  opacity: 0.7;
+}
+
+.statRange {
+  font-size: 0.75rem;
+  opacity: 0.7;
+}
+
+/* Projects */
+.projectsGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 640px) {
+  .projectsGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.projectCard {
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(30, 41, 59, 0.6);
+  padding: 1rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.projectName {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.projectCount {
+  font-size: 1.875rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.projectLabel {
+  font-size: 0.75rem;
+  opacity: 0.7;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .headerContent {
+    padding: 0.5rem;
+  }
+  
+  .timelineCard {
+    padding: 0.75rem;
+  }
+  
+  .bodyContainer {
+    padding: 0 0.5rem 6rem;
+  }
+  
+  .filterButtons {
+    gap: 0.25rem;
+  }
+  
+  .filterButton {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.8125rem;
+  }
+}
