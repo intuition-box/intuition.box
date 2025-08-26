@@ -190,3 +190,68 @@
               0 6px 20px color-mix(in srgb, var(--btn-text) 40%, transparent);
 }
 .cta:focus, .cta:active { text-decoration: none; }
+
+@media (max-width:640px){
+  .rowCarousel { display: block; }
+
+  .rowTrack {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 88%;
+    gap: 12px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-snap-stop: always;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-x;
+    overscroll-behavior-x: contain;
+    padding: 4px 8px 12px;
+    scrollbar-width: none;
+  }
+  .rowTrack::-webkit-scrollbar { display: none; }
+
+  .rowSlide {
+    scroll-snap-align: center;
+    display: block;
+  }
+
+  .rowControls {
+    margin-top: 8px;
+    display: flex; align-items: center; justify-content: center;
+    gap: 10px; margin-bottom: 2rem;
+  }
+  .rowNavBtn {
+    all: unset;
+    cursor: pointer;
+    padding: 6px 10px;
+    border: 1px solid rgba(255,255,255,.18);
+    border-radius: 12px;
+    background: rgba(255,255,255,.06);
+    box-shadow: 0 4px 14px rgba(0,0,0,.25);
+    line-height: 1; font-weight: 700;
+  }
+
+  .rowDots {
+    --dot-gap: 8px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: var(--dot-gap);
+    padding: 4px 6px;
+  }
+  .rowDot {
+    --dot-size: 10px;
+    inline-size: var(--dot-size);
+    block-size: var(--dot-size);
+    border-radius: 999px;
+    border: 1px solid color-mix(in srgb, var(--btn-text) 60%, transparent);
+    background: transparent;
+    transition: transform .18s ease, background-color .18s ease, border-color .18s ease;
+  }
+  .rowDotActive {
+    background-color: var(--accent-main);
+    border-color: var(--accent-main);
+    transform: scale(1.12);
+    box-shadow: 0 0 6px color-mix(in srgb, var(--accent-main) 45%, transparent);
+  }
+}
