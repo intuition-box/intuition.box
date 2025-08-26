@@ -47,74 +47,115 @@ function fmtReading(rt: Post["readingTime"]) {
 
 function InfiniteLooper({ posts, whenFmt }: { posts: Post[]; whenFmt: (d: string) => string }) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
   const setRef = useRef<HTMLDivElement>(null);
   const rafRef = useRef<number | null>(null);
-  const speedRef = useRef(0.25); // px/frame ≈ 15px/s
-  const pausedRef = useRef(false);
 
-  const normalize = useCallback(() => {
-    const el = containerRef.current;
-    const s = setRef.current;
-    if (!el || !s) return;
-    const w = s.scrollWidth;
-    if (!w) return;
-    if (el.scrollLeft <= 0) el.scrollLeft += w;
-    else if (el.scrollLeft >= w * 2) el.scrollLeft -= w;
-  }, []);
+  const maxBoost = 2.6;
+  const speedRef = useRef(0);
+  const targetSpeedRef = useRef(0);
+  const offsetRef = useRef(0);
+
+  const getSetWidth = useCallback(() => setRef.current?.scrollWidth ?? 0, []);
 
   const tick = useCallback(() => {
-    const el = containerRef.current;
-    if (el && !pausedRef.current) {
-      el.scrollLeft += speedRef.current;
-      normalize();
+    const track = trackRef.current;
+    if (!track) {
+      rafRef.current = requestAnimationFrame(tick);
+      return;
     }
+
+    speedRef.current += (targetSpeedRef.current - speedRef.current) * 0.1;
+
+    const w = getSetWidth();
+    if (w > 0) {
+      offsetRef.current += speedRef.current;
+      if (offsetRef.current >= w) offsetRef.current -= w;
+      else if (offsetRef.current < 0) offsetRef.current += w;
+
+      track.style.transform = `translate3d(${-offsetRef.current}px, 0, 0)`;
+    }
+
     rafRef.current = requestAnimationFrame(tick);
-  }, [normalize]);
+  }, [getSetWidth]);
 
   useEffect(() => {
-    const el = containerRef.current;
-    const s = setRef.current;
-    if (!el || !s) return;
-    el.scrollLeft = s.scrollWidth; // démarre au milieu
     rafRef.current = requestAnimationFrame(tick);
-    return () => { if (rafRef.current) cancelAnimationFrame(rafRef.current); };
+    const onResize = () => {};
+    window.addEventListener("resize", onResize);
+    return () => {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      window.removeEventListener("resize", onResize);
+    };
   }, [tick]);
+
+  useEffect(() => {
+    const onMouseMove = (e: MouseEvent) => {
+      const vw = Math.max(1, window.innerWidth);
+      let ratio = (e.clientX / vw) * 2 - 1; // -1..1
+      const dead = 0.06;
+      if (Math.abs(ratio) < dead) ratio = 0;
+      const curved = Math.sign(ratio) * Math.pow(Math.abs(ratio), 0.9);
+      targetSpeedRef.current = curved * maxBoost;
+    };
+    const onMouseLeave = () => (targetSpeedRef.current = 0);
+
+    window.addEventListener("mousemove", onMouseMove);
+    window.addEventListener("mouseleave", onMouseLeave);
+    return () => {
+      window.removeEventListener("mousemove", onMouseMove);
+      window.removeEventListener("mouseleave", onMouseLeave);
+    };
+  }, []);
 
   return (
     <div
       className={styles.loopContainer}
       ref={containerRef}
-      onMouseEnter={() => (pausedRef.current = true)}
-      onMouseLeave={() => (pausedRef.current = false)}
       aria-roledescription="carousel"
     >
-      <div className={styles.loopTrack}>
+      <div className={styles.loopTrack} ref={trackRef}>
         <div className={styles.loopSet} ref={setRef}>
           {posts.map((p) => {
             const reading = fmtReading(p.readingTime);
             return (
-              <article key={"a-" + p.href} className={clsx(styles.card, styles.loopCard)}>
+              <article
+                key={"a-" + p.href}
+                className={clsx(styles.card, styles.loopCard)}
+              >
+                <Link
+                  to={p.href}
+                  className={styles.cardLink}
+                  aria-label={p.title}
+                />
                 {p.image ? (
-                  <Link to={p.href} aria-label={p.title}>
-                    <div className={styles.media} style={{ backgroundImage: `url(${p.image})` }} />
-                  </Link>
+                  <div
+                    className={styles.media}
+                    style={{ backgroundImage: `url(${p.image})` }}
+                  />
                 ) : (
-                  <Link to={p.href} aria-label={p.title}>
-                    <div className={clsx(styles.media, styles.mediaPlaceholder)} />
-                  </Link>
+                  <div
+                    className={clsx(styles.media, styles.mediaPlaceholder)}
+                  />
                 )}
                 <div className={styles.body}>
-                  <h3 className={styles.postTitle}><Link to={p.href}>{p.title}</Link></h3>
+                  <h3 className={styles.postTitle}>
+                    <Link to={p.href}>{p.title}</Link>
+                  </h3>
                   <div className={styles.meta}>
                     <time className={styles.date}>{whenFmt(p.date)}</time>
                     {typeof reading === "number" && (
                       <>
-                        <span className={styles.dot} aria-hidden>•</span>
+                        <span className={styles.dot} aria-hidden>
+                          •
+                        </span>
                         <span className={styles.reading}>{reading} min</span>
                       </>
                     )}
                   </div>
-                  {p.description && <p className={styles.desc}>{p.description}</p>}
+                  {p.description && (
+                    <p className={styles.desc}>{p.description}</p>
+                  )}
                 </div>
               </article>
             );
@@ -125,15 +166,24 @@ function InfiniteLooper({ posts, whenFmt }: { posts: Post[]; whenFmt: (d: string
           {posts.map((p) => {
             const reading = fmtReading(p.readingTime);
             return (
-              <article key={"b-" + p.href} className={clsx(styles.card, styles.loopCard)}>
+              <article
+                key={"b-" + p.href}
+                className={clsx(styles.card, styles.loopCard)}
+              >
+                <Link
+                  to={p.href}
+                  className={styles.cardLink}
+                  aria-label={p.title}
+                />
                 {p.image ? (
-                  <Link to={p.href} aria-label={p.title}>
-                    <div className={styles.media} style={{ backgroundImage: `url(${p.image})` }} />
-                  </Link>
+                  <div
+                    className={styles.media}
+                    style={{ backgroundImage: `url(${p.image})` }}
+                  />
                 ) : (
-                  <Link to={p.href} aria-label={p.title}>
-                    <div className={clsx(styles.media, styles.mediaPlaceholder)} />
-                  </Link>
+                  <div
+                    className={clsx(styles.media, styles.mediaPlaceholder)}
+                  />
                 )}
                 <div className={styles.body}>
                   <h3 className={styles.postTitle}><Link to={p.href}>{p.title}</Link></h3>
@@ -161,34 +211,20 @@ function MobileCarousel({ posts, whenFmt }: { posts: Post[]; whenFmt: (d: string
   const visible = useMemo(() => posts, [posts]);
   const trackRef = useRef<HTMLDivElement>(null);
   const [index, setIndex] = useState(0);
-  const scrollEndTO = useRef<number | null>(null);
 
   const scrollTo = (i: number) => {
-    const el = trackRef.current; if (!el) return;
+    const el = trackRef.current;
+    if (!el) return;
     const clamped = Math.max(0, Math.min(i, visible.length - 1));
     const child = el.children.item(clamped) as HTMLElement | null;
     if (child) child.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
     setIndex(clamped);
   };
 
-  const snapToClosest = () => {
-    const el = trackRef.current; if (!el) return;
-    const tr = el.getBoundingClientRect();
-    const center = tr.left + tr.width / 2;
-    let best = 0, bestDist = Infinity;
-    for (let i = 0; i < el.children.length; i++) {
-      const r = (el.children[i] as HTMLElement).getBoundingClientRect();
-      const c = r.left + r.width / 2;
-      const d = Math.abs(c - center);
-      if (d < bestDist) { bestDist = d; best = i; }
-    }
-    setIndex(best);
-    const child = el.children.item(best) as HTMLElement | null;
-    if (child) child.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
-  };
-
   const onTrackScroll = () => {
-    const el = trackRef.current; if (!el) return;
+    const el = trackRef.current;
+    if (!el) return;
+
     const tr = el.getBoundingClientRect();
     const center = tr.left + tr.width / 2;
     let best = 0, bestDist = Infinity;
@@ -196,11 +232,9 @@ function MobileCarousel({ posts, whenFmt }: { posts: Post[]; whenFmt: (d: string
       const r = (el.children[i] as HTMLElement).getBoundingClientRect();
       const c = r.left + r.width / 2;
       const d = Math.abs(c - center);
-      if (d < bestDist) { bestDist = d; best = i; }
+      if (d < bestDist) { best = i; bestDist = d; }
     }
     setIndex(best);
-    if (scrollEndTO.current) window.clearTimeout(scrollEndTO.current);
-    scrollEndTO.current = window.setTimeout(snapToClosest, 80);
   };
 
   return (
@@ -216,7 +250,9 @@ function MobileCarousel({ posts, whenFmt }: { posts: Post[]; whenFmt: (d: string
           <article key={p.href} className={clsx(styles.card, styles.slide)}>
             <Link to={p.href} className={styles.cardLink} aria-label={p.title} />
             {p.image ? (
-              <div className={styles.media} style={{ backgroundImage: `url(${p.image})` }} />
+              <Link to={p.href} aria-label={p.title}>
+                <div className={styles.media} style={{ backgroundImage: `url(${p.image})` }} />
+              </Link>
             ) : (
               <div className={clsx(styles.media, styles.mediaPlaceholder)} />
             )}

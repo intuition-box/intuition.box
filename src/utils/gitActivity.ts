@@ -69,51 +69,33 @@ function isRateLimited(res: Response) {
   return false;
 }
 
-
 async function fetchOrgEvents(org: string) {
   const res = await fetch(`${GH}/orgs/${org}/events?per_page=100`, { headers });
-  if (!res.ok) {
-    const limited = isRateLimited(res);
-    const text = await res.text().catch(() => "");
-    throw new Error(limited ? "rate-limit" : `org events ${res.status} ${text?.slice(0, 120)}`);
-  }
+  if (!res.ok) throw new Error("org events");
   const data: GitHubEvent[] = await res.json();
   return data;
 }
 
 async function fetchOrgRepos(org: string, perPage = 30) {
   const res = await fetch(`${GH}/orgs/${org}/repos?per_page=${perPage}&sort=pushed`, { headers });
-  if (!res.ok) {
-    const limited = isRateLimited(res);
-    const text = await res.text().catch(() => "");
-    throw new Error(limited ? "rate-limit" : `org repos ${res.status} ${text?.slice(0, 120)}`);
-  }
+  if (!res.ok) throw new Error("org repos");
   const data: OrgRepo[] = await res.json();
   return data.filter((r) => !r.private);
 }
 
 async function fetchRepoHeadCommit(org: string, repo: string) {
   const res = await fetch(`${GH}/repos/${org}/${repo}/commits?per_page=1`, { headers });
-  if (!res.ok) {
-    const limited = isRateLimited(res);
-    const text = await res.text().catch(() => "");
-    throw new Error(limited ? "rate-limit" : `commits ${repo} ${res.status} ${text?.slice(0, 120)}`);
-  }
+  if (!res.ok) throw new Error("commits head");
   const data: CommitAPI[] = await res.json();
   return data[0];
 }
 
 async function fetchRepoRecentCommits(org: string, repo: string, limit = 3) {
   const res = await fetch(`${GH}/repos/${org}/${repo}/commits?per_page=${limit}`, { headers });
-  if (!res.ok) {
-    const limited = isRateLimited(res);
-    const text = await res.text().catch(() => "");
-    throw new Error(limited ? "rate-limit" : `commits ${repo} ${res.status} ${text?.slice(0, 120)}`);
-  }
+  if (!res.ok) throw new Error("commits recent");
   const data: CommitAPI[] = await res.json();
   return data;
 }
-
 
 async function recentFromOrgEvents(org: string, topRepos = 6): Promise<HybridResult> {
   const events = await fetchOrgEvents(org);
@@ -128,7 +110,7 @@ async function recentFromOrgEvents(org: string, topRepos = 6): Promise<HybridRes
     const login = ev.actor?.login;
     const avatar = ev.actor?.avatar_url;
     const when = ev.created_at ? new Date(ev.created_at) : null;
-    const repoFull = ev.repo?.name; // "org/repo"
+    const repoFull = ev.repo?.name;
     if (!login || !when || Number.isNaN(when.getTime())) continue;
 
     const prev = contribByLast.get(login);
@@ -201,7 +183,6 @@ async function recentFromRepos(
     const avatar = c.author?.avatar_url;
     contributorsRaw.push({ login: author, date, avatarUrl: avatarOf(author, avatar) });
 
-    // lier auteur → repo
     if (!contribToProjects.has(author)) contribToProjects.set(author, new Set());
     contribToProjects.get(author)!.add(repo);
 
@@ -245,8 +226,6 @@ async function recentFromRepos(
     ),
   };
 }
-
-/* ===================== FALLBACK JSON LOCAL ===================== */
 
 import contributorsJson from "../static/data/contributors.json";
 import projectMappingJson from "../static/data/project-repo-mapping.json";
@@ -310,7 +289,6 @@ function fromLocalJson(): HybridResult {
   };
 }
 
-
 export async function fetchHybridActivity(
   org: string,
   options?: { repoLimit?: number; perRepoCommitList?: number }
@@ -321,34 +299,22 @@ export async function fetchHybridActivity(
   if (perRepoCommitList > 0) {
     try {
       return await recentFromRepos(org, repoLimit, perRepoCommitList);
-    } catch (e: any) {
-      if (String(e?.message).includes("rate-limit")) {
-        return { ...fromLocalJson(), error: "Rate limit reached (repos). Using local JSON." };
-      }
+    } catch {
       try {
         return await recentFromOrgEvents(org, repoLimit);
-      } catch (e2: any) {
-        if (String(e2?.message).includes("rate-limit")) {
-          return { ...fromLocalJson(), error: "Rate limit reached (events). Using local JSON." };
-        }
-        return { ...fromLocalJson(), error: e2?.message || e?.message || "Fallback to local JSON." };
+      } catch {
+        return fromLocalJson();
       }
     }
   }
 
   try {
     return await recentFromOrgEvents(org, repoLimit);
-  } catch (e: any) {
-    if (String(e?.message).includes("rate-limit")) {
-      return { ...fromLocalJson(), error: "Rate limit reached (events). Using local JSON." };
-    }
+  } catch {
     try {
       return await recentFromRepos(org, repoLimit, perRepoCommitList);
-    } catch (e2: any) {
-      if (String(e2?.message).includes("rate-limit")) {
-        return { ...fromLocalJson(), error: "Rate limit reached (repos). Using local JSON." };
-      }
-      return { ...fromLocalJson(), error: e2?.message || e?.message || "Fallback to local JSON." };
+    } catch {
+      return fromLocalJson();
     }
   }
 }

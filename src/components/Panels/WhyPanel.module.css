@@ -286,7 +286,6 @@
 .voteFor     { --icon-color: var(--ok); }
 .voteAgainst { --icon-color: var(--bad); }
 .voteMiniNumber { color: var(--ink); }
-:global(:root[data-theme="light"]) .voteMiniNumber { color: #000; }
 
 /* responsive design */
 .desktopOnly { display: block; }

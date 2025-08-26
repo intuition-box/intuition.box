@@ -106,19 +106,37 @@
   -webkit-mask-image: linear-gradient(to right, transparent 0, #000 8%, #000 92%, transparent 100%);
           mask-image: linear-gradient(to right, transparent 0, #000 8%, #000 92%, transparent 100%);
   padding: 10px 0 2px;
-  touch-action: pan-x;
-  cursor: grab;
   width: 100%;
   max-width: 1280px;
   margin-inline: auto;
 }
-.loopContainer:active { cursor: grabbing; }
-.loopTrack { display: flex; flex-wrap: nowrap; }
+.loopTrack {
+  display: inline-flex;
+  flex-wrap: nowrap;
+  will-change: transform;
+  transform: translateZ(0);
+}
 .loopSet { display: inline-flex; gap: 14px; }
 .loopCard { width: min(540px, 78vw); flex: 0 0 auto; grid-template-rows: 140px auto; }
 @media (min-width: 996px) { .loopCard { width: 520px; grid-template-rows: 160px auto; } }
 .loopContainer:hover .loopCard { box-shadow: 0 14px 36px rgba(0,0,0,.42); }
 @media (max-width: 480px){ .loopSet { gap: 10px; } }
+
+.loopContainer::before,
+.loopContainer::after {
+  content: "";
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 56px;
+  pointer-events: none;
+  display: none;
+}
+@supports (-webkit-touch-callout: none) {
+  .loopContainer { -webkit-mask-image: none; mask-image: none; }
+  .loopContainer::before, .loopContainer::after { display: block; }
+  .loopContainer::before { left: 0; background: linear-gradient(to right, rgba(0,0,0,.32), rgba(0,0,0,0)); }
+  .loopContainer::after  { right: 0; background: linear-gradient(to left,  rgba(0,0,0,.32), rgba(0,0,0,0)); }
+}
 
 .carousel { display: none; }
 @media (max-width:640px){
@@ -146,9 +164,9 @@
   .slide { scroll-snap-align: center; min-height: 220px; }
 
   .controls {
-    margin-top: 8px;
+    margin-top: 2px;
     display: flex; align-items: center; justify-content: center;
-    gap: 10px; margin-bottom: 5rem;
+    gap: 10px;
   }
   .navBtn {
     all: unset;
@@ -160,13 +178,36 @@
     box-shadow: 0 4px 14px rgba(0,0,0,.25);
     line-height: 1; font-weight: 700;
   }
-  .dots { display: flex; gap: 6px; }
-  .dot  { width: 8px; height: 8px; border-radius: 999px; background: rgba(255,255,255,.35); border: 1px solid rgba(255,255,255,.35); cursor: pointer; }
-  .dotActive { width: 18px; background: var(--accent-main); border-color: var(--accent-main); transition: width .18s ease; }
 
-  .cardLink { pointer-events: none; }
+  .dots {
+    --dot-gap: 8px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: var(--dot-gap);
+    padding: 4px 6px;
+  }
+
+  .dot {
+    --dot-size: 10px;
+    inline-size: var(--dot-size);
+    block-size: var(--dot-size);
+    border-radius: 999px;
+    border: 1px solid color-mix(in srgb, var(--btn-text) 60%, transparent);
+    background: transparent;
+    transition: transform .18s ease, background-color .18s ease, border-color .18s ease;
+  }
+
+  .dotActive {
+    background-color: white;
+    border-color: var(--accent-main);
+    transform: scale(1.12);
+    box-shadow: 0 0 6px color-mix(in srgb, var(--accent-main) 45%, transparent);
+  }
+  .seeAll {
+    margin-bottom: 3rem;
+  }
+  .title {
+    margin-top: auto;
+  }
 }
-
-.card:focus-visible,
-.navBtn:focus-visible,
-.dot:focus-visible { outline: 2px solid var(--accent-main); outline-offset: 2px; }
