@@ -98,7 +98,7 @@
   position: relative;
   z-index: 1;
   margin: 0;
-  font-family: 'Orbitron', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-weight: 700;
   letter-spacing: 0.04em;
   text-shadow: 0 0 20px var(--sun-core), 0 0 40px var(--sun-mid);
@@ -242,7 +242,7 @@
 .contribCardTitle {
   font-size: 1.05rem;
   margin: 0;
-  font-family: 'Orbitron', Arial, sans-serif;
+  font-family: 'Montserrat', Arial, sans-serif;
   text-align: center;
 }
 
@@ -401,4 +401,58 @@
 
 @media (prefers-reduced-motion: reduce) {
   .contribCard, .commit, .project { transition: none !important; }
+}
+
+/* ===== MOBILE TWEAK – garder tout dans l'écran et éloigner les projects ===== */
+
+/* palier 1 : ≤ 640px */
+@media (max-width: 640px) {
+  /* Étroit en largeur, un peu plus haut : scale anisotrope */
+  .boxesContainer,
+  .orbit,
+  .orbitProjects {
+    transform: scale(0.56, 0.66);  /* ← moins large que haut */
+    transform-origin: 50% 50%;
+  }
+
+  /* Rayon différent commit vs project (projects + loin du soleil) */
+  .commit  { --orbit-radius: 92px  !important; }
+  .project { --orbit-radius: 122px !important; }  /* +30px vs commit */
+
+  /* Contributeurs un poil plus étroits = pas de dépassement latéral */
+  .contribCard { width: 172px; }
+
+  /* Soleil un chouïa plus petit pour augmenter l’espace perçu */
+  .centralCircle { width: 160px; height: 160px; }
+}
+
+/* palier 2 : ≤ 420px */
+@media (max-width: 420px) {
+  .boxesContainer,
+  .orbit,
+  .orbitProjects { transform: scale(0.50, 0.62); }
+
+  .commit  { --orbit-radius: 80px  !important; }
+  .project { --orbit-radius: 110px !important; }
+
+  .contribCard { width: 158px; }
+  .centralCircle { width: 148px; height: 148px; }
+}
+
+/* palier 3 : ≤ 360px ou paysage bas */
+@media (max-width: 360px), (max-height: 540px) and (orientation: landscape) {
+  .boxesContainer,
+  .orbit,
+  .orbitProjects { transform: scale(0.46, 0.60); }
+
+  .commit  { --orbit-radius: 72px  !important; }
+  .project { --orbit-radius: 102px !important; }
+
+  .contribCard { width: 150px; }
+  .centralCircle { width: 136px; height: 136px; }
+}
+
+/* sécurité : on garde le contenu "dans" le wrapper */
+@media (max-width: 640px) {
+  .galaxyWrapper { overflow: hidden; }
 }

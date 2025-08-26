@@ -73,6 +73,30 @@ export default function OffersPanel() {
     requestAnimationFrame(() => scrollTo(0));
   }, [isMobile]);
 
+  const onMoveTilt = (e: React.MouseEvent<HTMLElement>) => {
+    const el = e.currentTarget as HTMLElement;
+    const r = el.getBoundingClientRect();
+    const nx = (e.clientX - r.left) / r.width;
+    const ny = (e.clientY - r.top) / r.height;
+
+    const tilt = 5;
+    const rx = (ny - 0.5) * -2 * tilt;
+    const ry = (nx - 0.5) *  2 * tilt;
+
+    el.style.setProperty("--rx", `${rx}deg`);
+    el.style.setProperty("--ry", `${ry}deg`);
+    el.style.setProperty("--mx", `${nx}`);
+    el.style.setProperty("--my", `${ny}`);
+  };
+
+  const onLeaveTilt = (e: React.MouseEvent<HTMLElement>) => {
+    const el = e.currentTarget as HTMLElement;
+    el.style.setProperty("--rx", "0deg");
+    el.style.setProperty("--ry", "0deg");
+    el.style.removeProperty("--mx");
+    el.style.removeProperty("--my");
+  };
+
   return (
     <section className={styles.wrap}>
       <header className={styles.header}>
@@ -80,7 +104,6 @@ export default function OffersPanel() {
         <p className={styles.subtitle}>Short description</p>
       </header>
 
-{/* desktop */}
       {!isMobile && (
         <div className={styles.grid}>
           {layout.map(({ data, style, isGhost }, i) => {
@@ -88,11 +111,13 @@ export default function OffersPanel() {
             const Tag: any = !isGhost && it.href ? "a" : "div";
             return (
               <Tag key={isGhost ? `ghost-${i}` : it.id}
-                className={`${styles.card} ${isGhost ? styles.ghost : ""}`}
+                className={`${styles.card} ${isGhost ? styles.ghost : styles.glassTiltSoft}`}
                 style={style}
                 href={!isGhost ? it.href : undefined}
                 target={!isGhost && it.href?.startsWith("http") ? "_blank" : undefined}
                 rel={!isGhost && it.href?.startsWith("http") ? "noreferrer" : undefined}
+                onMouseMove={!isGhost ? onMoveTilt : undefined}
+                onMouseLeave={!isGhost ? onLeaveTilt : undefined}
               >
                 {!isGhost && (
                   <div className={styles.inner}>
@@ -107,7 +132,6 @@ export default function OffersPanel() {
         </div>
       )}
 
-      {/* Mobile */}
       {isMobile && (
         <div className={styles.carousel} aria-roledescription="carousel">
           <div

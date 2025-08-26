@@ -16,6 +16,33 @@ const CHECK_ITEMS: string[] = [
 
 export default function WhyPanel() {
   const isMobile = useIsMobile();
+
+  const onMoveAcc = (e: React.MouseEvent<HTMLElement>) => {
+    const el = e.currentTarget as HTMLElement;
+    const r = el.getBoundingClientRect();
+    const x = e.clientX - r.left;
+    const y = e.clientY - r.top;
+    const nx = x / r.width;
+    const ny = y / r.height;
+
+    const tilt = 6;
+    const rx = (ny - 0.5) * -2 * tilt;
+    const ry = (nx - 0.5) *  2 * tilt;
+
+    el.style.setProperty("--rx", `${rx}deg`);
+    el.style.setProperty("--ry", `${ry}deg`);
+    el.style.setProperty("--mx", `${nx}`);
+    el.style.setProperty("--my", `${ny}`);
+  };
+
+  const onLeaveAcc = (e: React.MouseEvent<HTMLElement>) => {
+    const el = e.currentTarget as HTMLElement;
+    el.style.setProperty("--rx", "0deg");
+    el.style.setProperty("--ry", "0deg");
+    el.style.removeProperty("--mx");
+    el.style.removeProperty("--my");
+  };
+
   return (
     <Panel variant="large">
       <h2>WHY INTUITION ?</h2>
@@ -25,20 +52,18 @@ export default function WhyPanel() {
           <h3 className={styles.cardTitle}>Context & Origin</h3>
           <p className={styles.cardIntro}>The FabLab Charter</p>
 
-          <div className={styles.correction} aria-live="polite">
+          <div
+            className={`${styles.correction} ${styles.glassTilt}`}
+            aria-live="polite"
+            onMouseMove={onMoveAcc}
+            onMouseLeave={onLeaveAcc}
+          >
             <div className={styles.correctionLabel}>Global network of</div>
             <div className={styles.swap}>
               <div className={styles.badRow}>
                 <span className={styles.inlineCross} aria-hidden="true">
                   <svg viewBox="0 0 24 24">
-                    <rect
-                      x="2.5"
-                      y="2.5"
-                      width="19"
-                      height="19"
-                      rx="6"
-                      className={styles.iconBoxBad}
-                    />
+                    <rect x="2.5" y="2.5" width="19" height="19" rx="6" className={styles.iconBoxBad} />
                     <path d="M8 8l8 8M16 8l-8 8" className={styles.iconCross} />
                   </svg>
                 </span>
@@ -49,20 +74,11 @@ export default function WhyPanel() {
               <div className={styles.goodRow}>
                 <span className={styles.inlineCheck} aria-hidden="true">
                   <svg viewBox="0 0 24 24">
-                    <rect
-                      x="2.5"
-                      y="2.5"
-                      width="19"
-                      height="19"
-                      rx="6"
-                      className={styles.iconBox}
-                    />
+                    <rect x="2.5" y="2.5" width="19" height="19" rx="6" className={styles.iconBox} />
                     <path d="M6 12.5l4 4 8-9" className={styles.iconTick} />
                   </svg>
                 </span>
-                <span className={styles.bodyFont}>
-                  online and decentralized labs
-                </span>
+                <span className={styles.bodyFont}>online and decentralized labs</span>
               </div>
             </div>
           </div>
@@ -70,17 +86,15 @@ export default function WhyPanel() {
           <div className={styles.revealWrap}>
             <ul className={styles.checklist}>
               {CHECK_ITEMS.map((txt, i) => (
-                <li className={styles.checkItem} key={i}>
+                <li
+                  key={i}
+                  className={`${styles.checkItem} ${styles.glassTilt}`}
+                  onMouseMove={onMoveAcc}
+                  onMouseLeave={onLeaveAcc}
+                >
                   <span className={styles.checkIcon} aria-hidden="true">
                     <svg viewBox="0 0 24 24">
-                      <rect
-                        x="2.5"
-                        y="2.5"
-                        width="19"
-                        height="19"
-                        rx="6"
-                        className={styles.iconBox}
-                      />
+                      <rect x="2.5" y="2.5" width="19" height="19" rx="6" className={styles.iconBox} />
                       <path d="M6 12.5l4 4 8-9" className={styles.iconTick} />
                     </svg>
                   </span>
@@ -89,7 +103,7 @@ export default function WhyPanel() {
               ))}
             </ul>
 
-            <details className={`${styles.moreMobile}`}>
+            <details className={styles.moreMobile}>
               <summary className={styles.moreBtn}>
                 <span className={styles.whenClosed}>MORE</span>
                 <span className={styles.whenOpen}>LESS</span>
@@ -97,9 +111,7 @@ export default function WhyPanel() {
             </details>
           </div>
 
-          <button className={styles.ctaBtn}>
-            Read the FabLab Manifesto
-          </button>
+          <button className={styles.ctaBtn}>Read the FabLab Manifesto</button>
         </section>
 
         <section className={styles.card}>
@@ -108,23 +120,20 @@ export default function WhyPanel() {
 
           <div className={styles.revealWrap}>
             <div className={styles.accordion}>
-              <details className={styles.accordionItem} open={!isMobile}>
+              <details
+                className={`${styles.accordionItem} ${styles.glassTilt}`}
+                open={!isMobile}
+                onMouseMove={onMoveAcc}
+                onMouseLeave={onLeaveAcc}
+              >
                 <summary className={styles.accordionSummary}>
                   Decentralization
                   <div className={styles.voteSummary}>
                     <div className={`${styles.voteMini} ${styles.voteFor}`}>
                       <div className={styles.voteMiniIcon}>
                         <svg viewBox="0 0 24 24">
-                          <circle
-                            cx="12"
-                            cy="6"
-                            r="3"
-                            fill="var(--icon-color)"
-                          />
-                          <path
-                            d="M4 20c0-4 3.6-7 8-7s8 3 8 7"
-                            fill="var(--icon-color)"
-                          />
+                          <circle cx="12" cy="6" r="3" fill="var(--icon-color)" />
+                          <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="var(--icon-color)" />
                         </svg>
                       </div>
                       <span className={styles.voteMiniNumber}>1672</span>
@@ -132,16 +141,8 @@ export default function WhyPanel() {
                     <div className={`${styles.voteMini} ${styles.voteAgainst}`}>
                       <div className={styles.voteMiniIcon}>
                         <svg viewBox="0 0 24 24">
-                          <circle
-                            cx="12"
-                            cy="6"
-                            r="3"
-                            fill="var(--icon-color)"
-                          />
-                          <path
-                            d="M4 20c0-4 3.6-7 8-7s8 3 8 7"
-                            fill="var(--icon-color)"
-                          />
+                          <circle cx="12" cy="6" r="3" fill="var(--icon-color)" />
+                          <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="var(--icon-color)" />
                         </svg>
                       </div>
                       <span className={styles.voteMiniNumber}>245</span>
@@ -157,23 +158,19 @@ export default function WhyPanel() {
                 </p>
               </details>
 
-              <details className={styles.accordionItem}>
+              <details
+                className={`${styles.accordionItem} ${styles.glassTilt}`}
+                onMouseMove={onMoveAcc}
+                onMouseLeave={onLeaveAcc}
+              >
                 <summary className={styles.accordionSummary}>
                   Innovation and Experimentation
                   <div className={styles.voteSummary}>
                     <div className={`${styles.voteMini} ${styles.voteFor}`}>
                       <div className={styles.voteMiniIcon}>
                         <svg viewBox="0 0 24 24">
-                          <circle
-                            cx="12"
-                            cy="6"
-                            r="3"
-                            fill="var(--icon-color)"
-                          />
-                          <path
-                            d="M4 20c0-4 3.6-7 8-7s8 3 8 7"
-                            fill="var(--icon-color)"
-                          />
+                          <circle cx="12" cy="6" r="3" fill="var(--icon-color)" />
+                          <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="var(--icon-color)" />
                         </svg>
                       </div>
                       <span className={styles.voteMiniNumber}>1672</span>
@@ -181,16 +178,8 @@ export default function WhyPanel() {
                     <div className={`${styles.voteMini} ${styles.voteAgainst}`}>
                       <div className={styles.voteMiniIcon}>
                         <svg viewBox="0 0 24 24">
-                          <circle
-                            cx="12"
-                            cy="6"
-                            r="3"
-                            fill="var(--icon-color)"
-                          />
-                          <path
-                            d="M4 20c0-4 3.6-7 8-7s8 3 8 7"
-                            fill="var(--icon-color)"
-                          />
+                          <circle cx="12" cy="6" r="3" fill="var(--icon-color)" />
+                          <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="var(--icon-color)" />
                         </svg>
                       </div>
                       <span className={styles.voteMiniNumber}>245</span>
@@ -208,23 +197,19 @@ export default function WhyPanel() {
                 </p>
               </details>
 
-              <details className={styles.accordionItem}>
+              <details
+                className={`${styles.accordionItem} ${styles.glassTilt}`}
+                onMouseMove={onMoveAcc}
+                onMouseLeave={onLeaveAcc}
+              >
                 <summary className={styles.accordionSummary}>
                   Community and Collaboration
                   <div className={styles.voteSummary}>
                     <div className={`${styles.voteMini} ${styles.voteFor}`}>
                       <div className={styles.voteMiniIcon}>
                         <svg viewBox="0 0 24 24">
-                          <circle
-                            cx="12"
-                            cy="6"
-                            r="3"
-                            fill="var(--icon-color)"
-                          />
-                          <path
-                            d="M4 20c0-4 3.6-7 8-7s8 3 8 7"
-                            fill="var(--icon-color)"
-                          />
+                          <circle cx="12" cy="6" r="3" fill="var(--icon-color)" />
+                          <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="var(--icon-color)" />
                         </svg>
                       </div>
                       <span className={styles.voteMiniNumber}>1672</span>
@@ -232,16 +217,8 @@ export default function WhyPanel() {
                     <div className={`${styles.voteMini} ${styles.voteAgainst}`}>
                       <div className={styles.voteMiniIcon}>
                         <svg viewBox="0 0 24 24">
-                          <circle
-                            cx="12"
-                            cy="6"
-                            r="3"
-                            fill="var(--icon-color)"
-                          />
-                          <path
-                            d="M4 20c0-4 3.6-7 8-7s8 3 8 7"
-                            fill="var(--icon-color)"
-                          />
+                          <circle cx="12" cy="6" r="3" fill="var(--icon-color)" />
+                          <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="var(--icon-color)" />
                         </svg>
                       </div>
                       <span className={styles.voteMiniNumber}>245</span>
@@ -258,23 +235,19 @@ export default function WhyPanel() {
                 </p>
               </details>
 
-              <details className={styles.accordionItem}>
+              <details
+                className={`${styles.accordionItem} ${styles.glassTilt}`}
+                onMouseMove={onMoveAcc}
+                onMouseLeave={onLeaveAcc}
+              >
                 <summary className={styles.accordionSummary}>
                   Economic Inclusivity and Empowerment
                   <div className={styles.voteSummary}>
                     <div className={`${styles.voteMini} ${styles.voteFor}`}>
                       <div className={styles.voteMiniIcon}>
                         <svg viewBox="0 0 24 24">
-                          <circle
-                            cx="12"
-                            cy="6"
-                            r="3"
-                            fill="var(--icon-color)"
-                          />
-                          <path
-                            d="M4 20c0-4 3.6-7 8-7s8 3 8 7"
-                            fill="var(--icon-color)"
-                          />
+                          <circle cx="12" cy="6" r="3" fill="var(--icon-color)" />
+                          <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="var(--icon-color)" />
                         </svg>
                       </div>
                       <span className={styles.voteMiniNumber}>1672</span>
@@ -282,16 +255,8 @@ export default function WhyPanel() {
                     <div className={`${styles.voteMini} ${styles.voteAgainst}`}>
                       <div className={styles.voteMiniIcon}>
                         <svg viewBox="0 0 24 24">
-                          <circle
-                            cx="12"
-                            cy="6"
-                            r="3"
-                            fill="var(--icon-color)"
-                          />
-                          <path
-                            d="M4 20c0-4 3.6-7 8-7s8 3 8 7"
-                            fill="var(--icon-color)"
-                          />
+                          <circle cx="12" cy="6" r="3" fill="var(--icon-color)" />
+                          <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="var(--icon-color)" />
                         </svg>
                       </div>
                       <span className={styles.voteMiniNumber}>245</span>
@@ -308,23 +273,19 @@ export default function WhyPanel() {
                 </p>
               </details>
 
-              <details className={styles.accordionItem}>
+              <details
+                className={`${styles.accordionItem} ${styles.glassTilt}`}
+                onMouseMove={onMoveAcc}
+                onMouseLeave={onLeaveAcc}
+              >
                 <summary className={styles.accordionSummary}>
                   Resilience and Antifragility
                   <div className={styles.voteSummary}>
                     <div className={`${styles.voteMini} ${styles.voteFor}`}>
                       <div className={styles.voteMiniIcon}>
                         <svg viewBox="0 0 24 24">
-                          <circle
-                            cx="12"
-                            cy="6"
-                            r="3"
-                            fill="var(--icon-color)"
-                          />
-                          <path
-                            d="M4 20c0-4 3.6-7 8-7s8 3 8 7"
-                            fill="var(--icon-color)"
-                          />
+                          <circle cx="12" cy="6" r="3" fill="var(--icon-color)" />
+                          <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="var(--icon-color)" />
                         </svg>
                       </div>
                       <span className={styles.voteMiniNumber}>1672</span>
@@ -332,16 +293,8 @@ export default function WhyPanel() {
                     <div className={`${styles.voteMini} ${styles.voteAgainst}`}>
                       <div className={styles.voteMiniIcon}>
                         <svg viewBox="0 0 24 24">
-                          <circle
-                            cx="12"
-                            cy="6"
-                            r="3"
-                            fill="var(--icon-color)"
-                          />
-                          <path
-                            d="M4 20c0-4 3.6-7 8-7s8 3 8 7"
-                            fill="var(--icon-color)"
-                          />
+                          <circle cx="12" cy="6" r="3" fill="var(--icon-color)" />
+                          <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="var(--icon-color)" />
                         </svg>
                       </div>
                       <span className={styles.voteMiniNumber}>245</span>

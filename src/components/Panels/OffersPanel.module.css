@@ -16,7 +16,7 @@
   max-inline-size: 1200px;
   margin-inline: auto;
   padding-inline: clamp(12px, 4vw, 48px);
-  overflow: hidden; /* clippe les glows/ombres pour éviter tout dépassement visuel */
+  overflow: hidden;
 }
 
 .card {
@@ -108,3 +108,58 @@
 .card:focus-visible,
 .navBtn:focus-visible,
 .dot:focus-visible { outline: 2px solid var(--accent-main); outline-offset: 2px; }
+
+.card.glassTiltSoft {
+  position: relative;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  will-change: transform, box-shadow;
+  transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateZ(0);
+  transition: transform 160ms ease, box-shadow 160ms ease;
+}
+
+.card.glassTiltSoft:hover {
+  transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg))
+             translateY(-2px) translateZ(4px); /* garde le petit lift */
+  box-shadow:
+    0 0 2px var(--glass-border),
+    0 8px 18px color-mix(in srgb, var(--glass-border) 30%, transparent),
+    var(--glass-inset),
+    var(--glass-shadow);
+}
+
+.card.glassTiltSoft::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      circle at calc(var(--mx, .5) * 100%) calc(var(--my, .5) * 100%),
+      color-mix(in srgb, var(--accent-main) 12%, transparent) 0%,
+      color-mix(in srgb, var(--accent-main) 5%, transparent) 14%,
+      transparent 36%
+    ),
+    linear-gradient(
+      120deg,
+      transparent 0%,
+      color-mix(in srgb, white 10%, transparent) 50%,
+      transparent 100%
+    );
+  mix-blend-mode: screen;
+  opacity: 0;
+  transition: opacity 160ms ease;
+}
+.card.glassTiltSoft:hover::after { opacity: .35; }
+
+@media (prefers-reduced-motion: reduce) {
+  .card.glassTiltSoft,
+  .card.glassTiltSoft:hover { transition: none; transform: none; }
+  .card.glassTiltSoft::after { transition: none; }
+}
+@media (max-width: 640px) {
+  .card.glassTiltSoft,
+  .card.glassTiltSoft:hover { transform: none !important; }
+  .card.glassTiltSoft::after { opacity: 0 !important; }
+}

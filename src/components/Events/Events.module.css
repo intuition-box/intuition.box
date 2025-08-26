@@ -7,7 +7,7 @@
   margin: 0 0 .75rem;
   text-transform: uppercase;
   letter-spacing: .02em;
-  font-family: "Orbitron", sans-serif;
+  font-family: "Montserrat", sans-serif;
 }
 
 .sectionDivider {
@@ -45,7 +45,6 @@
   color: var(--ink);
 
   background: var(--glass-bg);
-  border: var(--glass-border);
   box-shadow:
     0 0 2px var(--glass-border),
     0 0 6px color-mix(in srgb, var(--glass-border) 30%, transparent),
@@ -98,9 +97,9 @@
   min-width: 64px;
   text-align: center;
 }
-.weekday { font: 600 12px/1.2 "Orbitron", sans-serif; padding: 6px 8px; }
-.day     { font: 800 24px/1.1 "Orbitron", sans-serif; padding-top: 4px; }
-.month   { font: 600 12px/1.2 "Orbitron", sans-serif; padding: 4px 0 8px; }
+.weekday { font: 600 12px/1.2 "Montserrat", sans-serif; padding: 6px 8px; }
+.day     { font: 800 24px/1.1 "Montserrat", sans-serif; padding-top: 4px; }
+.month   { font: 600 12px/1.2 "Montserrat", sans-serif; padding: 4px 0 8px; }
 
 :global(:root[data-theme="light"]) .datePill {
   background: rgb(255 255 255 / 18%);
@@ -153,7 +152,7 @@
   margin: .2rem 0 .4rem;
   font-size: clamp(1rem, .95rem + .4vw, 1.2rem);
   line-height: 1.35;
-  font-family: "Audiowide", Arial, sans-serif;
+  font-family: "Sansation", sans-serif;
   color: var(--ink);
 }
 :global(:root[data-theme="light"]) .title { color: #0b2f78; }
@@ -163,7 +162,7 @@
 .cta {
   justify-content: center;
   padding: 0.7rem 1.2rem;
-  font-family: "Orbitron", sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 700;
   font-size: .95rem;
   display: block;

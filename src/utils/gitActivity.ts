@@ -231,7 +231,7 @@ async function recentFromRepos(
 
   const contributors = uniq(contributorsRaw.sort(byDateDesc((x) => x.date)), (x) => x.login).slice(0, 4);
   const projectsSorted = projects.sort(byDateDesc((x) => x.date)).slice(0, repoLimit);
-  const commits = uniq(commitsRaw.sort(byDateDesc((x) => x.date)), (x) => x.sha).slice(0, 30);
+  const commits = uniq(commitsRaw.sort(byDateDesc((x) => x.date)), (x) => x.sha).slice(0, 10);
   const commitDates = commits.map((c) => c.date).sort((a, b) => b.getTime() - a.getTime());
 
   return {

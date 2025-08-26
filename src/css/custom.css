@@ -20,7 +20,7 @@
   --btn-text: var(--accent-main);
 
   /* Fond global noir */
-  --ifm-background-color: #181818;
+  --ifm-background-color: #000000;
   --ifm-background-surface-color: #000000;
 
   /* Palette primaire en niveaux de gris */
@@ -45,7 +45,6 @@
   --glass-shadow: 0 12px 30px rgba(0, 0, 0, 0.7);
 }
 
-/* Global background */
 html,
 body {
   background: #000000;
@@ -57,25 +56,21 @@ body {
   color: var(--ink);
 }
 
-/* Titres en Montserrat */
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Montserrat', sans-serif !important;
   text-align: center;
   color: var(--accent-main);
 }
 
-/* Texte en Sansation (fallback sans-serif) */
 p, li, .sansation-regular {
   font-family: 'Sansation', sans-serif !important;
   color: var(--ink);
 }
 
-/* Conteneur principal transparent */
 .main-wrapper {
   background: transparent !important;
 }
 
-/* Utilitaires font */
 .montserrat {
   font-family: "Montserrat", sans-serif;
   font-optical-sizing: auto;
@@ -90,7 +85,6 @@ p, li, .sansation-regular {
 .sansation-regular-italic { font-family: "Sansation", sans-serif; font-weight: 400; font-style: italic; }
 .sansation-bold-italic { font-family: "Sansation", sans-serif; font-weight: 700; font-style: italic; }
 
-/* Navbar en verre noir/blanc */
 .navbar {
   background: rgba(255, 255, 255, 0.08);
   box-shadow: 0 8px 32px 0 rgba(0,0,0,0.65);
@@ -102,7 +96,6 @@ p, li, .sansation-regular {
   color: var(--accent-main);
 }
 
-/* Footer en verre noir/blanc */
 .footer {
   background: rgba(255, 255, 255, 0.08);
   box-shadow: 0 -8px 32px 0 rgba(0,0,0,0.65);
@@ -120,7 +113,6 @@ p, li, .sansation-regular {
   font-weight: 100;
 }
 
-/* Liens */
 a,
 a:hover,
 a:focus,
