@@ -40,9 +40,14 @@ export default function EventGrid({
       <section className={styles.wrap}>
         {upcoming.length > 0 && (
           <section className={`${styles.section} ${styles.upcoming}`}>
-            <div className={styles.grid}>
-              {upcoming.map(ev => <EventCard key={ev.id} item={ev} />)}
-            </div>
+            <h3 className={styles.sectionTitle}>Upcoming</h3>
+            {!isMobile ? (
+              <div className={styles.grid}>
+                {upcoming.map(ev => <EventCard key={ev.id} item={ev} />)}
+              </div>
+            ) : (
+              <RowCarousel items={upcoming} ariaLabel="Upcoming events" />
+            )}
           </section>
         )}
 
