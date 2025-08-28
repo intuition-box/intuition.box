@@ -1,0 +1,72 @@
+.wrap {
+  margin: 1.25rem 0 0.5rem;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(160px, 1fr));
+  gap: clamp(1.25rem, 5vw, 6rem);
+  align-items: start;
+  justify-items: center;
+}
+
+.block {
+  text-align: center;
+  min-width: 160px;
+}
+
+.tickerRow{
+  display:inline-flex;
+  align-items:center;
+  gap:0.08em;
+  font-family:"Orbitron","Montserrat",system-ui,sans-serif;
+  font-weight:800;
+  font-size:clamp(1.6rem,3vw,2.6rem);
+  line-height:1.1;
+  letter-spacing:0.01em;
+  color:var(--accent-main);
+  filter:drop-shadow(0 1px 0 rgba(255,255,255,.08));
+  font-variant-numeric: tabular-nums;
+}
+
+.tickerPrefix{
+  display:inline-block;
+  line-height:1;
+  margin-right:0.12em;
+  transform: translateY(.02em);
+}
+
+.tickerNumber{
+  display:inline-block;
+  transition: opacity .2s ease, transform .2s ease;
+}
+
+.tickerReels {
+  display: inline-flex;
+  gap: 0.03em;
+  align-items: center;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.tickerReel {
+  position: relative;
+  display: inline-block;
+  height: 1em;
+  overflow: hidden;
+}
+
+.tickerReelInner {
+  display: grid;
+  grid-auto-rows: 1em;
+  transform: translate3d(0, calc(var(--y, 0) * 1em), 0);
+  transition: transform var(--dur, 900ms) cubic-bezier(.2, .7, .2, 1);
+  will-change: transform;
+}
+
+/* Un chiffre (ligne) */
+.tickerDigit {
+  display: block;
+  height: 1em;
+  line-height: 1em;
+}
