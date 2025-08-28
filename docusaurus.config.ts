@@ -74,15 +74,15 @@ const config: Config = {
     // Replace with your project's social card
     colorMode: {
       defaultMode: 'dark',
-      disableSwitch: false,
+      disableSwitch: true,
       respectPrefersColorScheme: false,
     },
     image: 'img/docusaurus-social-card.jpg',
     navbar: {
       title: 'intuition.box',
       logo: {
-        alt: 'My Site Logo',
-        src: 'img/logo.svg',
+        alt: 'Intuition Logo',
+        src: 'img/intuition-logo.jpg',
       },
       items: [
         {
