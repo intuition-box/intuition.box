@@ -61,7 +61,6 @@
   overflow-x: hidden;
 }
 
-
 .grabber {
   height: 16px;
   display: grid;
@@ -80,7 +79,6 @@
   position: sticky;
   top: 0;
   z-index: 1;
-  background: inherit;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -107,4 +105,45 @@
 @media (min-width: 641px) {
   .sheet { display: none; }
   .backdrop { display: none; }
+}
+
+.headerSlot {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.headerSlot :global(.slotAvatar) {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.12);
+  flex: 0 0 auto;
+}
+.headerSlot :global(.slotAvatar) img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.headerSlot :global(.slotText) {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.headerSlot :global(.slotName) {
+  font-weight: 700;
+  line-height: 1.2;
+  color: #fff;
+}
+.headerSlot :global(.slotSub) {
+  opacity: .85;
+  font-size: .85rem;
+  line-height: 1.2;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

@@ -4,9 +4,9 @@ import styles from "./Galaxy.module.css";
 export type Commit = { id: string; name: string; url: string; color?: string };
 
 const getStyle = (i: number, total: number, color?: string): React.CSSProperties => {
-  const duration = 85, radius = 300, delay = -(duration / total) * i;
+  const duration = 85;
+  const delay = -(duration / total) * i;
   return {
-    ["--orbit-radius" as any]: `${radius}px`,
     animationDelay: `${delay}s`,
     animationDuration: `${duration}s`,
     backgroundColor: color || undefined,

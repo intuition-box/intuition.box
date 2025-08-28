@@ -7,6 +7,7 @@ type Props = {
   onClose: () => void;
   borderColor?: string;
   title?: string;
+  headerSlot?: React.ReactNode;
   children: React.ReactNode;
   minimal?: boolean;
 };
@@ -16,6 +17,7 @@ export default function MobileBottomSheet({
   onClose,
   borderColor = "#333",
   title,
+  headerSlot,
   children,
   minimal,
 }: Props) {
@@ -59,10 +61,12 @@ export default function MobileBottomSheet({
         
         {!minimal && (
           <header className={styles.header}>
-            {title && <div className={styles.title}>{title}</div>}
-            <button className={styles.close} onClick={onClose} aria-label="Close">
-              ✕
-            </button>
+            {headerSlot ? (
+              <div className={styles.headerSlot}>{headerSlot}</div>
+            ) : (
+              title && <div className={styles.title}>{title}</div>
+            )}
+            <button className={styles.close} onClick={onClose} aria-label="Close">✕</button>
           </header>
         )}
 

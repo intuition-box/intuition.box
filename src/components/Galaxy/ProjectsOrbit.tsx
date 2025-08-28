@@ -14,10 +14,8 @@ export type Project = {
 
 const getStyle = (i: number, total: number, color?: string): React.CSSProperties => {
   const duration = 70;
-  const radius = 420;
   const delay = -(duration / total) * i;
   return {
-    ["--orbit-radius" as any]: `${radius}px`,
     animationDelay: `${delay}s`,
     animationDuration: `${duration}s`,
     backgroundColor: color || undefined,
