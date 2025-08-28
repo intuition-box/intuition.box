@@ -8,6 +8,7 @@ export const EVENTS: EventItem[] = [
     date: "2025-09-06T18:30:00Z",
     imageUrl: "/img/events/conf.jpg",
     href: "/",
+    recurrence: { kind: "monthly", bymonthday: 6 },
   },
   {
     id: "sp-2025-10-10",
@@ -15,6 +16,7 @@ export const EVENTS: EventItem[] = [
     date: "2025-10-10T18:00:00Z",
     imageUrl: "/img/events/meet.jpg",
     href: "/",
+    recurrence: { kind: "weekly", byweekday: ["wednesday"] },
   },
   {
     id: "web3-2025-11-15",
@@ -22,6 +24,7 @@ export const EVENTS: EventItem[] = [
     date: "2025-11-15T17:00:00Z",
     imageUrl: "/img/events/conf.jpg",
     href: "/",
+    recurrence: { kind: "custom", label: "Every 2 weeks" },
   },
   {
     id: "web3-2025-01-21",
