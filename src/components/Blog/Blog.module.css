@@ -45,7 +45,7 @@
   font-size: clamp(1rem, .95rem + .4vw, 1.2rem);
   line-height: 1.35;
   font-family: "Sansation", sans-serif;
-  color: rgb(0, 0, 255);
+  color: white;
 }
 :global(:root[data-theme="light"]) .postTitle a { color: #0b2f78; }
 
