@@ -55,7 +55,7 @@ export default function Hero() {
       <section className={styles.hero}>
         <h1>INTUITION.BOX</h1>
         <h2>
-          An online community where anyone can create, share, and build open projects for the common good.
+          A <a href="https://fablab.box" target="_blank" rel="noopener noreferrer" className={styles.link}>Fablab.box</a>{" "}community where anyone can create, share, and build open projects for the{" "} <a href="https://intuition.systems/" target="_blank" rel="noopener noreferrer" className={styles.link}>Intuition ecosystem</a>.
         </h2>
         <h3 className={styles.textLoop}>
           A hub for&nbsp;

@@ -100,7 +100,7 @@ export default function OffersPanel() {
   return (
     <section className={styles.wrap}>
       <header className={styles.header}>
-        <h2 className={styles.h2}>WHAT INTUITION OFFERS ?</h2>
+        <h2 className={styles.h2}>WHAT INTUITION.BOX OFFERS ?</h2>
         <p className={styles.subtitle}>Short description</p>
       </header>
 

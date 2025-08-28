@@ -14,6 +14,7 @@ import OffersPanel from '../components/Panels/OffersPanel';
 import Blog from '../components/Blog/Blog';
 import EventGrid from "@site/src/components/Events/EventGrid";
 import { EVENTS } from "@site/src/components/Events/events.data";
+import NetworkIntuition from '../components/NetworkIntuition/NetworkIntuition';
 
 import styles from './index.module.css';
 import Iridescence from '../components/Backgrounds/Iridescence/Iridescence';
@@ -57,10 +58,8 @@ export default function Home(): ReactNode {
       <main>
         <Hero />
         <Panel variant='large'>
-          <h2>THE INTUITION NETWORK</h2>
-          <p>
-            Compteur + liste des contributeurs
-          </p>
+          <h2>THE INTUITION.BOX NETWORK</h2>
+          <NetworkIntuition />
         </Panel>
         <Galaxy/>
         <Panel variant='small' >

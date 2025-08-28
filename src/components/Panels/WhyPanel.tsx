@@ -45,12 +45,12 @@ export default function WhyPanel() {
 
   return (
     <Panel variant="large">
-      <h2>WHY INTUITION ?</h2>
+      <h2>WHY INTUITION.BOX ?</h2>
 
       <div className={styles.grid}>
         <section className={styles.card}>
           <h3 className={styles.cardTitle}>Context & Origin</h3>
-          <p className={styles.cardIntro}>The FabLab Charter</p>
+          <p className={styles.cardIntro}>Align with{" "}<a href="https://fablab.box" target="_blank" rel="noopener noreferrer" className={styles.extLink}>Fablab.box</a></p>
 
           <div
             className={`${styles.correction} ${styles.glassTilt}`}
@@ -116,7 +116,7 @@ export default function WhyPanel() {
 
         <section className={styles.card}>
           <h3 className={styles.cardTitle}>Our Values</h3>
-          <p className={styles.cardIntro}>Ethereum org values exemple</p>
+          <p className={styles.cardIntro}><a href="https://ethereum-values.consensys.io" target="_blank" rel="noopener noreferrer" className={styles.extLink}>Ethereum org values example</a></p>
 
           <div className={styles.revealWrap}>
             <div className={styles.accordion}>
@@ -318,7 +318,7 @@ export default function WhyPanel() {
             </details>
           </div>
 
-          <button className={styles.ctaBtn}>See all organisation values</button>
+          <a href="https://github.com/intuition-box/Values" target="_blank" rel="noopener noreferrer" className={styles.ctaBtn}>See all</a>
         </section>
       </div>
     </Panel>
