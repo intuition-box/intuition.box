@@ -1,9 +1,10 @@
-type OrgRepo = { name: string; pushed_at?: string; private?: boolean };
+type OrgRepo = { name: string; pushed_at?: string; private?: boolean; archived?: boolean; fork?: boolean };
 type GitHubEvent = {
   type: string;
   actor?: { login?: string; avatar_url?: string };
   repo?: { name?: string };
   created_at?: string;
+  payload?: { size?: number; commits?: Array<{ sha: string }> };
 };
 type CommitAPI = {
   sha: string;
@@ -37,6 +38,8 @@ export type HybridResult = {
   contributorProjects: Record<string, string[]>;
   error?: string | null;
 };
+
+export type OrgCounters = { projects: number; contributors: number; commits: number };
 
 const GH = "https://api.github.com";
 const headers: Record<string, string> = { Accept: "application/vnd.github+json" };
@@ -76,11 +79,11 @@ async function fetchOrgEvents(org: string) {
   return data;
 }
 
-async function fetchOrgRepos(org: string, perPage = 30) {
-  const res = await fetch(`${GH}/orgs/${org}/repos?per_page=${perPage}&sort=pushed`, { headers });
+async function fetchOrgRepos(org: string, perPage = 100) {
+  const res = await fetch(`${GH}/orgs/${org}/repos?per_page=${perPage}&type=public&sort=pushed`, { headers });
   if (!res.ok) throw new Error("org repos");
   const data: OrgRepo[] = await res.json();
-  return data.filter((r) => !r.private);
+  return data.filter((r) => !r.private && !r.archived);
 }
 
 async function fetchRepoHeadCommit(org: string, repo: string) {
@@ -97,7 +100,7 @@ async function fetchRepoRecentCommits(org: string, repo: string, limit = 3) {
   return data;
 }
 
-async function recentFromOrgEvents(org: string, topRepos = 6): Promise<HybridResult> {
+export async function recentFromOrgEvents(org: string, topRepos = 6): Promise<HybridResult> {
   const events = await fetchOrgEvents(org);
   const pushes = events.filter((e) => e.type === "PushEvent");
 
@@ -154,7 +157,7 @@ async function recentFromOrgEvents(org: string, topRepos = 6): Promise<HybridRes
   };
 }
 
-async function recentFromRepos(
+export async function recentFromRepos(
   org: string,
   repoLimit = 8,
   perRepoCommitList = 0
@@ -190,7 +193,9 @@ async function recentFromRepos(
   });
 
   if (perRepoCommitList > 0) {
-    const more = await Promise.allSettled(selected.slice(0, 4).map((repo) => fetchRepoRecentCommits(org, repo, perRepoCommitList)));
+    const more = await Promise.allSettled(
+      selected.slice(0, 4).map((repo) => fetchRepoRecentCommits(org, repo, perRepoCommitList))
+    );
     more.forEach((r, idx) => {
       if (r.status !== "fulfilled") return;
       const repo = selected[idx];
@@ -228,7 +233,6 @@ async function recentFromRepos(
 }
 
 import contributorsJson from "../static/data/contributors.json";
-import projectMappingJson from "../static/data/project-repo-mapping.json";
 
 function fromLocalJson(): HybridResult {
   const contribData = contributorsJson as Record<string, { projects: Record<string, string[]> }>;
@@ -260,15 +264,11 @@ function fromLocalJson(): HybridResult {
     lastByContributor.set(name, lastC);
   }
 
-  const contributors = Array.from(lastByContributor.entries())
-    .filter(([, d]) => !!d)
-    .map(([login, date]) => ({
-      login,
-      date: date!,
-      avatarUrl: avatarOf(login),
-    }))
-    .sort(byDateDesc((x) => x.date))
-    .slice(0, 4);
+  const contributors = Array.from(lastByContributor.keys()).map((login) => ({
+    login,
+    date: new Date(),
+    avatarUrl: avatarOf(login),
+  }));
 
   const projects = Array.from(byProject.entries())
     .filter(([, v]) => !!v.last)
@@ -318,3 +318,84 @@ export async function fetchHybridActivity(
     }
   }
 }
+
+// ==================== NO-TOKEN LIGHTWEIGHT COUNTERS ====================
+// 2 requêtes publiques : repos + events. Commits ~= somme des PushEvent.payload.size.
+const LS_KEY = "gh_light_snapshot_v1";
+
+export async function fetchLightweightOrgSnapshot(org: string): Promise<OrgCounters> {
+
+  let cached: OrgCounters | null = null;
+  if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
+    try {
+      const raw = localStorage.getItem(LS_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw) as { projects?: number; contributors?: number; commits?: number };
+        if (
+          typeof parsed.projects === 'number' &&
+          typeof parsed.contributors === 'number' &&
+          typeof parsed.commits === 'number'
+        ) {
+          cached = { projects: parsed.projects, contributors: parsed.contributors, commits: parsed.commits };
+        }
+      }
+    } catch {
+    }
+  }
+
+  // 1) Projects
+  let projects = 0;
+  try {
+    const repos = await fetchOrgRepos(org, 100);
+    projects = repos.length;
+  } catch (e) {
+  }
+
+  // 2) Contributors + Commits approx depuis events
+  let contributors = 0;
+  let commits = 0;
+  try {
+    const events = await fetchOrgEvents(org);
+    const set = new Set<string>();
+    for (const ev of events) {
+      const login = (ev.actor?.login || '').toLowerCase();
+      if (login) set.add(login);
+      if (ev.type === 'PushEvent') {
+        if (typeof ev.payload?.size === 'number') commits += ev.payload.size;
+        else if (Array.isArray(ev.payload?.commits)) commits += ev.payload.commits!.length;
+        else commits += 1;
+      }
+    }
+    contributors = set.size;
+  } catch (e) {
+  }
+
+  // If no data could be fetched, fall back to cached snapshot or local JSON
+  if (projects === 0 && contributors === 0 && commits === 0) {
+    if (cached) {
+      return cached;
+    }
+    const local = fromLocalJson();
+    const contribCount = new Set(local.contributors.map((c) => c.login.toLowerCase())).size;
+    return {
+      projects: local.projects.length,
+      contributors: contribCount,
+      commits: local.commitDates.length,
+    };
+  }
+
+  // Persist the result to localStorage so that future calls can fall back to
+  // it if GitHub API is unavailable. Wrap in try/catch to avoid errors in
+  // environments without localStorage.
+  if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
+    try {
+      localStorage.setItem(LS_KEY, JSON.stringify({ projects, contributors, commits }));
+    } catch {
+      // ignore storage errors
+    }
+  }
+
+  return { projects, contributors, commits };
+
+}
+
