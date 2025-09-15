@@ -51,9 +51,7 @@ export default function EventGrid({
           </section>
         )}
 
-        {past.length > 0 && (
-          <div className={styles.sectionDivider} aria-hidden />
-        )}
+        {past.length > 0 && <div className={styles.sectionDivider} aria-hidden />}
 
         {past.length > 0 && (
           <section className={`${styles.section} ${styles.replay}`}>

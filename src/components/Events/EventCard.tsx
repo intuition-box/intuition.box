@@ -4,6 +4,7 @@ import styles from "./Events.module.css";
 type Weekday =
   | "monday" | "tuesday" | "wednesday" | "thursday"
   | "friday" | "saturday" | "sunday";
+
 export type Recurrence =
   | { kind: "daily" }
   | { kind: "weekly"; byweekday?: Weekday[] }
@@ -56,20 +57,6 @@ function recurrenceLabel(r?: Recurrence): string | null {
   }
 }
 
-function formatTooltipDate(dateISO: string) {
-  return new Date(dateISO).toLocaleString("en-US", {
-    weekday: "short",
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  }).replace(",", "")
-    .replace(" ", " ")
-    .replace(" AM", "")
-    .replace(" PM", "");
-}
-
 export default function EventCard({
   item,
   onClick,
@@ -81,9 +68,7 @@ export default function EventCard({
   const isPast = new Date(item.endDate ?? item.date).getTime() < Date.now();
   const ctaText = item.ctaLabel ?? "Register";
 
-  const tooltipText = isPast
-    ? formatTooltipDate(item.date)
-    : recurrenceLabel(item.recurrence);
+  const recurrenceText = !isPast ? recurrenceLabel(item.recurrence) : null;
 
   const CardTag = item.href ? ("a" as const) : ("div" as const);
   const tagProps = item.href
@@ -100,25 +85,22 @@ export default function EventCard({
     >
       <div className={styles.overlay} />
 
-      {!isPast ? (
-        <div className={styles.datePill} aria-hidden="true">
-          <div className={styles.weekday}>{weekday}</div>
-          <div className={styles.day}>{range ? range : day}</div>
-          {!range && <div className={styles.month}>{month}</div>}
-        </div>
-      ) : (
-        <div className={`${styles.datePill} ${styles.pastBadge}`} aria-hidden="true">
-          <div className={styles.weekday}>REPLAY</div>
-        </div>
-      )}
+      {/* Toujours afficher la date à gauche (upcoming + past) */}
+      <div className={styles.datePill} aria-hidden="true">
+        <div className={styles.weekday}>{weekday}</div>
+        <div className={styles.day}>{range ? range : day}</div>
+        {!range && <div className={styles.month}>{month}</div>}
+      </div>
 
-      <div className={styles.infoWrap}>
-        <div className={styles.info} role="img" aria-label="More info" tabIndex={0}>i</div>
-        {tooltipText && (
-          <div className={styles.infoTip} role="tooltip">
-            {tooltipText}
-          </div>
-        )}
+      {/* En haut-droite : récurrence (upcoming) ou REPLAY (past) */}
+      <div className={styles.badgeTopRight} aria-hidden="true">
+        {isPast ? (
+          <span className={`${styles.badge} ${styles.replayBadge}`}>REPLAY</span>
+        ) : recurrenceText ? (
+          <span className={styles.badge} title="Recurrence">
+            {recurrenceText}
+          </span>
+        ) : null}
       </div>
 
       <div className={styles.content}>

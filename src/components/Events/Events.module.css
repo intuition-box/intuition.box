@@ -81,7 +81,6 @@
 }
 @media (max-width: 996px) { .overlay { height: 180px; } }
 
-/* date pill */
 .datePill {
   position: absolute;
   top: 10px;
@@ -105,29 +104,40 @@
     inset 0 1px 0 rgba(255,255,255,.06),
     0 2px 10px rgba(0,0,0,.12);
 }
-
 .weekday { font: 600 12px/1.2 "Montserrat", sans-serif; padding: 6px 8px; }
 .day     { font: 800 24px/1.1 "Montserrat", sans-serif; padding-top: 4px; }
 .month   { font: 600 12px/1.2 "Montserrat", sans-serif; padding: 4px 0 8px; }
 
-.pastBadge {
-  text-transform: uppercase;
-  padding: 2px 0;
-}
-.pastBadge .weekday { padding: 6px 8px; }
-.pastBadge .day, .pastBadge .month { display: none; }
-
-.info {
+/* ===== top-right badges (recurrence / replay) ===== */
+.badgeTopRight {
   position: absolute;
-  top: 10px; right: 10px;
-  width: 30px; height: 30px;
-  border-radius: 9px; display: grid; place-items: center;
-  background: rgba(10, 18, 26, .45);
-  border: 1px solid rgba(255,255,255,.16);
-  font-weight: 700; opacity: .85;
-  transition: opacity .15s ease, transform .15s ease;
+  top: 10px;
+  right: 10px;
 }
-.card:hover .info { opacity: 1; transform: scale(1.02); }
+
+.badge {
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 10px;
+  font: 700 12px/1 "Montserrat", sans-serif;
+  text-transform: uppercase;
+  letter-spacing: .02em;
+  color: white;
+
+  background: rgba(10,18,26,.45);
+  border: 1px solid rgba(255,255,255,.16);
+  backdrop-filter: blur(6px) saturate(1.1);
+  -webkit-backdrop-filter: blur(6px) saturate(1.1);
+  box-shadow: 0 8px 22px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.06);
+  white-space: nowrap;
+}
+
+.replayBadge {
+  box-shadow:
+    0 8px 22px rgba(0,0,0,.25),
+    0 0 10px color-mix(in srgb, var(--accent-main) 40%, transparent),
+    inset 0 1px 0 rgba(255,255,255,.06);
+}
 
 /* contenu */
 .content {
@@ -168,7 +178,7 @@
   box-shadow: var(--glass-inset),
               0 4px 15px color-mix(in srgb, var(--btn-text) 25%, transparent);
   transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease, color .15s ease;
-  text-decoration: none; /* jamais souligné */
+  text-decoration: none;
 }
 
 .cta:hover {
@@ -197,10 +207,7 @@
   }
   .rowTrack::-webkit-scrollbar { display: none; }
 
-  .rowSlide {
-    scroll-snap-align: center;
-    display: block;
-  }
+  .rowSlide { scroll-snap-align: center; display: block; }
 
   .rowControls {
     margin-top: 8px;
@@ -241,42 +248,4 @@
     transform: scale(1.12);
     box-shadow: 0 0 6px color-mix(in srgb, var(--accent-main) 45%, transparent);
   }
-}
-
-.infoWrap {
-  position: absolute;
-  top: 10px; right: 10px;
-}
-
-.infoWrap:hover .infoTip,
-.infoWrap:focus-within .infoTip {
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: auto;
-}
-
-.infoTip {
-  position: absolute;
-  top: 40px; right: 0;
-  max-width: 220px;
-  padding: 8px 10px;
-  border-radius: 10px;
-  font: 600 12px/1.2 "Montserrat", sans-serif;
-  color: var(--ink);
-  background: var(--glass-bg);
-  border: 1px solid rgba(255,255,255,.16);
-  box-shadow: 0 10px 28px rgba(0,0,0,.28);
-  opacity: 0;
-  transform: translateY(-4px);
-  transition: opacity .15s ease, transform .15s ease;
-  pointer-events: none;
-  z-index: 2;
-  white-space: nowrap;
-}
-
-.infoTip::after {
-  content: "";
-  position: absolute;
-  top: -6px; right: 12px;
-  border-width: 6px;
 }
