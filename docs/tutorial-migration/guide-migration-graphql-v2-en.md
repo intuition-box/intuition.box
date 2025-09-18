@@ -1,45 +1,105 @@
-# GraphQL v1 → v2 Migration Guide
+---
+sidebar_position: 1
+---
+
+# Contract v1 → v2 Migration Guide
 ## Universal Guide for Migrating Any Project
 
 ---
 
 ## 🎯 **Objective**
-This universal guide helps developers migrate **any project** from GraphQL v1 to v2, based on best practices and common errors identified during real migrations.
+This universal guide helps developers migrate **any project** from Contract v1 to v2, based on best practices and common errors identified during real migrations.
+
+### **📝 Creation Context**
+This guide was created **in parallel** with a real migration, documenting:
+- Data format changes
+- Technical problems encountered
+- Applied solutions
+- Project-specific custom queries
+
+### **⚠️ Limitations**
+- The provided examples do **not constitute an exhaustive list**
+- Each project may have its specificities
+- Some queries may require adaptations according to your context
+
+### **🤖 AI Support and Context**
+This guide strongly recommends creating a `migration-resources/` folder containing (see prerequisites):
+- **Old contract ABI**
+- **GraphQL Schema**
+- **Migration journal** with queries and responses
+- **Custom migration plan**
+
+**Why?** These resources allow you to provide **complete context** to an AI agent, significantly facilitating the migration process and resolution of project-specific issues.
+
+---
+
+## 📝 **Migration Plan Template**
+
+```markdown
+# Contract v1 → v2 Migration Plan - [PROJECT_NAME]
+
+## Phase A: Analysis ✅
+- [ ] Identify used endpoints
+- [ ] List GraphQL types
+- [ ] Analyze architecture
+
+## Phase B: Endpoint Migration ✅
+- [ ] Update URLs
+- [ ] Test connectivity
+
+## Phase C: Query Migration ✅
+- [ ] Adapt identifiers
+- [ ] Change variable types
+- [ ] Replace relations
+
+## Phase D: Component Migration ✅
+- [ ] Migrate hooks
+- [ ] Adapt components
+- [ ] Update interfaces
+
+## Phase E: Testing and Validation ✅
+- [ ] Unit tests
+- [ ] Integration tests
+- [ ] End-to-end tests
+```
+
+---
 
 ## 📚 **Prerequisites: Create Your Reference Files**
-
-Before starting your migration, create these reference files in a `migration-resources/` folder:
 
 ### **1. Get the New ABI:**
 ```bash
 # Download the v2 contract ABI from your source
 ```
 
-### **2. Create a Copy of the Old Contract:**
+### **2. Before starting your migration, create these reference files in a `migration-resources/` folder:**
+
+#### **2.1 Create a Copy of the Old Contract:**
 ```bash
 # Backup the old contract ABI
-# Save in: migration-resources/old-contrat.doc
+# Save in: migration-resources/old-contract.doc
 ```
 
-### **3. Get the GraphQL v2 Schema:**
+#### **2.2 Get the GraphQL v2 Schema:**
 Run this command to get the complete schema:
 ```bash
 curl -X POST "https://testnet.intuition.sh/v1/graphql" \
   -H "Content-Type: application/json" \
   -d '{"query": "query { __schema { types { name fields { name type { name kind ofType { name kind } } } } } }"}'
 ```
-  > Copy the response to migration-resources/schemaGraph.doc
+  > Copy the response to migration-resources/schema-graph.doc
 
-### **4. Create a Migration Journal:**
+#### **2.3 Create a Migration Journal:**
 ```bash
-# Create: migration-resources/requete-utile-reponse.doc
+# Create: migration-resources/useful-queries-responses.doc
 # Document your v1 vs v2 queries, encountered errors, solutions
 ```
 
-### **5. Create a Migration Plan:**
+#### **2.4 Create a Migration Plan:**
 ```bash
 # Create: migration-resources/migration-plan-[YOUR_PROJECT].md
 # Adapt the provided template to your project
+# 1h of preparation = 10h saved later
 ```
 
 ---
@@ -76,7 +136,6 @@ curl -X POST "https://testnet.intuition.sh/v1/graphql" \
 ### **Phase 5: Smart Contracts Migration**
 - [ ] **Verify** ABI compatibility
 - [ ] **Adapt** function calls (`depositTriple` → `depositBatch`)
-- [ ] **Add** `asset` parameter to deposit functions
 - [ ] **Update** data types (`BigInt` → `0x...` string)
 - [ ] **Test** contract interactions
 
@@ -274,6 +333,14 @@ const query = gql`
     }
   }
 `;
+
+// 💡 Key changes:
+// - $id: numeric! → String!
+// - atom(id: $id) → atom(term_id: $id)
+// - id → term_id
+// - vault → term
+// - total_shares → total_market_cap
+// - position_count → positions_aggregate { aggregate { count }}
 ```
 
 ### **Example 2: Complex Query Migration**
@@ -281,8 +348,8 @@ const query = gql`
 ```typescript
 // ❌ v1 (Old)
 const query = gql`
-  query GetTriples($where: triples_bool_exp) {
-    triples(where: $where) {
+  query GetTripleDetails($tripleId: numeric!) {
+    triple(id: $tripleId) {
       id
       subject {
         id
@@ -298,9 +365,11 @@ const query = gql`
       }
       vault {
         total_shares
+        position_count
       }
       counter_vault {
         total_shares
+        position_count
       }
     }
   }
@@ -308,8 +377,8 @@ const query = gql`
 
 // ✅ v2 (New)
 const query = gql`
-  query GetTriples($where: triples_bool_exp) {
-    triples(where: $where) {
+  query GetTripleDetails($tripleId: String!) {
+    triple(term_id: $tripleId) {
       term_id
       subject {
         term_id
@@ -325,40 +394,63 @@ const query = gql`
       }
       term {
         total_market_cap
+        positions_aggregate {
+          aggregate { count }
+        }
       }
       counter_term {
         total_market_cap
+        positions_aggregate {
+          aggregate { count }
+        }
       }
     }
   }
 `;
+
+// 💡 Key changes:
+// - $tripleId: numeric! → String!
+// - triple(id: $tripleId) → triple(term_id: $tripleId)
+// - id → term_id (everywhere)
+// - vault → term
+// - counter_vault → counter_term
+// - total_shares → total_market_cap
+// - position_count → positions_aggregate { aggregate { count }}
 ```
 
-### **Example 3: Smart Contracts Migration - Deposits**
+### **Example 3: Position Verification Query:**
+```typescript
+// ❌ v1 (Old)
+const query = gql`
+  query GetPositions($vaultId: numeric!) {
+    vault(id: $vaultId) {
+      position_count
+    }
+  }
+`;
+
+// ✅ v2 (New)
+const query = gql`
+  query GetPositions($termId: String!) {
+    term(id: $termId) {
+      positions_aggregate {
+        aggregate { count }
+      }
+    }
+  }
+`;
+
+// 💡 Key changes:
+// - $vaultId: numeric! → String!
+// - vault → term
+// - $vaultId → $termId
+// - position_count → positions_aggregate { aggregate { count }}
+```
+
+### **Example 4: Smart Contracts Migration - Deposits**
 
 ```typescript
-// ❌ v1 (Old) - Single function for one or multiple deposits
-const deposit = async (receiver, termId, curveId, minShares) => {
-  return await writeContract({
-    address: contractAddress,
-    abi: contractABI,
-    functionName: 'deposit',
-    args: [receiver, termId, curveId, minShares],
-    value: depositValue
-  });
-};
-
-const depositBatch = async (receivers, termIds, curveIds, assets, minShares) => {
-  return await writeContract({
-    address: contractAddress,
-    abi: contractABI,
-    functionName: 'depositBatch',
-    args: [receivers, termIds, curveIds, assets, minShares],
-    value: totalValue
-  });
-};
-
-// ✅ v2 (New) - Specialized functions by type
+// ❌ v1 (Old) - Specialized functions by type
 // For a single atom
 const depositAtom = async (receiver, id) => {
   return await writeContract({
@@ -381,25 +473,36 @@ const depositTriple = async (receiver, id) => {
   });
 };
 
-// 💡 Tip: For multiple deposits, use depositAtom/depositTriple in a loop
-// or create a wrapper function that handles the batch
-```
-
-### **Example 4: Atom Creation Migration**
-
-```typescript
-// ❌ v1 (Old) - Single function for one or multiple atoms
-const createAtoms = async (data, assets) => {
+// ✅ v2 (New) - Single function for one or multiple deposits
+const deposit = async (receiver, termId, curveId, minShares) => {
   return await writeContract({
     address: contractAddress,
     abi: contractABI,
-    functionName: 'createAtoms',
-    args: [data, assets],
+    functionName: 'deposit',
+    args: [receiver, termId, curveId, minShares],
+    value: depositValue
+  });
+};
+
+const depositBatch = async (receivers, termIds, curveIds, assets, minShares) => {
+  return await writeContract({
+    address: contractAddress,
+    abi: contractABI,
+    functionName: 'depositBatch',
+    args: [receivers, termIds, curveIds, assets, minShares],
     value: totalValue
   });
 };
 
-// ✅ v2 (New) - Two distinct functions
+// 💡 Tip: For deposits, prefer depositBatch, it handles both simple and batch deposits
+// You can deposit on Atoms and Triples in one action
+// depositBatch handles all cases atom/triple, simple/batch deposits
+```
+
+### **Example 5: Atom Creation Migration**
+
+```typescript
+// ❌ v1 (Old) - Two distinct functions
 // For a single atom
 const createAtom = async (atomUri) => {
   return await writeContract({
@@ -422,25 +525,22 @@ const batchCreateAtom = async (atomUris) => {
   });
 };
 
-// 💡 Tip: batchCreateAtom works for a single atom too
-// Use batchCreateAtom even for 1 element (more efficient than a loop)
-```
-
-### **Example 5: Triple Creation Migration**
-
-```typescript
-// ❌ v1 (Old) - Single function for one or multiple triples
-const createTriples = async (subjectIds, predicateIds, objectIds, assets) => {
+// ✅ v2 (New) - Single function for one or multiple atoms
+const createAtoms = async (data, assets) => {
   return await writeContract({
     address: contractAddress,
     abi: contractABI,
-    functionName: 'createTriples',
-    args: [subjectIds, predicateIds, objectIds, assets],
+    functionName: 'createAtoms',
+    args: [data, assets],
     value: totalValue
   });
 };
+```
 
-// ✅ v2 (New) - Two distinct functions
+### **Example 6: Triple Creation Migration**
+
+```typescript
+// ❌ v1 (Old) - Two distinct functions
 // For a single triple
 const createTriple = async (subjectId, predicateId, objectId) => {
   return await writeContract({
@@ -463,11 +563,19 @@ const batchCreateTriple = async (subjectIds, predicateIds, objectIds) => {
   });
 };
 
-// 💡 Tip: batchCreateTriple works for a single triple too
-// Use batchCreateTriple even for 1 element (more efficient than a loop)
+// ✅ v2 (New) - Single function for one or multiple triples
+const createTriples = async (subjectIds, predicateIds, objectIds, assets) => {
+  return await writeContract({
+    address: contractAddress,
+    abi: contractABI,
+    functionName: 'createTriples',
+    args: [subjectIds, predicateIds, objectIds, assets],
+    value: totalValue
+  });
+};
 ```
 
-### **Example 6: Atom Retrieval Query Migration**
+### **Example 7: Atom Retrieval Query Migration**
 
 ```typescript
 // ❌ v1 (Old)
@@ -508,7 +616,7 @@ const query = gql`
 // - total_shares → total_market_cap
 ```
 
-### **Example 7: Triple Retrieval Query Migration**
+### **Example 8: Triple Retrieval Query Migration**
 
 ```typescript
 // ❌ v1 (Old)
@@ -574,7 +682,7 @@ const query = gql`
 
 ---
 
-## 🎯 **GraphQL v2 Relations Structure**
+## 🎯 **Contract v2 Relations Structure**
 
 ### **Main Types:**
 - **`atoms`**: `term_id`, `label`, `data`, `type`, `creator_id`
@@ -590,274 +698,10 @@ const query = gql`
 
 ---
 
-## 🗳️ **Hooks and Components Migration (Complete Examples)**
-
-### **Batch Deposit Hook:**
-```typescript
-// ❌ v1 (Old) - Deposit functions
-const deposit = async (receiver, termId, curveId, minShares) => {
-  return await writeContract({
-    functionName: 'deposit',
-    args: [receiver, termId, curveId, minShares]
-  });
-};
-
-const depositBatch = async (receivers, termIds, curveIds, assets, minShares) => {
-  return await writeContract({
-    functionName: 'depositBatch',
-    args: [receivers, termIds, curveIds, assets, minShares]
-  });
-};
-
-// ✅ v2 (New) - Specialized functions + batch
-const depositAtom = async (receiver, id) => {
-  return await writeContract({
-    functionName: 'depositAtom',
-    args: [receiver, id]
-  });
-};
-
-const depositTriple = async (receiver, id) => {
-  return await writeContract({
-    functionName: 'depositTriple',
-    args: [receiver, id]
-  });
-};
-
-const depositBatch = async (receiver, termIds, curveIds, assets, minShares) => {
-  return await writeContract({
-    functionName: 'depositBatch',
-    args: [receiver, termIds, curveIds, assets, minShares]
-  });
-};
-
-// 💡 Note: v2 has depositBatch + specialized functions depositAtom/depositTriple
-```
-
-### **Atom Creation Hook:**
-```typescript
-// ❌ v1 (Old) - Single function
-const createAtoms = async (data, assets) => {
-  return await writeContract({
-    functionName: 'createAtoms',
-    args: [data, assets],
-    value: totalValue
-  });
-};
-
-// ✅ v2 (New) - Two distinct functions
-// For a single atom
-const createAtom = async (atomUri) => {
-  return await writeContract({
-    functionName: 'createAtom',
-    args: [atomUri],
-    value: VALUE_PER_ATOM
-  });
-};
-
-// For multiple atoms
-const batchCreateAtom = async (atomUris) => {
-  return await writeContract({
-    functionName: 'batchCreateAtom',
-    args: [atomUris],
-    value: totalValue
-  });
-};
-```
-
-### **Triple Creation Hook:**
-```typescript
-// ❌ v1 (Old) - Single function
-const createTriples = async (subjectIds, predicateIds, objectIds, assets) => {
-  return await writeContract({
-    functionName: 'createTriples',
-    args: [subjectIds, predicateIds, objectIds, assets],
-    value: totalValue
-  });
-};
-
-// ✅ v2 (New) - Two distinct functions
-// For a single triple
-const createTriple = async (subjectId, predicateId, objectId) => {
-  return await writeContract({
-    functionName: 'createTriple',
-    args: [subjectId, predicateId, objectId],
-    value: VALUE_PER_TRIPLE
-  });
-};
-
-// For multiple triples
-const batchCreateTriple = async (subjectIds, predicateIds, objectIds) => {
-  return await writeContract({
-    functionName: 'batchCreateTriple',
-    args: [subjectIds, predicateIds, objectIds],
-    value: totalValue
-  });
-};
-```
-
-### **Atom Deposit Hook:**
-```typescript
-// ❌ v1 (Old) - Doesn't exist in v1
-// v1 uses deposit() with termId
-
-// ✅ v2 (New) - New specialized function
-const depositAtom = async (receiver, id) => {
-  return await writeContract({
-    functionName: 'depositAtom',
-    args: [receiver, id]
-  });
-};
-
-// 💡 Note: depositAtom is a v2 novelty
-// In v1, use deposit(receiver, termId, curveId, minShares)
-```
-
-### **Position Verification Hook:**
-```typescript
-// ❌ v1 (Old)
-const query = gql`
-  query GetPositions($vaultId: numeric!) {
-    vault(id: $vaultId) {
-      position_count
-    }
-  }
-`;
-
-// ✅ v2 (New)
-const query = gql`
-  query GetPositions($termId: String!) {
-    term(id: $termId) {
-      positions_aggregate {
-        aggregate { count }
-      }
-    }
-  }
-`;
-```
-
-### **Triple Details Retrieval Hook:**
-```typescript
-// ❌ v1 (Old)
-const query = gql`
-  query GetTripleDetails($tripleId: numeric!) {
-    triple(id: $tripleId) {
-      id
-      subject {
-        id
-        label
-      }
-      predicate {
-        id
-        label
-      }
-      object {
-        id
-        label
-      }
-      vault {
-        total_shares
-        position_count
-      }
-      counter_vault {
-        total_shares
-        position_count
-      }
-    }
-  }
-`;
-
-// ✅ v2 (New)
-const query = gql`
-  query GetTripleDetails($tripleId: String!) {
-    triple(term_id: $tripleId) {
-      term_id
-      subject {
-        term_id
-        label
-      }
-      predicate {
-        term_id
-        label
-      }
-      object {
-        term_id
-        label
-      }
-      term {
-        total_market_cap
-        positions_aggregate {
-          aggregate { count }
-        }
-      }
-      counter_term {
-        total_market_cap
-        positions_aggregate {
-          aggregate { count }
-        }
-      }
-    }
-  }
-`;
-```
-
-### **Triple Search Hook:**
-```typescript
-// ❌ v1 (Old)
-const searchTriples = async (filters) => {
-  const query = gql`
-    query SearchTriples($where: triples_bool_exp) {
-      triples(where: $where) {
-        id
-        subject {
-          id
-          label
-        }
-        predicate {
-          id
-          label
-        }
-        object {
-          id
-          label
-        }
-      }
-    }
-  `;
-  // ...
-};
-
-// ✅ v2 (New)
-const searchTriples = async (filters) => {
-  const query = gql`
-    query SearchTriples($where: triples_bool_exp) {
-      triples(where: $where) {
-        term_id
-        subject {
-          term_id
-          label
-        }
-        predicate {
-          term_id
-          label
-        }
-        object {
-          term_id
-          label
-        }
-      }
-    }
-  `;
-  // ...
-};
-```
-
----
-
 ## 🔄 **Data Format Issues and ID Conversions**
 
 ### **Main Problem:**
-**GraphQL v2** returns data with `term_id` but your **existing code** expects data with `id`.
+**Contract v2** returns data with `term_id` but your **existing code** expects data with `id`.
 
 ### **Two Possible Approaches:**
 
@@ -922,7 +766,7 @@ const convertToBigInt = (hexString) => {
 
 // Example
 const hexId = "0x27191de92fe0308355319ec8f2359e5ce85123bd243bf7ffa6eb8028347b3eab";
-const bigIntId = convertToBigInt(hexId);
+const bigIntId = convertToBigInt(hexId); //17684578708720383048295706142294460746182665123468931996900258680220266741419n
 ```
 
 #### **3. Conversion for GraphQL**
@@ -942,7 +786,7 @@ const graphqlId = hexString; // If already in 0x... format
 - Console: id: undefined in elements
 - Console: predicateId: undefined in relations
 ```
-**Cause:** Component expects `id` but receives `term_id`
+**Cause:** Component expects `id` but receives `term_id`  
 **Solution:** Use `transformTripleData` before passing data to component
 
 #### **Problem 2: ID format error in smart contracts**
@@ -950,7 +794,7 @@ const graphqlId = hexString; // If already in 0x... format
 # Error
 Failed to fetch triple details
 ```
-**Cause:** ID converted to BigInt instead of staying in 0x... format
+**Cause:** ID converted to BigInt instead of staying in 0x... format  
 **Solution:** Keep ID in hex format for GraphQL, convert only for smart contract
 
 #### **Problem 3: TypeScript type incompatibility**
@@ -958,7 +802,7 @@ Failed to fetch triple details
 # Error
 Type 'string' is not assignable to type 'bigint'
 ```
-**Cause:** Mix between string and bigint formats
+**Cause:** Mix between string and bigint formats  
 **Solution:** Standardize types and use explicit conversions
 
 ### **Best Practices for Conversions:**
@@ -1019,9 +863,10 @@ Type 'string' is not assignable to type 'bigint'
 - **Network Tab**: Check HTTP requests
 
 ### **Reference Resources:**
-- **GraphQL v2 Schema**: `migration-resources/schemaGraph.old`
-- **Contract ABI**: `migration-resources/nouvel-abi.old`
-- **Query Examples**: `migration-resources/requete-utile-reponse.old`
+- **GraphQL v2 Schema**: `migration-resources/schema-graph.doc`
+- **Contract ABI**: `migration-resources/old-contract.doc`
+- **Query Examples**: `migration-resources/useful-queries-responses.doc`
+- **Migration Plan**: `migration-resources/migration-plan-[YOUR_PROJECT].md`
 
 ### **Useful Commands:**
 ```bash
@@ -1029,43 +874,12 @@ Type 'string' is not assignable to type 'bigint'
 curl -X POST "https://testnet.intuition.sh/v1/graphql" \
   -H "Content-Type: application/json" \
   -d '{"query": "query { __schema { types { name } } }"}'
-
+```
+```bash
 # Test a specific query
 curl -X POST "https://testnet.intuition.sh/v1/graphql" \
   -H "Content-Type: application/json" \
   -d '{"query": "query { atoms(limit: 1) { term_id label } }"}'
-```
-
----
-
-## 📝 **Migration Plan Template**
-
-```markdown
-# GraphQL v1 → v2 Migration Plan - [PROJECT_NAME]
-
-## Phase A: Analysis ✅
-- [ ] Identify used endpoints
-- [ ] List GraphQL types
-- [ ] Analyze architecture
-
-## Phase B: Endpoint Migration ✅
-- [ ] Update URLs
-- [ ] Test connectivity
-
-## Phase C: Query Migration ✅
-- [ ] Adapt identifiers
-- [ ] Change variable types
-- [ ] Replace relations
-
-## Phase D: Component Migration ✅
-- [ ] Migrate hooks
-- [ ] Adapt components
-- [ ] Update interfaces
-
-## Phase E: Testing and Validation ✅
-- [ ] Unit tests
-- [ ] Integration tests
-- [ ] End-to-end tests
 ```
 
 ---
