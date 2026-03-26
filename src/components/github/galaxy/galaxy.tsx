@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useRef, useState, useCallback } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import {
   Drawer,
   DrawerContent,
@@ -17,7 +17,6 @@ import { GalaxyBackground } from './galaxy-background';
 import { ContributorCards } from './contributor-cards';
 import { CommitsOrbit } from './commits-orbit';
 import { ProjectsOrbit } from './projects-orbit';
-import { ProjectCard } from './project-card';
 
 const PARTICIPANT_COLORS = ['#ffb4b4', '#a7d8ff', '#c7a7ff', '#94e2c4', '#ffe4a7', '#ffa7d6', '#aef3e3', '#ffc7a7'];
 const PROJECT_COLORS = ['#01c3a8', '#ffb741', '#a63d2a', '#1890ff', '#8a55e6', '#f56c6c'];
@@ -33,8 +32,6 @@ export function Galaxy({ activity, fetchedAt }: GalaxyProps) {
   const { isMobile, safeOffsets } = useOrbitDimensions(containerRef);
 
   const [activeContrib, setActiveContrib] = useState<ContributorDisplay | null>(null);
-  const [selectedProject, setSelectedProject] = useState<ProjectDisplay | null>(null);
-  const [projectPosition, setProjectPosition] = useState({ x: 0, y: 0 });
 
   // Build contributor→project mapping for per-repo authors
   const contributorsByLogin = useMemo(() => {
@@ -108,17 +105,6 @@ export function Galaxy({ activity, fetchedAt }: GalaxyProps) {
     [activity.commits],
   );
 
-  const handleProjectHover = useCallback(
-    (project: ProjectDisplay, position: { x: number; y: number }) => {
-      setSelectedProject(project);
-      setProjectPosition(position);
-    },
-    [],
-  );
-
-  const handleProjectLeave = useCallback(() => {
-    setSelectedProject(null);
-  }, []);
 
   return (
     <div
@@ -140,18 +126,7 @@ export function Galaxy({ activity, fetchedAt }: GalaxyProps) {
       />
 
       <CommitsOrbit commits={commits} />
-      <ProjectsOrbit
-        projects={projects}
-        onProjectHover={handleProjectHover}
-        onProjectLeave={handleProjectLeave}
-      />
-
-      <ProjectCard
-        project={selectedProject}
-        position={projectPosition}
-        isMobile={isMobile}
-        onClose={handleProjectLeave}
-      />
+      <ProjectsOrbit projects={projects} />
 
       {/* Contributor detail drawer (swipes down to dismiss) */}
       <Drawer open={!!activeContrib} onOpenChange={(open) => !open && setActiveContrib(null)}>
