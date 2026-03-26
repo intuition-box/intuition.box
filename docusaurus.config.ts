@@ -5,9 +5,8 @@ import type * as Preset from '@docusaurus/preset-classic';
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
 const config: Config = {
-  title: 'INTUITION.BOX',
-  // tagline: 'AN ONLINE COMMUNITY WHERE ANYONE CAN CREATE SHARE AND BUILD OPEN PROJECTS FOR THE COMMON GOOD.',
-  tagline: 'AN ONLINE COMMUNITY FOR BUILDING AND SHARING OPEN PROJECTS',
+  title: 'Intuition Boc',
+  tagline: '',
   favicon: 'img/favicon.ico',
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
@@ -16,18 +15,17 @@ const config: Config = {
   },
 
   // Set the production url of your site here
-  url: 'https://your-docusaurus-site.example.com',
+  url: 'https://intuition.box',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: '/',
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'facebook', // Usually your GitHub org/user name.
-  projectName: 'docusaurus', // Usually your repo name.
+  organizationName: 'intuition-box', // Usually your GitHub org/user name.
+  projectName: 'intuition.box', // Usually your repo name.
 
   onBrokenLinks: 'throw',
-  onBrokenMarkdownLinks: 'warn',
 
   // Even if you don't use internationalization, you can use this field to set
   // useful metadata like html lang. For example, if your site is Chinese, you
@@ -42,12 +40,29 @@ const config: Config = {
       'classic',
       {
         docs: {
+          routeBasePath: '/',
           sidebarPath: './sidebars.ts',
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
-          editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+          // Expand all categories by default
+          async sidebarItemsGenerator(
+            args,
+          ) {
+            const items = await args.defaultSidebarItemsGenerator(args);
+            const expandAll = (sidebarItems: any[]): any[] =>
+              sidebarItems.map((item) => {
+                if (item.type === 'category') {
+                  return {
+                    ...item,
+                    collapsed: false,
+                    items: expandAll(item.items),
+                  };
+                }
+                return item;
+              });
+            return expandAll(items);
+          },
         },
+        // Remove bog and pages from navbar
+        // Keep it a focus on documentation
         blog: false,
         theme: {
           customCss: './src/css/custom.css',
@@ -57,42 +72,42 @@ const config: Config = {
   ],
 
   themeConfig: {
-    // Replace with your project's social card
-    colorMode: {
-      defaultMode: 'dark',
-      disableSwitch: true,
-      respectPrefersColorScheme: false,
-    },
-    image: 'img/docusaurus-social-card.jpg',
-    navbar: {
-      title: 'intuition.box',
-      logo: {
-        alt: 'Intuition Logo',
-        src: 'img/intuition-logo.jpg',
+    image: 'brand/social-card.jpg',
+    docs: {
+      sidebar: {
+        hideable: true, // shows the collapse button on desktop
+        autoCollapseCategories: true, // keep multiple categories open
       },
-      items: [
-        {
-          type: 'docSidebar',
-          sidebarId: 'tutorialSidebar',
-          position: 'left',
-          label: 'Tutorial',
-        },
-        {
-          href: 'https://github.com/facebook/docusaurus',
-          label: 'GitHub',
-          position: 'right',
-        },
-      ],
+    },
+    colorMode: {
+      respectPrefersColorScheme: true,
+    },
+    navbar: {
+      logo: {
+        alt: 'Intuition logo',
+        src: 'brand/logo.svg',
+      },
     },
     footer: {
-      style: 'dark',
+      logo: {
+        src: 'brand/logo.svg',
+        alt: 'Intuition Box logo'
+      },
       links: [
         {
-          title: 'Docs',
+          title: 'Ressources',
           items: [
             {
-              label: 'Tutorial',
-              to: '/docs/intro',
+              label: 'Brand',
+              to: '/brand',
+            },
+            {
+              label: 'Ecosystem',
+              href: 'https://intuition.systems/ecosystem',
+            },
+            {
+              label: 'Roadmap',
+              to: '/roadmap',
             },
           ],
         },
@@ -100,30 +115,25 @@ const config: Config = {
           title: 'Community',
           items: [
             {
-              label: 'Stack Overflow',
-              href: 'https://stackoverflow.com/questions/tagged/docusaurus',
-            },
-            {
-              label: 'Discord',
-              href: 'https://discordapp.com/invite/docusaurus',
+              label: 'Github',
+              href: '#',
             },
             {
               label: 'X',
-              href: 'https://x.com/docusaurus',
+              href: '#',
             },
-          ],
-        },
-        {
-          title: 'More',
-          items: [
             {
-              label: 'GitHub',
-              href: 'https://github.com/facebook/docusaurus',
+              label: 'Discord',
+              href: '#',
+            },
+            {
+              label: 'Intuition Protocol',
+              href: 'https://intuition.systems',
             },
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
+      copyright: `© ${new Date().getFullYear()} Intuition Box, LLC`,
     },
     prism: {
       theme: prismThemes.github,
