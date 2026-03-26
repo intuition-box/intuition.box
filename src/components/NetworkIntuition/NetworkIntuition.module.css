@@ -33,3 +33,18 @@
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
+
+.timestamp {
+  margin-top: 1rem;
+  text-align: center;
+  font-size: 0.75rem;
+  opacity: 0.45;
+  font-style: italic;
+}
+
+.empty {
+  text-align: center;
+  opacity: 0.6;
+  font-style: italic;
+  margin: 2rem 0;
+}

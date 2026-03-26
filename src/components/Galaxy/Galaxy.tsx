@@ -1,15 +1,15 @@
-import React, { useEffect, useMemo, useState } from "react";
-import GalaxyBackground from "./GalaxyBackground";
-import styles from "./Galaxy.module.css";
-import ContributorCards from "./ContributorCards";
-import CommitsOrbit from "./Commits";
-import type { Commit as CommitOrbitType } from "./Commits";
-import ProjectsOrbit, { Project as ProjectFull } from "./ProjectsOrbit";
-import ProjectCard from "./ProjectCard";
-import { fetchHybridActivity, HybridResult } from "../../utils/gitActivity";
-import MobileBottomSheet from "./MobileBottomSheet";
+import React, { useMemo, useState } from 'react';
+import useGlobalData from '@docusaurus/useGlobalData';
+import GalaxyBackground from './GalaxyBackground';
+import styles from './Galaxy.module.css';
+import ContributorCards from './ContributorCards';
+import CommitsOrbit from './Commits';
+import type { Commit as CommitOrbitType } from './Commits';
+import ProjectsOrbit, { Project as ProjectFull } from './ProjectsOrbit';
+import ProjectCard from './ProjectCard';
+import MobileBottomSheet from './MobileBottomSheet';
 
-const ORG = "intuition-box";
+const ORG = 'intuition-box';
 
 type ContributorCardItem = {
   id: string;
@@ -19,68 +19,69 @@ type ContributorCardItem = {
   avatarUrl?: string;
   profileUrl?: string;
 };
-type CommitItem = CommitOrbitType;
 
-const participantColors = ["#ffb4b4","#a7d8ff","#c7a7ff","#94e2c4","#ffe4a7","#ffa7d6","#aef3e3","#ffc7a7"];
-const projectColors = ["#01c3a8","#ffb741","#a63d2a","#1890ff","#8a55e6","#f56c6c"];
+interface ActivityData {
+  contributors: Array<{ login: string; date: string; avatarUrl?: string }>;
+  projects: Array<{ fullName: string; name: string; date: string }>;
+  commits: Array<{
+    sha: string;
+    repo: string;
+    message: string;
+    date: string;
+    url: string;
+    author: string;
+  }>;
+  contributorProjects: Record<string, string[]>;
+}
+
+const participantColors = ['#ffb4b4', '#a7d8ff', '#c7a7ff', '#94e2c4', '#ffe4a7', '#ffa7d6', '#aef3e3', '#ffc7a7'];
+const projectColors = ['#01c3a8', '#ffb741', '#a63d2a', '#1890ff', '#8a55e6', '#f56c6c'];
 const commitColors = participantColors;
 
 export default function Galaxy() {
-  const [data, setData] = useState<HybridResult | null>(null);
+  const globalData = useGlobalData();
+  const pluginData = globalData['github-stats']?.default as
+    | { activity: ActivityData }
+    | undefined;
 
-  const [activeContrib, setActiveContrib] =
-    useState<ContributorCardItem | null>(null);
+  const data = pluginData?.activity ?? null;
 
-  useEffect(() => {
-    let cancel = false;
-    (async () => {
-      const res = await fetchHybridActivity(ORG, {
-        repoLimit: 6,
-        perRepoCommitList: 2,
-      });
-      if (!cancel) setData(res);
-    })();
-    return () => { cancel = true; };
-  }, []);
+  const [activeContrib, setActiveContrib] = useState<ContributorCardItem | null>(null);
 
   const contributorsByLogin = useMemo(() => {
     const m = new Map<string, { avatarUrl?: string; last?: Date }>();
     (data?.contributors ?? []).forEach((c) => {
-      m.set(c.login, { avatarUrl: c.avatarUrl, last: c.date });
+      m.set(c.login, { avatarUrl: c.avatarUrl, last: new Date(c.date) });
     });
     return m;
   }, [data]);
 
   const perRepoAuthors = useMemo(() => {
-    const map = new Map<
-      string,
-      Array<{ login: string; avatarUrl?: string; last?: Date }>
-    >();
+    const map = new Map<string, Array<{ login: string; avatarUrl?: string; last?: Date }>>();
+
     if (data?.commits?.length) {
-      const groups = new Map<
-        string,
-        Map<string, { login: string; avatarUrl?: string; last: Date }>
-      >();
+      const groups = new Map<string, Map<string, { login: string; avatarUrl?: string; last: Date }>>();
       for (const c of data.commits) {
-        const repo = c.repo;
-        if (!repo || !c.author || !c.date) continue;
+        if (!c.repo || !c.author || !c.date) continue;
         const login = c.author;
-        const last = c.date;
+        const last = new Date(c.date);
         const avatarUrl = contributorsByLogin.get(login)?.avatarUrl;
-        const g = groups.get(repo) ?? new Map();
-        groups.set(repo, g);
+        const g = groups.get(c.repo) ?? new Map();
+        groups.set(c.repo, g);
         const prev = g.get(login);
-        if (!prev || (prev.last?.getTime() ?? 0) < last.getTime())
+        if (!prev || (prev.last?.getTime() ?? 0) < last.getTime()) {
           g.set(login, { login, avatarUrl, last });
+        }
       }
       for (const [repo, g] of groups) {
-        const arr = Array.from(g.values()).sort(
-          (a, b) => (b.last?.getTime() ?? 0) - (a.last?.getTime() ?? 0)
+        map.set(
+          repo,
+          Array.from(g.values()).sort((a, b) => (b.last?.getTime() ?? 0) - (a.last?.getTime() ?? 0)),
         );
-        map.set(repo, arr);
       }
       return map;
     }
+
     if (data?.contributorProjects) {
       const inverse = new Map<string, Set<string>>();
       Object.entries(data.contributorProjects).forEach(([login, repos]) => {
@@ -91,13 +92,15 @@ export default function Galaxy() {
         });
       });
       for (const [repo, logins] of inverse) {
-        const arr = Array.from(logins)
-          .map((login) => {
-            const info = contributorsByLogin.get(login);
-            return { login, avatarUrl: info?.avatarUrl, last: info?.last };
-          })
-          .sort((a, b) => (b.last?.getTime() ?? 0) - (a.last?.getTime() ?? 0));
-        map.set(repo, arr);
+        map.set(
+          repo,
+          Array.from(logins)
+            .map((login) => {
+              const info = contributorsByLogin.get(login);
+              return { login, avatarUrl: info?.avatarUrl, last: info?.last };
+            })
+            .sort((a, b) => (b.last?.getTime() ?? 0) - (a.last?.getTime() ?? 0)),
+        );
       }
     }
     return map;
@@ -105,38 +108,37 @@ export default function Galaxy() {
 
   const contribItems: ContributorCardItem[] = useMemo(() => {
     const src = data?.contributors ?? [];
-    const map = data?.contributorProjects ?? {};
+    const projMap = data?.contributorProjects ?? {};
     return src.map((c) => {
-      const login = c.login;
-      const projs = (map[login] || []).slice(0, 6).map((name: string) => ({
+      const { login } = c;
+      const projs = (projMap[login] || []).slice(0, 6).map((name: string) => ({
         id: name,
         name,
         url: `https://github.com/${ORG}/${name}`,
       }));
       return {
         id: login,
-        summary: `Last activity: ${c.date.toISOString().slice(0,10)}`,
+        summary: `Last activity: ${c.date.slice(0, 10)}`,
         projects: projs,
         avatarUrl: c.avatarUrl,
         profileUrl: `https://github.com/${login}`,
-        onClick: () => window.open(`https://github.com/${login}`, "_blank", "noopener,noreferrer"),
+        onClick: () => window.open(`https://github.com/${login}`, '_blank', 'noopener,noreferrer'),
       };
     });
   }, [data]);
 
   const projects: ProjectFull[] = useMemo(() => {
     const src = (data?.projects ?? []).slice(0, 6);
-    return src.map((p: any, i: number) => {
-      const repoName: string = p.name;
-      const authors = perRepoAuthors.get(repoName) ?? [];
+    return src.map((p, i) => {
+      const authors = perRepoAuthors.get(p.name) ?? [];
       return {
-        id: repoName,
-        title: repoName,
-        desc: "",
+        id: p.name,
+        title: p.name,
+        desc: '',
         color: projectColors[i % projectColors.length],
-        date: (p.updatedAt || p.pushedAt || p.date || new Date()).toString(),
-        url: p.htmlUrl || `https://github.com/${ORG}/${repoName}`,
-        category: "",
+        date: p.date,
+        url: `https://github.com/${ORG}/${p.name}`,
+        category: '',
         participants: authors.slice(0, 4).map((c, j) => ({
           name: c.login,
           color: participantColors[j % participantColors.length],
@@ -146,40 +148,14 @@ export default function Galaxy() {
     });
   }, [data, perRepoAuthors]);
 
-  const commits: CommitItem[] = useMemo(() => {
-    type RawCommit = {
-      id?: string;
-      sha?: string;
-      message?: string;
-      htmlUrl?: string;
-      url?: string;
-      commitUrl?: string;
-      repo?: string;
-      date?: Date;
-      author?: string;
-    };
-    const raw: RawCommit[] =
-      (data as any)?.recentCommits ?? (data as any)?.commits ?? [];
-    const out: CommitItem[] = [];
-    for (let i = 0; i < Math.min(raw.length, 8); i++) {
-      const c = raw[i];
-      const sha = c.sha ?? c.id ?? "";
-      const url =
-        c.htmlUrl ??
-        c.url ??
-        c.commitUrl ??
-        (sha && c.repo ? `https://github.com/${ORG}/${c.repo}/commit/${sha}` : undefined);
-
-      if (!url) continue;
-
-      out.push({
-        id: sha || `c-${i}`,
-        name: sha ? sha.slice(0, 7) : c.message?.slice(0, 7) ?? "commit",
-        url,
-        color: commitColors[i % commitColors.length],
-      });
-    }
-    return out;
+  const commits: CommitOrbitType[] = useMemo(() => {
+    const raw = data?.commits ?? [];
+    return raw.slice(0, 8).map((c, i) => ({
+      id: c.sha || `c-${i}`,
+      name: c.sha ? c.sha.slice(0, 7) : c.message?.slice(0, 7) ?? 'commit',
+      url: c.url || `https://github.com/${ORG}/${c.repo}/commit/${c.sha}`,
+      color: commitColors[i % commitColors.length],
+    }));
   }, [data]);
 
   return (
@@ -206,21 +182,20 @@ export default function Galaxy() {
                 ) : (
                   <div
                     style={{
-                      width: "100%",
-                      height: "100%",
-                      display: "grid",
-                      placeItems: "center",
+                      width: '100%',
+                      height: '100%',
+                      display: 'grid',
+                      placeItems: 'center',
                     }}
                   >
-                    {activeContrib.id?.[0]?.toUpperCase() ?? "?"}
+                    {activeContrib.id?.[0]?.toUpperCase() ?? '?'}
                   </div>
                 )}
               </div>
               <div className="slotText">
                 <div className="slotName">{activeContrib.id}</div>
                 <div className="slotSub">
-                  Last activity:{" "}
-                  {activeContrib.summary?.replace(/^Last activity:\s*/i, "")}
+                  Last activity: {activeContrib.summary?.replace(/^Last activity:\s*/i, '')}
                 </div>
               </div>
             </>
@@ -228,28 +203,28 @@ export default function Galaxy() {
         }
       >
         {activeContrib && (
-          <div style={{ display: "grid", gap: 12 }}>
+          <div style={{ display: 'grid', gap: 12 }}>
             {activeContrib.projects?.length ? (
               <div>
-                <div style={{ fontWeight: 600, margin: "6px 0" }}>Projects</div>
+                <div style={{ fontWeight: 600, margin: '6px 0' }}>Projects</div>
                 <ul
                   style={{
                     margin: 0,
                     padding: 0,
-                    listStyle: "none",
-                    display: "grid",
+                    listStyle: 'none',
+                    display: 'grid',
                     gap: 8,
                   }}
                 >
                   {activeContrib.projects.slice(0, 8).map((p, i) => {
-                    const name = typeof p === "string" ? p : p.name;
-                    const url = typeof p === "string" ? undefined : p.url;
+                    const name = typeof p === 'string' ? p : p.name;
+                    const url = typeof p === 'string' ? undefined : p.url;
                     return (
                       <li
                         key={`${name}-${i}`}
                         style={{
-                          display: "flex",
-                          alignItems: "center",
+                          display: 'flex',
+                          alignItems: 'center',
                           gap: 8,
                         }}
                       >
@@ -258,19 +233,13 @@ export default function Galaxy() {
                             width: 16,
                             height: 16,
                             borderRadius: 4,
-                            background:
-                              "linear-gradient(135deg, rgba(255,255,255,0.6), rgba(255,255,255,0.05))",
-                            boxShadow: "0 2px 6px rgba(0,0,0,0.35)",
-                            flex: "0 0 auto",
+                            background: 'linear-gradient(135deg, rgba(255,255,255,0.6), rgba(255,255,255,0.05))',
+                            boxShadow: '0 2px 6px rgba(0,0,0,0.35)',
+                            flex: '0 0 auto',
                           }}
                         />
                         {url ? (
-                          <a
-                            href={url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            style={{ textDecoration: "none" }}
-                          >
+                          <a href={url} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
                             {name}
                           </a>
                         ) : (
@@ -286,19 +255,19 @@ export default function Galaxy() {
             )}
 
             {activeContrib.profileUrl && (
-              <div style={{ display: "flex", gap: 10, marginTop: 4 }}>
+              <div style={{ display: 'flex', gap: 10, marginTop: 4 }}>
                 <a
                   href={activeContrib.profileUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   style={{
-                    display: "inline-flex",
-                    alignItems: "center",
+                    display: 'inline-flex',
+                    alignItems: 'center',
                     gap: 8,
-                    padding: "8px 12px",
+                    padding: '8px 12px',
                     borderRadius: 10,
-                    border: "1px solid rgba(255,255,255,.12)",
-                    textDecoration: "none",
+                    border: '1px solid rgba(255,255,255,.12)',
+                    textDecoration: 'none',
                   }}
                 >
                   View GitHub
@@ -308,20 +277,6 @@ export default function Galaxy() {
           </div>
         )}
       </MobileBottomSheet>
-
-      {data?.error && (
-        <div
-          style={{
-            position: "absolute",
-            bottom: 8,
-            left: 8,
-            fontSize: 12,
-            opacity: 0.7,
-          }}
-        >
-          {data.error}
-        </div>
-      )}
     </div>
   );
 }
