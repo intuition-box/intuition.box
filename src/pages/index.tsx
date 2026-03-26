@@ -11,7 +11,6 @@ import Panel from '../components/Panels/Panel';
 import Galaxy from '../components/Galaxy/Galaxy';
 import WhyPanel from '../components/Panels/WhyPanel';
 import OffersPanel from '../components/Panels/OffersPanel';
-import Blog from '../components/Blog/Blog';
 import EventGrid from "@site/src/components/Events/EventGrid";
 import { EVENTS } from "@site/src/components/Events/events.data";
 import NetworkIntuition from '../components/NetworkIntuition/NetworkIntuition';
@@ -67,7 +66,6 @@ export default function Home(): ReactNode {
         </Panel>
         <WhyPanel />
         <OffersPanel />
-        <Blog />
         <EventGrid events={EVENTS} />
       </main>
     </Layout>
