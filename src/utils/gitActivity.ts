@@ -39,7 +39,6 @@ export type HybridResult = {
   error?: string | null;
 };
 
-export type OrgCounters = { projects: number; contributors: number; commits: number };
 
 const GH = "https://api.github.com";
 const headers: Record<string, string> = { Accept: "application/vnd.github+json" };
@@ -319,83 +318,4 @@ export async function fetchHybridActivity(
   }
 }
 
-// ==================== NO-TOKEN LIGHTWEIGHT COUNTERS ====================
-// 2 requêtes publiques : repos + events. Commits ~= somme des PushEvent.payload.size.
-const LS_KEY = "gh_light_snapshot_v1";
-
-export async function fetchLightweightOrgSnapshot(org: string): Promise<OrgCounters> {
-
-  let cached: OrgCounters | null = null;
-  if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
-    try {
-      const raw = localStorage.getItem(LS_KEY);
-      if (raw) {
-        const parsed = JSON.parse(raw) as { projects?: number; contributors?: number; commits?: number };
-        if (
-          typeof parsed.projects === 'number' &&
-          typeof parsed.contributors === 'number' &&
-          typeof parsed.commits === 'number'
-        ) {
-          cached = { projects: parsed.projects, contributors: parsed.contributors, commits: parsed.commits };
-        }
-      }
-    } catch {
-    }
-  }
-
-  // 1) Projects
-  let projects = 0;
-  try {
-    const repos = await fetchOrgRepos(org, 100);
-    projects = repos.length;
-  } catch (e) {
-  }
-
-  // 2) Contributors + Commits approx depuis events
-  let contributors = 0;
-  let commits = 0;
-  try {
-    const events = await fetchOrgEvents(org);
-    const set = new Set<string>();
-    for (const ev of events) {
-      const login = (ev.actor?.login || '').toLowerCase();
-      if (login) set.add(login);
-      if (ev.type === 'PushEvent') {
-        if (typeof ev.payload?.size === 'number') commits += ev.payload.size;
-        else if (Array.isArray(ev.payload?.commits)) commits += ev.payload.commits!.length;
-        else commits += 1;
-      }
-    }
-    contributors = set.size;
-  } catch (e) {
-  }
-
-  // If no data could be fetched, fall back to cached snapshot or local JSON
-  if (projects === 0 && contributors === 0 && commits === 0) {
-    if (cached) {
-      return cached;
-    }
-    const local = fromLocalJson();
-    const contribCount = new Set(local.contributors.map((c) => c.login.toLowerCase())).size;
-    return {
-      projects: local.projects.length,
-      contributors: contribCount,
-      commits: local.commitDates.length,
-    };
-  }
-
-  // Persist the result to localStorage so that future calls can fall back to
-  // it if GitHub API is unavailable. Wrap in try/catch to avoid errors in
-  // environments without localStorage.
-  if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
-    try {
-      localStorage.setItem(LS_KEY, JSON.stringify({ projects, contributors, commits }));
-    } catch {
-      // ignore storage errors
-    }
-  }
-
-  return { projects, contributors, commits };
-
-}
 

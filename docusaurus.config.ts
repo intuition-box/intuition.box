@@ -35,6 +35,10 @@ const config: Config = {
     locales: ['en'],
   },
 
+  plugins: [
+    ['./plugins/github-stats', { org: 'intuition-box' }],
+  ],
+
   presets: [
     [
       'classic',
