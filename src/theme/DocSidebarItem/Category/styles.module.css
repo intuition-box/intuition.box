@@ -1,0 +1,28 @@
+.categoryLink {
+  overflow: hidden;
+}
+
+.categoryLinkLabel {
+  flex: 1;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+}
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  margin-right: 0.5rem;
+}
+
+.iconEmoji {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  margin-right: 0.5rem;
+}
