@@ -1,0 +1,36 @@
+@media (min-width: 997px) {
+  .expandButton {
+    position: absolute;
+    top: 0;
+    left: 0;
+    aspect-ratio: 1/1;
+    width: auto;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--ifm-radius-full);
+    transition: background var(--ifm-transition-fast) ease;
+    cursor: pointer;
+    padding: 0;
+
+    border: var(--ifm-button-border-width) solid transparent;
+    background: var(--ifm-button-background);
+  }
+
+  .expandButton:hover,
+  .expandButton:focus {
+    background-color: var(
+      --docusaurus-collapse-button-bg-hover,
+      rgba(0, 0, 0, 0.05)
+    );
+  }
+
+  .expandButtonIcon {
+    transform: rotate(0);
+  }
+
+  [dir='rtl'] .expandButtonIcon {
+    transform: rotate(180deg);
+  }
+}
