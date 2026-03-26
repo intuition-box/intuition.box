@@ -114,9 +114,8 @@ export default function ContributorCard({
                 const handleEnter = (
                   e: React.MouseEvent | React.FocusEvent
                 ) => {
-                  // Unifie hover & focus clavier
-                  const clientX = (e as any).clientX ?? 0;
-                  const clientY = (e as any).clientY ?? 0;
+                  const clientX = 'clientX' in e ? e.clientX : 0;
+                  const clientY = 'clientY' in e ? e.clientY : 0;
                   const payload =
                     typeof p === "string"
                       ? { name: p }

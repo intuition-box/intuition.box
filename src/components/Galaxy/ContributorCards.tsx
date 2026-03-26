@@ -25,10 +25,10 @@ function useIsMobile() {
     const update = () => setM(mq.matches);
     update();
     mq.addEventListener?.("change", update);
-    (mq as any).addListener?.(update);
+    mq.addListener?.(update);
     return () => {
       mq.removeEventListener?.("change", update);
-      (mq as any).removeListener?.(update);
+      mq.removeListener?.(update);
     };
   }, []);
   return m;
@@ -88,12 +88,12 @@ function useRespContribOrbit() {
     compute();
     window.addEventListener("resize", compute);
     mLandscapeLow.addEventListener?.("change", compute);
-    (mLandscapeLow as any).addListener?.(compute);
+    mLandscapeLow.addListener?.(compute);
 
     return () => {
       window.removeEventListener("resize", compute);
       mLandscapeLow.removeEventListener?.("change", compute);
-      (mLandscapeLow as any).removeListener?.(compute);
+      mLandscapeLow.removeListener?.(compute);
     };
   }, []);
 
@@ -162,7 +162,7 @@ export default function ContributorCards({ items, getStyle, onAvatarOpen }: Cont
             title={c.id}
           >
             {c.avatarUrl ? (
-              <img src={c.avatarUrl} alt="" loading="lazy" />
+              <img src={c.avatarUrl} alt={`${c.id} avatar`} width={44} height={44} loading="lazy" />
             ) : (
               <span className={styles.contribAvatarFallback}>
                 {c.id?.[0]?.toUpperCase() ?? "?"}

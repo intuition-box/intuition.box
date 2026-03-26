@@ -47,19 +47,12 @@ export const ProjectPlanner: React.FC = () => {
         let finalAssignments = loadAssignments();
         
         if (Object.keys(finalAssignments).length === 0) {
-          console.log('localStorage is empty, loading from contributors.json...');
-          
-          // Load contributor data and convert to assignments format
           const contributorData = await loadContributorAssignments();
           if (Object.keys(contributorData).length > 0) {
             finalAssignments = convertContributorDataToAssignments(contributorData);
-            console.log('✅ Using assignments from contributors.json');
           } else {
-            console.log('⚠️ No contributor data found, starting with empty assignments');
             finalAssignments = {};
           }
-        } else {
-          console.log('✅ Using assignments from localStorage');
         }
         
         setAppState(prev => ({
@@ -67,8 +60,8 @@ export const ProjectPlanner: React.FC = () => {
           projects: projectsFromJson,
           assignments: finalAssignments,
         }));
-      } catch (error) {
-        console.error('Error loading data:', error);
+      } catch {
+        // Data loading failed — continue with defaults
       } finally {
         setIsLoadingProjects(false);
       }
@@ -128,8 +121,7 @@ export const ProjectPlanner: React.FC = () => {
         
         // Check if project is already assigned to avoid duplicates
         if (existingContributor.projects[project.name]) {
-          console.log(`Project "${project.name}" is already assigned to ${contributor.name}`);
-          return prev; // Don't add duplicate
+          return prev; // Already assigned
         }
         
         return {
@@ -154,10 +146,7 @@ export const ProjectPlanner: React.FC = () => {
       
       // Find contributor by ID to get their github username
       const contributor = contributors.find(c => c.id === contributorId);
-      if (!contributor) {
-        console.error('Contributor not found for ID:', contributorId);
-        return;
-      }
+      if (!contributor) return;
 
       setAppState(prev => {
         const existingContributor = prev.assignments[contributor.github] || { projects: {} };
@@ -165,8 +154,7 @@ export const ProjectPlanner: React.FC = () => {
         
         // Deduplicate weeks
         if (currentWeeks.includes(week.id)) {
-          console.log(`Week "${week.label}" is already assigned to project "${projectName}"`);
-          return prev;
+          return prev; // Already assigned
         }
 
         return {

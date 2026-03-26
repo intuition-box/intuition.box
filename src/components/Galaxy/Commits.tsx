@@ -16,12 +16,12 @@ const getStyle = (i: number, total: number, color?: string): React.CSSProperties
 const pause = (e: React.MouseEvent<HTMLDivElement>) => {
   const el = e.currentTarget as HTMLElement;
   el.style.animationPlayState = "paused";
-  (el.style as any).webkitAnimationPlayState = "paused";
+  el.style.webkitAnimationPlayState = "paused";
 };
 const resume = (e: React.MouseEvent<HTMLDivElement>) => {
   const el = e.currentTarget as HTMLElement;
   el.style.animationPlayState = "running";
-  (el.style as any).webkitAnimationPlayState = "running";
+  el.style.webkitAnimationPlayState = "running";
 };
 
 export default function CommitsOrbit({ commits }: { commits: Commit[] }) {

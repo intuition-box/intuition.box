@@ -178,7 +178,7 @@ export default function Galaxy() {
             <>
               <div className="slotAvatar">
                 {activeContrib.avatarUrl ? (
-                  <img src={activeContrib.avatarUrl} alt="" />
+                  <img src={activeContrib.avatarUrl} alt={`${activeContrib.id} avatar`} width={40} height={40} />
                 ) : (
                   <div
                     style={{

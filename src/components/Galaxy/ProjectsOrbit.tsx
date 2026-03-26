@@ -22,8 +22,8 @@ const getStyle = (i: number, total: number, color?: string): React.CSSProperties
   } as React.CSSProperties;
 };
 
-const pause = (el: HTMLElement) => { el.style.animationPlayState = "paused"; (el.style as any).webkitAnimationPlayState = "paused"; };
-const resume = (el: HTMLElement) => { el.style.animationPlayState = "running"; (el.style as any).webkitAnimationPlayState = "running"; };
+const pause = (el: HTMLElement) => { el.style.animationPlayState = "paused"; el.style.webkitAnimationPlayState = "paused"; };
+const resume = (el: HTMLElement) => { el.style.animationPlayState = "running"; el.style.webkitAnimationPlayState = "running"; };
 
 export default function ProjectsOrbit({ projects }: { projects: Project[] }) {
   return (
@@ -46,7 +46,7 @@ export default function ProjectsOrbit({ projects }: { projects: Project[] }) {
           }}
           onClick={(e) => {
             window.dispatchEvent(new CustomEvent("ib:project-hover", {
-              detail: { id: p.id, name: p.title, x: (e as any).clientX ?? 0, y: (e as any).clientY ?? 0 }
+              detail: { id: p.id, name: p.title, x: e.clientX, y: e.clientY }
             }));
           }}
         />

@@ -25,7 +25,7 @@ export default function ProjectCard({ projects }: { projects: Project[] }) {
     p, n: norm(p.title), k: keyify(p.title), nNoSpace: norm(p.title).replace(/\s+/g, "")
   })), [projects]);
 
-  const resolveProject = (detail: any): Project | null => {
+  const resolveProject = (detail: { id?: string; name?: string }): Project | null => {
     const id = detail?.id ? String(detail.id).toLowerCase() : "";
     if (id && byId.has(id)) return byId.get(id)!;
     const raw = detail?.name ? String(detail.name) : "";
@@ -65,8 +65,8 @@ export default function ProjectCard({ projects }: { projects: Project[] }) {
     if (typeof window === "undefined") return;
     const mm = window.matchMedia("(pointer: coarse), (max-width: 640px)");
     const update = () => setIsMobile(mm.matches);
-    update(); mm.addEventListener?.("change", update); (mm as any).addListener?.(update);
-    return () => { mm.removeEventListener?.("change", update); (mm as any).removeListener?.(update); };
+    update(); mm.addEventListener?.("change", update); mm.addListener?.(update);
+    return () => { mm.removeEventListener?.("change", update); mm.removeListener?.(update); };
   }, []);
 
   useEffect(() => {
@@ -115,11 +115,13 @@ export default function ProjectCard({ projects }: { projects: Project[] }) {
         {/* FOOTER */}
         <div className={styles.projectCardFooter}>
           <ul className={styles.participantsStack}>
-            {p.participants.map((pt, idx) => (
-              <li key={idx} title={pt.name}>
+            {p.participants.map((pt) => (
+              <li key={pt.name} title={pt.name}>
                 <img
                   src={(pt.avatarUrl && pt.avatarUrl !== "") ? pt.avatarUrl : `https://github.com/${pt.name}.png?size=56`}
-                  alt={pt.name}
+                  alt={`${pt.name} avatar`}
+                  width={28}
+                  height={28}
                   className={styles.participantAvatar}
                   loading="lazy"
                 />

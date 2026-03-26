@@ -94,7 +94,6 @@ export const RepoCard: React.FC<RepoCardProps> = ({ repository, onWrapInProject 
             onClick={(e) => {
               e.stopPropagation();
               e.preventDefault();
-              console.log('Button clicked for repo:', repository.name);
               onWrapInProject(repository);
             }}
             className={styles.wrapInProjectButton}

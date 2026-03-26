@@ -195,7 +195,6 @@ export const RepoManager: React.FC = () => {
     try {
       const response = await fetch('/data/project-repo-mapping.json');
       if (!response.ok) {
-        console.log('No existing project-repo mappings found, using default projects');
         return;
       }
       
@@ -205,10 +204,9 @@ export const RepoManager: React.FC = () => {
           ...prev,
           projects: mappingData.projects
         }));
-        console.log('Loaded existing project-repo mappings:', mappingData.projects.length, 'projects');
       }
     } catch (error) {
-      console.log('Failed to load project-repo mappings, using default projects:', error);
+      // Failed to load mappings — use defaults
     }
   };
 
@@ -311,63 +309,32 @@ export const RepoManager: React.FC = () => {
   };
 
   const createProjectFromRepo = (repo: GitHubRepo) => {
-    console.log('=== Starting createProjectFromRepo ===');
-    console.log('Original repo name:', repo.name);
-
-    // Create a human-readable project name from the repo name
     const transformedName = repo.name.replace(/[-_]/g, ' ');
-    console.log('After replacing hyphens/underscores:', transformedName);
-
     const projectName = transformedName.replace(/\b\w/g, l => l.toUpperCase());
-    console.log('After title case transformation:', projectName);
-
     const projectId = projectName;
-    console.log('Project ID:', projectId);
-
-    // List all existing project names for debugging
-    console.log('All existing project names:', appState.projects.map(p => p.name));
 
     const existingProject = appState.projects.find(p => p.name === projectName);
-    console.log('Matching existing project:', existingProject?.name);
 
     if (existingProject) {
-      console.log('✅ Found existing project with exact name match, assigning repo to it');
       setAppState(prev => {
         const updatedProjects = prev.projects.map(p => {
           if (p.name === projectName) {
-            if (p.repositories.includes(repo.name)) {
-              console.log('⚠️ Repo already assigned to this project');
-              return p;
-            }
-            console.log('📦 Assigning repo to existing project');
-            return {
-              ...p,
-              repositories: [...p.repositories, repo.name]
-            };
+            if (p.repositories.includes(repo.name)) return p;
+            return { ...p, repositories: [...p.repositories, repo.name] };
           }
           return p;
         });
-
-        return {
-          ...prev,
-          projects: updatedProjects
-        };
+        return { ...prev, projects: updatedProjects };
       });
     } else {
-      console.log('🆕 Creating new project with human-readable name');
       const newProject: Project = {
         id: projectId,
         name: projectName,
         description: repo.description || `Project for ${repo.name}`,
         repositories: [repo.name]
       };
-
-      setAppState(prev => ({
-        ...prev,
-        projects: [...prev.projects, newProject]
-      }));
+      setAppState(prev => ({ ...prev, projects: [...prev.projects, newProject] }));
     }
-    console.log('=== Finished createProjectFromRepo ===');
   };
 
   const copyProjectRepoMapping = async () => {
