@@ -1,14 +1,18 @@
 'use client';
 
 import { useState } from 'react';
+import { motion } from 'motion/react';
 import Image from 'next/image';
+import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from '@waveso/ui/tooltip';
 import type { ContributorDisplay } from '../types';
+import { ContributorHeader } from './contributor-header';
 
 interface ContributorCardsProps {
   items: ContributorDisplay[];
   isMobile: boolean;
   safeOffsets: Array<{ x: number; y: number }>;
   onAvatarOpen: (contributor: ContributorDisplay) => void;
+  ready: boolean;
 }
 
 const MAX_VISIBLE = 4;
@@ -16,42 +20,29 @@ const MAX_VISIBLE = 4;
 function ContributorCard({
   contributor,
   offset,
+  index,
 }: {
   contributor: ContributorDisplay;
   offset: { x: number; y: number };
+  index: number;
 }) {
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <article
-      className="absolute w-auto max-w-[min(88vw,260px)] p-2.5 bg-white/10 border border-white/20 rounded-[14px] backdrop-blur-[14px] saturate-[1.15] shadow-[0_4px_20px_rgba(0,0,0,0.3)] text-fd-foreground pointer-events-auto z-10 will-change-transform transition-all duration-200 hover:-translate-y-1.5 hover:shadow-[0_22px_52px_rgba(0,0,0,0.28)] hover:border-white/90 max-sm:hidden"
+    <motion.article
+      initial={{ opacity: 0, scale: 0.8 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.4, delay: index * 0.1, ease: 'easeOut' }}
+      className="absolute w-auto max-w-[min(88vw,260px)] p-2.5 bg-white/10 border border-white/20 rounded-[14px] backdrop-blur-[14px] saturate-[1.15] shadow-[0_4px_20px_rgba(0,0,0,0.3)] text-fd-foreground pointer-events-auto z-10 will-change-transform transition-[transform,shadow,border-color] duration-200 hover:-translate-y-1.5 hover:shadow-[0_22px_52px_rgba(0,0,0,0.28)] hover:border-white/90 max-sm:hidden"
       style={{ left: offset.x, top: offset.y }}
       onMouseEnter={() => setExpanded(true)}
       onMouseLeave={() => setExpanded(false)}
       onFocus={() => setExpanded(true)}
       onBlur={() => setExpanded(false)}
     >
-      {/* Always visible: avatar left, name + activity stacked right */}
-      <a
-        href={contributor.profileUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="flex items-center gap-2.5 no-underline text-inherit hover:opacity-85"
-      >
-        <Image
-          src={contributor.avatarUrl}
-          alt={contributor.id}
-          width={36}
-          height={36}
-          className="rounded-full shadow-[0_0_0_1px_rgba(255,255,255,0.12)] flex-shrink-0"
-        />
-        <div className="flex flex-col min-w-0">
-          <h3 className="text-sm m-0 font-semibold truncate">{contributor.id}</h3>
-          <p className="text-xs m-0 opacity-70 truncate">{contributor.summary}</p>
-        </div>
-      </a>
+      <ContributorHeader contributor={contributor} size={36} />
 
-      {/* Expanded: projects + GitHub link */}
+      {/* Expanded: projects */}
       <div
         className="grid transition-[grid-template-rows] duration-200 ease-out"
         style={{ gridTemplateRows: expanded ? '1fr' : '0fr' }}
@@ -63,7 +54,10 @@ function ContributorCard({
               <ul className="list-none m-0 p-0 grid gap-1">
                 {contributor.projects.slice(0, 4).map((p) => (
                   <li key={p.id} className="flex items-center gap-2">
-                    <span className="w-4 h-4 rounded flex-shrink-0 bg-gradient-to-br from-white/60 to-white/5 shadow-[0_2px_6px_rgba(0,0,0,0.35)]" />
+                    <span
+                      className="w-4 h-4 rounded-sm flex-shrink-0 shadow-[0_2px_6px_rgba(0,0,0,0.35)]"
+                      style={{ background: p.color }}
+                    />
                     <a
                       href={p.url}
                       target="_blank"
@@ -84,7 +78,7 @@ function ContributorCard({
           )}
         </div>
       </div>
-    </article>
+    </motion.article>
   );
 }
 
@@ -92,27 +86,45 @@ function MobileAvatarButton({
   contributor,
   offset,
   onOpen,
+  index,
 }: {
   contributor: ContributorDisplay;
   offset: { x: number; y: number };
   onOpen: () => void;
+  index: number;
 }) {
   return (
-    <button
-      type="button"
-      className="absolute w-11 h-11 rounded-full overflow-hidden border border-white/20 bg-white/10 shadow-[0_4px_20px_rgba(0,0,0,0.3)] p-0 pointer-events-auto grid place-items-center z-10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fd-ring"
+    <motion.div
+      initial={{ opacity: 0, scale: 0.8 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.4, delay: index * 0.1, ease: 'easeOut' }}
+      className="absolute w-11 h-11 pointer-events-auto z-10"
       style={{ left: offset.x, top: offset.y }}
-      onClick={onOpen}
-      aria-label={`View ${contributor.id}'s profile`}
     >
-      <Image
-        src={contributor.avatarUrl}
-        alt={contributor.id}
-        width={44}
-        height={44}
-        className="w-full h-full object-cover block"
-      />
-    </button>
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger>
+            <button
+              type="button"
+              className="w-full h-full rounded-full overflow-hidden border border-white/20 bg-white/10 shadow-[0_4px_20px_rgba(0,0,0,0.3)] p-0 grid place-items-center focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fd-ring"
+              onClick={onOpen}
+              aria-label={`View ${contributor.id}'s profile`}
+            >
+              <Image
+                src={contributor.avatarUrl}
+                alt={contributor.id}
+                width={44}
+                height={44}
+                className="w-full h-full object-cover block"
+              />
+            </button>
+          </TooltipTrigger>
+          <TooltipContent side="top" sideOffset={8}>
+            {contributor.id}
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+    </motion.div>
   );
 }
 
@@ -121,7 +133,10 @@ export function ContributorCards({
   isMobile,
   safeOffsets,
   onAvatarOpen,
+  ready,
 }: ContributorCardsProps) {
+  if (!ready) return null;
+
   const visible = items.slice(0, MAX_VISIBLE);
 
   return (
@@ -136,6 +151,7 @@ export function ContributorCards({
               contributor={contributor}
               offset={offset}
               onOpen={() => onAvatarOpen(contributor)}
+              index={i}
             />
           );
         }
@@ -145,6 +161,7 @@ export function ContributorCards({
             key={contributor.id}
             contributor={contributor}
             offset={offset}
+            index={i}
           />
         );
       })}

@@ -3,7 +3,7 @@
 export interface ContributorDisplay {
   id: string;
   summary: string;
-  projects: Array<{ id: string; name: string; url: string }>;
+  projects: Array<{ id: string; name: string; url: string; color: string }>;
   avatarUrl: string;
   profileUrl: string;
 }

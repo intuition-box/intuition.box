@@ -13,6 +13,8 @@ interface OrbitDimensions {
   contribRadius: number;
   /** Clamped contributor orbit positions to keep avatars within bounds */
   safeOffsets: { x: number; y: number }[];
+  /** True after the first layout computation */
+  ready: boolean;
 }
 
 const CONTRIB_ANGLES = [-90, 0, 180, 90]; // diamond layout (degrees)
@@ -34,6 +36,7 @@ export function useOrbitDimensions(
     isMobile: false,
     contribRadius: 200,
     safeOffsets: CONTRIB_ANGLES.map(() => ({ x: 0, y: 0 })),
+    ready: false,
   });
 
   const frameRef = useRef<number | null>(null);
@@ -71,7 +74,7 @@ export function useOrbitDimensions(
       return { x, y };
     });
 
-    setDims({ width: w, height: h, isMobile, contribRadius, safeOffsets });
+    setDims({ width: w, height: h, isMobile, contribRadius, safeOffsets, ready: true });
   }, [containerRef]);
 
   useEffect(() => {

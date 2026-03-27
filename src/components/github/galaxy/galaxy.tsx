@@ -7,7 +7,6 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from '@waveso/ui/drawer';
-import Image from 'next/image';
 import type { ActivityData } from '@/lib/github/types';
 import type { ContributorDisplay, OrbitItem } from '../types';
 import { GITHUB_ORG } from '@/lib/github/constants';
@@ -15,6 +14,7 @@ import { useOrbitDimensions } from './use-orbit-dimensions';
 import { GalaxyBackground } from './galaxy-background';
 import { ContributorCards } from './contributor-cards';
 import { ActivityOrbit } from './activity-orbit';
+import { ContributorHeader } from './contributor-header';
 
 const PROJECT_COLORS = ['#01c3a8', '#ffb741', '#a63d2a', '#1890ff', '#8a55e6', '#f56c6c'];
 const COMMIT_COLOR = '#8391ff';
@@ -26,9 +26,18 @@ interface GalaxyProps {
 
 export function Galaxy({ activity, fetchedAt }: GalaxyProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const { isMobile, safeOffsets } = useOrbitDimensions(containerRef);
+  const { isMobile, safeOffsets, ready } = useOrbitDimensions(containerRef);
 
   const [activeContrib, setActiveContrib] = useState<ContributorDisplay | null>(null);
+
+  // Build a stable name→color map so contributor cards match orbit colors
+  const projectColorMap = useMemo(() => {
+    const map = new Map<string, string>();
+    activity.projects.forEach((p, i) => {
+      map.set(p.name, PROJECT_COLORS[i % PROJECT_COLORS.length]);
+    });
+    return map;
+  }, [activity.projects]);
 
   // Transform data for display components
   const contribItems: ContributorDisplay[] = useMemo(
@@ -36,15 +45,16 @@ export function Galaxy({ activity, fetchedAt }: GalaxyProps) {
       activity.contributors.map((c) => ({
         id: c.login,
         summary: `Last activity: ${c.date.slice(0, 10)}`,
-        projects: (activity.contributorProjects[c.login] ?? []).slice(0, 6).map((name) => ({
+        projects: (activity.contributorProjects[c.login] ?? []).slice(0, 6).map((name, i) => ({
           id: name,
           name,
           url: `https://github.com/${GITHUB_ORG}/${name}`,
+          color: projectColorMap.get(name) ?? PROJECT_COLORS[i % PROJECT_COLORS.length],
         })),
         avatarUrl: c.avatarUrl,
         profileUrl: `https://github.com/${c.login}`,
       })),
-    [activity],
+    [activity, projectColorMap],
   );
 
   // Merge commits + projects into a single timeline, sorted newest → oldest
@@ -88,6 +98,7 @@ export function Galaxy({ activity, fetchedAt }: GalaxyProps) {
         isMobile={isMobile}
         safeOffsets={safeOffsets}
         onAvatarOpen={setActiveContrib}
+        ready={ready}
       />
 
       <ActivityOrbit items={orbitItems} />
@@ -98,21 +109,8 @@ export function Galaxy({ activity, fetchedAt }: GalaxyProps) {
           {activeContrib && (
             <>
               <DrawerHeader>
-                <div className="flex items-center gap-3">
-                  <Image
-                    src={activeContrib.avatarUrl}
-                    alt={activeContrib.id}
-                    width={40}
-                    height={40}
-                    className="rounded-full"
-                  />
-                  <div>
-                    <DrawerTitle>{activeContrib.id}</DrawerTitle>
-                    <p className="text-sm text-fd-muted-foreground mt-0.5">
-                      {activeContrib.summary}
-                    </p>
-                  </div>
-                </div>
+                <DrawerTitle className="sr-only">{activeContrib.id}</DrawerTitle>
+                <ContributorHeader contributor={activeContrib} size={40} />
               </DrawerHeader>
 
               <div className="space-y-4 px-4 pb-6">
@@ -122,7 +120,10 @@ export function Galaxy({ activity, fetchedAt }: GalaxyProps) {
                     <ul className="m-0 p-0 list-none grid gap-2">
                       {activeContrib.projects.slice(0, 8).map((p) => (
                         <li key={p.id} className="flex items-center gap-2">
-                          <span className="w-4 h-4 rounded bg-gradient-to-br from-white/60 to-white/5 shadow-sm flex-shrink-0" />
+                          <span
+                            className="w-4 h-4 rounded-sm shadow-sm flex-shrink-0"
+                            style={{ background: p.color }}
+                          />
                           <a
                             href={p.url}
                             target="_blank"

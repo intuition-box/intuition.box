@@ -39,11 +39,11 @@ export function GalaxyBackground({ fetchedAt }: GalaxyBackgroundProps) {
         {/* Title + date */}
         <div className="relative z-[1] text-center">
           <h2 className="m-0 font-bold tracking-wider text-[#0b2545] max-sm:text-sm">
-            Latest contributions
+            Live Activity
           </h2>
           {fetchedAt && (
             <p className="m-0 mt-1 text-xs text-[#0b2545]/60 max-sm:text-[10px]">
-              as of {formatDate(fetchedAt)}
+              {formatDate(fetchedAt)}
             </p>
           )}
         </div>
