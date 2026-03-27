@@ -22,4 +22,14 @@ export interface CommitDisplay {
   name: string;
   url: string;
   color: string;
+  date: string;
+}
+
+export interface OrbitItem {
+  id: string;
+  type: 'commit' | 'project';
+  label: string;
+  url: string;
+  color: string;
+  date: string;
 }
