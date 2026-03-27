@@ -151,10 +151,9 @@ async function fetchGitHubDataUncached(
     const repoFull = ev.repo?.name;
     if (!login || !when || Number.isNaN(when.getTime())) continue;
 
-    const key = normalizeLogin(login);
-    const prev = contribByLast.get(key);
+    const prev = contribByLast.get(login);
     if (!prev || new Date(prev.date) < when) {
-      contribByLast.set(key, {
+      contribByLast.set(login, {
         login,
         date: when.toISOString(),
         avatarUrl: avatar || `https://github.com/${login}.png?size=80`,
@@ -166,9 +165,9 @@ async function fetchGitHubDataUncached(
       const pv = projectByLast.get(repoFull);
       if (!pv || pv < when) projectByLast.set(repoFull, when);
 
-      const set = contribToProjects.get(key) ?? new Set<string>();
+      const set = contribToProjects.get(login) ?? new Set<string>();
       set.add(repoName);
-      contribToProjects.set(key, set);
+      contribToProjects.set(login, set);
     }
   }
 

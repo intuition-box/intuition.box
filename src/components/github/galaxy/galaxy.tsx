@@ -8,7 +8,6 @@ import {
   DrawerTitle,
 } from '@waveso/ui/drawer';
 import Image from 'next/image';
-import { ExternalLink } from 'lucide-react';
 import type { ActivityData } from '@/lib/github/types';
 import type { ContributorDisplay, ProjectDisplay, CommitDisplay } from '../types';
 import { GITHUB_ORG } from '@/lib/github/constants';
@@ -175,15 +174,6 @@ export function Galaxy({ activity, fetchedAt }: GalaxyProps) {
                   <p className="text-sm text-fd-muted-foreground">No recent projects found</p>
                 )}
 
-                <a
-                  href={activeContrib.profileUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-fd-border text-sm no-underline text-fd-foreground hover:bg-fd-accent"
-                >
-                  <ExternalLink className="w-4 h-4" />
-                  View GitHub
-                </a>
               </div>
             </>
           )}

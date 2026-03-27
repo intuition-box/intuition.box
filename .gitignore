@@ -11,8 +11,12 @@
 /build
 *.tsbuildinfo
 
+# env files (can opt-in for committing if needed)
+.env*
+!.env.example
+
 # misc
-.DS_Store
+**/.DS_Store
 *.pem
 /.pnp
 .pnp.js
