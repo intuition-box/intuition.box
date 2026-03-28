@@ -84,11 +84,11 @@ export function Galaxy({ activity, fetchedAt }: GalaxyProps) {
   return (
     <div
       ref={containerRef}
-      className="relative w-full flex items-center justify-center mb-16 mt-[clamp(40px,6vw,120px)]"
+      className="relative w-full flex items-center justify-center mb-16 mt-[clamp(40px,6vw,120px)] overflow-x-clip overflow-y-visible"
       style={{
         '--orbit-base': 'clamp(260px, 34vmin, 340px)',
-        height: 'clamp(520px, 72svh, 850px)',
-        minHeight: 480,
+        height: 'clamp(620px, 85svh, 1000px)',
+        minHeight: 580,
       } as React.CSSProperties}
     >
       <GalaxyBackground fetchedAt={fetchedAt} />

@@ -1,3 +1,37 @@
 @import 'tailwindcss';
+@import '@waveso/ui/styles.css';
 @import 'fumadocs-ui/css/neutral.css';
 @import 'fumadocs-ui/css/preset.css';
+
+/* Galaxy SVG swap by theme */
+:root {
+  --galaxy-svg: url('/light-galaxy.svg');
+}
+.dark {
+  --galaxy-svg: url('/dark-galaxy.svg');
+}
+
+/* Galaxy orbital animations */
+@keyframes spin-galaxy {
+  from { rotate: 0deg; }
+  to { rotate: 360deg; }
+}
+
+@keyframes orbit-spin {
+  from { transform: rotate(0deg) translateX(var(--orbit-radius)) rotate(0deg); }
+  to { transform: rotate(360deg) translateX(var(--orbit-radius)) rotate(-360deg); }
+}
+
+@keyframes star-pulse {
+  0%, 100% { transform: scale(1); opacity: 0.7; }
+  50% { transform: scale(1.15); opacity: 1; }
+}
+
+/* Reduced motion: disable all Galaxy animations */
+@media (prefers-reduced-motion: reduce) {
+  .motion-safe\:animate-\[spin-galaxy_200s_linear_infinite\],
+  .motion-safe\:animate-\[star-pulse_4s_ease-in-out_infinite\],
+  .motion-safe\:animate-\[orbit-spin_linear_infinite\] {
+    animation: none !important;
+  }
+}

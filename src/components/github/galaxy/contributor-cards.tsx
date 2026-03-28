@@ -33,7 +33,7 @@ function ContributorCard({
       initial={{ opacity: 0, scale: 0.8 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.4, delay: index * 0.1, ease: 'easeOut' }}
-      className="absolute w-auto max-w-[min(88vw,260px)] p-2.5 bg-white/10 border border-white/20 rounded-[14px] backdrop-blur-[14px] saturate-[1.15] shadow-[0_4px_20px_rgba(0,0,0,0.3)] text-fd-foreground pointer-events-auto z-10 will-change-transform transition-[transform,shadow,border-color] duration-200 hover:-translate-y-1.5 hover:shadow-[0_22px_52px_rgba(0,0,0,0.28)] hover:border-white/90 max-sm:hidden"
+      className="absolute w-auto max-w-[min(88vw,260px)] p-2.5 bg-fd-card/80 border border-fd-border rounded-[14px] backdrop-blur-[14px] saturate-[1.15] shadow-lg text-fd-foreground pointer-events-auto z-10 max-sm:hidden"
       style={{ left: offset.x, top: offset.y }}
       onMouseEnter={() => setExpanded(true)}
       onMouseLeave={() => setExpanded(false)}
@@ -44,18 +44,18 @@ function ContributorCard({
 
       {/* Expanded: projects */}
       <div
-        className="grid transition-[grid-template-rows] duration-200 ease-out"
+        className="grid transition-[grid-template-rows] duration-300 ease-in-out"
         style={{ gridTemplateRows: expanded ? '1fr' : '0fr' }}
       >
         <div className="overflow-hidden">
           {contributor.projects.length > 0 ? (
             <>
-              <div className="h-px bg-white/15 my-2" />
+              <div className="h-px bg-fd-border my-2" />
               <ul className="list-none m-0 p-0 grid gap-1">
                 {contributor.projects.slice(0, 4).map((p) => (
                   <li key={p.id} className="flex items-center gap-2">
                     <span
-                      className="w-4 h-4 rounded-sm flex-shrink-0 shadow-[0_2px_6px_rgba(0,0,0,0.35)]"
+                      className="w-4 h-4 rounded-sm flex-shrink-0 shadow-sm"
                       style={{ background: p.color }}
                     />
                     <a
@@ -72,7 +72,7 @@ function ContributorCard({
             </>
           ) : (
             <>
-              <div className="h-px bg-white/15 my-2" />
+              <div className="h-px bg-fd-border my-2" />
               <p className="text-xs opacity-60 m-0">No recent projects found</p>
             </>
           )}
@@ -106,7 +106,7 @@ function MobileAvatarButton({
           <TooltipTrigger>
             <button
               type="button"
-              className="w-full h-full rounded-full overflow-hidden border border-white/20 bg-white/10 shadow-[0_4px_20px_rgba(0,0,0,0.3)] p-0 grid place-items-center focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fd-ring"
+              className="w-full h-full rounded-full overflow-hidden border border-fd-border bg-fd-card/80 shadow-lg p-0 grid place-items-center focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fd-ring"
               onClick={onOpen}
               aria-label={`View ${contributor.id}'s profile`}
             >
