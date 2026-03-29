@@ -1,4 +1,4 @@
-import { FilmGrain } from '@/components/backgrounds/film-grain';
+import { FilmGrain } from '@waveso/ui/film-grain';
 
 function formatDate(iso: string): string {
   try {

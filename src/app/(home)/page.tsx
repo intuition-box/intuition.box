@@ -10,6 +10,7 @@ import { AnimateIn, AnimateOnView } from '@/components/animate';
 import { Footer } from '@/components/footer';
 import { Code, Coins, Network, Wallet, Signal, Award, Rocket, GitBranch } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 const STEPS = [
   'Contributors',
@@ -26,13 +27,30 @@ export default async function HomePage() {
 
   return (
     <>
-      <section className="max-w-5xl mx-auto text-center py-20">
+      {/* Hero glow — outside section so it sits behind everything */}
+      <AnimateIn distance={0} transition={{ duration: 1.2 }}>
+        <div className="absolute inset-x-0 top-0 h-[800px] -z-1 pointer-events-none bg-hero-glow" />
+      </AnimateIn>
+
+      <section className="relative max-w-5xl mx-auto text-center py-20">
+
         <AnimateIn>
-          <h1 className="text-6xl font-bold mb-6 tracking-tight sm:text-5xl">
-            Build on Intuition
+          <Image
+            src="/logomark.svg"
+            alt="Intuition Box"
+            width={80}
+            height={80}
+            className="mx-auto mb-8"
+            priority
+          />
+        </AnimateIn>
+
+        <AnimateIn delay={0.08}>
+          <h1 className="text-6xl leading-none font-bold mb-6 tracking-tight bg-clip-text text-transparent antialiased [box-decoration-break:clone] sm:text-5xl bg-linear-[103deg] from-fd-primary from-15% to-fd-muted-foreground to-85%">
+            Intuition Box
           </h1>
         </AnimateIn>
-        <AnimateIn delay={0.1}>
+        <AnimateIn delay={0.16}>
           <p className="text-lg text-fd-muted-foreground max-w-2xl mx-auto mb-8">
             We fund work, govern decisions, and shape the Intuition ecosystem with a coordination protocol for everyone.
           </p>
@@ -47,7 +65,7 @@ export default async function HomePage() {
         </AnimateOnView>
         <div className="grid md:grid-cols-7 gap-4">
           {STEPS.map((step, i) => (
-            <AnimateOnView key={step} delay={i * 0.08} from="up" distance={30}>
+            <AnimateOnView key={step} delay={i * 0.08} distance={30}>
               <Card className="h-full hover:scale-105 transition-transform">
                 <CardContent className="p-4 text-center">
                   <p className="text-sm text-fd-muted-foreground">Step {i + 1}</p>
@@ -169,7 +187,7 @@ export default async function HomePage() {
       </section>
 
       <AnimateOnView>
-        <section className="bg-gradient-to-br from-fd-primary/5 to-transparent overflow-hidden rounded-3xl max-w-6xl mx-auto p-8 text-center space-y-6 sm:px-16 sm:py-20">
+        <section className="max-w-5xl mx-auto w-full bg-gradient-to-br from-fd-primary/5 to-transparent overflow-hidden rounded-3xl p-8 text-center space-y-6 sm:px-16 sm:py-20">
           <h2 className="text-3xl font-semibold mb-4">
             Start Building
           </h2>
@@ -179,7 +197,8 @@ export default async function HomePage() {
           <div className="flex flex-wrap justify-center gap-3 pt-2">
             <Button
               variant="outline"
-              render={<Link href={GRANTS_URL} />}
+              size="lg"
+              render={<Link href="/docs" />}
             >
               Find more
             </Button>

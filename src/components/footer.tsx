@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { GradientRevealText } from './gradient-reveal-text';
+import { GradientRevealText } from '@/components/gradient-reveal-text';
+import { AnimateOnView } from '@/components/animate';
 
 const COLUMNS = [
   {
@@ -31,10 +32,10 @@ const COLUMNS = [
 
 export function Footer() {
   return (
-    <footer className="max-w-6xl mx-auto relative px-8 py-20">
-      <div className="mx-auto flex max-w-7xl flex-col items-start justify-between text-sm text-fd-muted-foreground sm:flex-row md:px-8">
+    <footer className="max-w-5xl mx-auto w-full relative py-40 sm:py-40">
+      <div className="flex flex-col space-between items-start justify-between text-sm text-fd-muted-foreground sm:flex-row md:px-8">
         <div>
-          <div className="mb-4 flex items-center space-x-2 px-2 py-1">
+          <div className="mb-4 flex flex-col space-x-2 px-2 py-1">
             <Image
               src="/logomark.svg"
               alt="Intuition Box"
@@ -45,10 +46,10 @@ export function Footer() {
             <p className="font-medium text-fd-foreground">
               Intuition Box
             </p>
+            <p className="text-sm">
+              © {new Date().getFullYear()} Intuition Box, LLC
+            </p>
           </div>
-          <p className="ml-2 text-sm">
-            © {new Date().getFullYear()} Intuition Box, LLC. All rights reserved.
-          </p>
         </div>
 
         <div className="mt-10 grid grid-cols-2 items-start gap-10 sm:mt-0 lg:grid-cols-3">
@@ -85,10 +86,9 @@ export function Footer() {
         </div>
       </div>
 
-
-      <div className="mt-20">
-        <GradientRevealText text="INTUITION" />
-      </div>
+      <AnimateOnView distance={0}>
+        <GradientRevealText className="mt-20" text="INTUITION" colors={['#8df1c9', '#8df1c9']} hoverOpacity={0.3} strokeWidth={0.1} />
+      </AnimateOnView>
     </footer>
   );
 }

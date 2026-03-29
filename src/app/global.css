@@ -35,3 +35,41 @@
     animation: none !important;
   }
 }
+
+/* Hero glow — warm orange + cool blue radial gradients */
+@layer components {
+  .bg-hero-glow {
+    background-repeat: no-repeat;
+    background-image:
+      radial-gradient(rgb(141 241 201 / .1), rgb(141 241 201 / .02) 30%, transparent 50%),
+      radial-gradient(rgb(250 52 115 / .1), rgb(250 52 115 / .02) 30%, transparent 50%);
+    background-size: 1400px 1400px, 980px 720px;
+    background-position: 50% -594px, 50% -254px;
+  }
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  position: relative;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizelegibility;
+  text-wrap-mode: wrap;
+  text-wrap-style: balance;
+  background-color: oklch(0.141 0.005 285.823);
+}
+
+body:before {
+  z-index: -1;
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: 128px;
+  background-repeat: repeat;
+  background-image: url('/noise.png');
+  opacity: 0.03;
+}
