@@ -1,0 +1,211 @@
+@import 'tailwindcss';
+@import '@waveso/ui/styles.css';
+@import 'fumadocs-ui/css/neutral.css';
+@import 'fumadocs-ui/css/preset.css';
+
+/*
+ * Bridge wave-ui vars → fumadocs vars.
+ * Wave-ui components read from --foreground, --border, etc.
+ * Fumadocs defines --color-fd-foreground, --color-fd-border, etc.
+ * This makes them point to the same values so you only configure
+ * the --color-fd-* tokens above and wave-ui follows.
+ */
+:root {
+  --galaxy-svg: url('/light-galaxy.svg');
+  --foreground: var(--color-fd-foreground);
+  --background: var(--color-fd-background);
+  --card: var(--color-fd-card);
+  --card-foreground: var(--color-fd-card-foreground);
+  --popover: var(--color-fd-popover);
+  --popover-foreground: var(--color-fd-popover-foreground);
+  --primary: var(--color-fd-primary);
+  --primary-foreground: var(--color-fd-primary-foreground);
+  --secondary: var(--color-fd-secondary);
+  --secondary-foreground: var(--color-fd-secondary-foreground);
+  --accent: var(--color-fd-accent);
+  --accent-foreground: var(--color-fd-accent-foreground);
+  --muted: var(--color-fd-muted);
+  --muted-foreground: var(--color-fd-muted-foreground);
+  --border: var(--color-fd-border);
+  --ring: var(--color-fd-ring);
+}
+
+.dark {
+  --galaxy-svg: url('/dark-galaxy.svg');
+}
+
+/*
+ * Light mode
+ */
+@theme {
+  --color-fd-background: hsl(0, 0%, 96%);
+  --color-fd-foreground: hsl(0, 0%, 3.9%);
+  --color-fd-muted: hsl(0, 0%, 96.1%);
+  --color-fd-muted-foreground: hsl(0, 0%, 45.1%);
+  --color-fd-popover: hsl(0, 0%, 98%);
+  --color-fd-popover-foreground: hsl(0, 0%, 15.1%);
+  --color-fd-card: hsl(0, 0%, 94.7%);
+  --color-fd-card-foreground: hsl(0, 0%, 3.9%);
+  --color-fd-border: hsla(0, 0%, 80%, 50%);
+  --color-fd-primary: hsl(0, 0%, 9%);
+  --color-fd-primary-foreground: hsl(0, 0%, 98%);
+  --color-fd-secondary: hsl(0, 0%, 93.1%);
+  --color-fd-secondary-foreground: hsl(0, 0%, 9%);
+  --color-fd-accent: hsla(0, 0%, 82%, 50%);
+  --color-fd-accent-foreground: hsl(0, 0%, 9%);
+  --color-fd-ring: hsl(0, 0%, 63.9%);
+  --color-fd-overlay: hsla(0, 0%, 0%, 0.2);
+
+  /* Brand colors */
+  --color-ib-brand: rgb(141, 241, 201);
+  --color-ib-brand-alpha: rgba(141, 241, 201, 0.1);
+  --color-ib-brand-dark: rgb(16, 29, 24);
+
+  --color-ib-red: rgb(251, 51, 114);
+  --color-ib-red-alpha: rgba(251, 51, 114, 0.1);
+
+  --color-ib-yellow: rgb(254, 244, 44);
+  --color-ib-yellow-alpha: rgba(254, 244, 44, 0.1);
+
+  --color-ib-teal: rgb(104, 219, 241);
+  --color-ib-teal-alpha: rgba(104, 219, 241, 0.1);
+
+  --color-ib-purple: rgb(159, 159, 254);
+  --color-ib-purple-alpha: rgba(159, 159, 254, 0.1);
+
+  --color-ib-lilac: rgb(209, 174, 241);
+  --color-ib-lilac-alpha: rgba(209, 174, 241, 0.1);
+}
+
+/*
+ * Dark mode
+ */
+.dark {
+  --color-fd-background: rgb(18, 18, 18);
+  --color-fd-foreground: rgb(235, 235, 235);
+  --color-fd-muted: rgb(33, 33, 33);
+  --color-fd-muted-foreground: rgba(179, 179, 179, 0.8);
+  --color-fd-popover: rgb(30, 30, 30);
+  --color-fd-popover-foreground: rgb(222, 222, 222);
+  --color-fd-card: rgb(18, 18, 18);
+  --color-fd-card-foreground: rgb(250, 250, 250);
+  --color-fd-border: rgba(102, 102, 102, 0.2);
+  --color-fd-primary: rgb(250, 250, 250);
+  --color-fd-primary-foreground: rgb(23, 23, 23);
+  --color-fd-secondary: rgb(33, 33, 33);
+  --color-fd-secondary-foreground: rgb(235, 235, 235);
+  --color-fd-accent: rgba(104, 104, 104, 0.3);
+  --color-fd-accent-foreground: rgb(230, 230, 230);
+  --color-fd-ring: red;
+  --color-fd-overlay: rgba(0, 0, 0, 0.2);
+
+  /* Brand colors */
+  --color-ib-brand: rgb(141, 241, 201);
+  --color-ib-brand-alpha: rgba(141, 241, 201, 0.1);
+  --color-ib-brand-dark: rgb(16, 29, 24);
+
+  /* UI colors */
+  --color-ib-text: rgba(255, 255, 255, 0.6);
+  --color-ib-white: rgb(246, 246, 246);
+  --color-ib-white-alpha: rgba(246, 246, 246, 0.1);
+  --color-ib-black: rgb(11, 16, 19);
+  --color-ib-black-alpha: rgba(11, 16, 19, 0.1);
+  --color-ib-gray: rgb(69, 69, 69);
+  --color-ib-gray-alpha: rgba(69, 69, 69, 0.1);
+  --color-ib-red: rgb(251, 51, 114);
+  --color-ib-red-alpha: rgba(251, 51, 114, 0.1);
+  --color-ib-yellow: rgb(254, 244, 44);
+  --color-ib-yellow-alpha: rgba(254, 244, 44, 0.1);
+  --color-ib-teal: rgb(104, 219, 241);
+  --color-ib-teal-alpha: rgba(104, 219, 241, 0.1);
+  --color-ib-purple: rgb(159, 159, 254);
+  --color-ib-purple-alpha: rgba(159, 159, 254, 0.1);
+  --color-ib-lilac: rgb(209, 174, 241);
+  --color-ib-lilac-alpha: rgba(209, 174, 241, 0.1);
+}
+
+@layer components {
+  .bg-hero-glow {
+    background-repeat: no-repeat;
+    background-image:
+      radial-gradient(rgb(252 120 64 / .1), rgb(252 120 64 / .02) 30%, transparent 50%),
+      radial-gradient(rgb(94 106 210 / .1), rgb(5 106 210 / .02) 30%, transparent 50%);
+    background-size: 1400px 1400px, 980px 720px;
+    background-position: 50% -594px, 50% -254px;
+  }
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  position: relative;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizelegibility;
+  text-wrap-mode: wrap;
+  text-wrap-style: balance;
+  background-color: rgb(9, 9, 11);
+}
+
+body:before {
+  z-index: -1;
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: 128px;
+  background-repeat: repeat;
+  background-image: url('/noise.png');
+  opacity: 0.03;
+}
+
+/*
+ * Galaxy orbital animations
+ */
+@keyframes spin-galaxy {
+  from {
+    rotate: 0deg;
+  }
+
+  to {
+    rotate: 360deg;
+  }
+}
+
+@keyframes orbit-spin {
+  from {
+    transform: rotate(0deg) translateX(var(--orbit-radius)) rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg) translateX(var(--orbit-radius)) rotate(-360deg);
+  }
+}
+
+@keyframes star-pulse {
+
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+
+  50% {
+    transform: scale(1.15);
+    opacity: 1;
+  }
+}
+
+/*
+ * Reduced motion: disable all Galaxy animations
+ */
+@media (prefers-reduced-motion: reduce) {
+
+  .motion-safe\:animate-\[spin-galaxy_200s_linear_infinite\],
+  .motion-safe\:animate-\[star-pulse_4s_ease-in-out_infinite\],
+  .motion-safe\:animate-\[orbit-spin_linear_infinite\] {
+    animation: none !important;
+  }
+}

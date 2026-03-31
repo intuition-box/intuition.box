@@ -1,1 +1,0 @@
-export { ContributorsActivity } from './ContributorsActivity';
