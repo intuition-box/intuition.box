@@ -1,7 +1,7 @@
 import Link from 'next/link';
-import Image from 'next/image';
 import { GradientRevealText } from '@/components/gradient-reveal-text';
 import { AnimateOnView } from '@/components/animate';
+import { Logomark } from '@/components/logomark';
 
 const COLUMNS = [
   {
@@ -32,25 +32,14 @@ const COLUMNS = [
 
 export function Footer() {
   return (
-    <footer className="max-w-5xl mx-auto w-full relative py-40 sm:py-40">
+    <footer className="max-w-5xl mx-auto w-full relative pt-40">
       <div className="flex flex-col space-between items-start justify-between text-sm text-fd-muted-foreground sm:flex-row md:px-8">
-        <div>
-          <div className="mb-4 flex flex-col space-x-2 px-2 py-1">
-            <Image
-              src="/logomark.svg"
-              alt="Intuition Box"
-              width={30}
-              height={30}
-              className="dark:invert"
-            />
-            <p className="font-medium text-fd-foreground">
-              Intuition Box
-            </p>
-            <p className="text-sm">
-              © {new Date().getFullYear()} Intuition Box, LLC
-            </p>
-          </div>
-        </div>
+        <p className="mb-4 flex flex-col gap-2 align-center font-medium text-fd-foreground space-x-2 px-2 py-1">
+          <Logomark size={60} />
+          <span className="text-sm">
+            © {new Date().getFullYear()} Intuition Box, LLC
+          </span>
+        </p>
 
         <div className="mt-10 grid grid-cols-2 items-start gap-10 sm:mt-0 lg:grid-cols-3">
           {COLUMNS.map((col) => (

@@ -8,9 +8,9 @@ import { Galaxy } from '@/components/github/galaxy/galaxy';
 import { DarkVeil } from '@/components/backgrounds/dark-veil';
 import { AnimateIn, AnimateOnView } from '@/components/animate';
 import { Footer } from '@/components/footer';
+import { Logomark } from '@/components/logomark';
 import { Code, Coins, Network, Wallet, Signal, Award, Rocket, GitBranch } from 'lucide-react';
 import Link from 'next/link';
-import Image from 'next/image';
 
 const STEPS = [
   'Contributors',
@@ -27,7 +27,6 @@ export default async function HomePage() {
 
   return (
     <>
-      {/* Hero glow — outside section so it sits behind everything */}
       <AnimateIn distance={0} transition={{ duration: 1.2 }}>
         <div className="absolute inset-x-0 top-0 h-[800px] -z-1 pointer-events-none bg-hero-glow" />
       </AnimateIn>
@@ -35,14 +34,7 @@ export default async function HomePage() {
       <section className="relative max-w-5xl mx-auto text-center py-20">
 
         <AnimateIn>
-          <Image
-            src="/logomark.svg"
-            alt="Intuition Box"
-            width={80}
-            height={80}
-            className="mx-auto mb-8"
-            priority
-          />
+          <Logomark size={80} className="mx-auto mb-8" />
         </AnimateIn>
 
         <AnimateIn delay={0.08}>
@@ -77,7 +69,6 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Principles */}
       <section className="max-w-5xl mx-auto py-16">
         <AnimateOnView>
           <h2 className="text-3xl font-semibold text-center mb-12">
@@ -122,8 +113,9 @@ export default async function HomePage() {
               </CardContent>
             </Card>
           </AnimateOnView>
+
           <AnimateOnView delay={0.15}>
-            <Card className="h-full">
+            <Card className="h-full bg-fd-card">
               <CardContent className="p-8 space-y-8">
                 <h3 className="text-xl font-bold">For the Ecosystem</h3>
                 <ul className="space-y-6">
@@ -187,7 +179,7 @@ export default async function HomePage() {
       </section>
 
       <AnimateOnView>
-        <section className="max-w-5xl mx-auto w-full bg-gradient-to-br from-fd-primary/5 to-transparent overflow-hidden rounded-3xl p-8 text-center space-y-6 sm:px-16 sm:py-20">
+        <section className="bg-linear-to-b from-fd-card from-50% to-ib-brand-dark ring-ib-brand-dark max-w-5xl mx-auto w-full bg-gradient-to-b from-fd-primary/5 to-transparent overflow-hidden rounded-3xl p-8 text-center space-y-6 sm:px-16 sm:py-20">
           <h2 className="text-3xl font-semibold mb-4">
             Start Building
           </h2>

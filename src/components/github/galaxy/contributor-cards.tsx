@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
+import { Card, CardContent } from '@waveso/ui/card';
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from '@waveso/ui/tooltip';
 import { AnimateIn } from '@/components/animate';
 import type { ContributorDisplay } from '../types';
@@ -30,53 +31,54 @@ function ContributorCard({
 
   return (
     <AnimateIn scale delay={index * 0.1} transition={{ duration: 0.4 }}>
-      <article
-        className="absolute w-auto max-w-[min(88vw,260px)] p-2.5 bg-fd-card/80 border border-fd-border rounded-[14px] backdrop-blur-[14px] saturate-[1.15] shadow-lg text-fd-foreground pointer-events-auto z-10 max-sm:hidden"
+      <Card
+        className="absolute w-auto max-w-[min(88vw,260px)] py-0 overflow-visible bg-fd-card/80 backdrop-blur-[14px] saturate-[1.15] shadow-lg pointer-events-auto z-10 max-sm:hidden"
         style={{ left: offset.x, top: offset.y }}
         onMouseEnter={() => setExpanded(true)}
         onMouseLeave={() => setExpanded(false)}
         onFocus={() => setExpanded(true)}
         onBlur={() => setExpanded(false)}
       >
-        <ContributorHeader contributor={contributor} size={36} />
+        <CardContent className="p-2.5">
+          <ContributorHeader contributor={contributor} size={36} />
 
-        {/* Expanded: projects */}
-        <div
-          className="grid transition-[grid-template-rows] duration-300 ease-in-out"
-          style={{ gridTemplateRows: expanded ? '1fr' : '0fr' }}
-        >
-          <div className="overflow-hidden">
-            {contributor.projects.length > 0 ? (
-              <>
-                <div className="h-px bg-fd-border my-2" />
-                <ul className="list-none m-0 p-0 grid gap-1">
-                  {contributor.projects.slice(0, 4).map((p) => (
-                    <li key={p.id} className="flex items-center gap-2">
-                      <span
-                        className="w-4 h-4 rounded-sm flex-shrink-0 shadow-sm"
-                        style={{ background: p.color }}
-                      />
-                      <a
-                        href={p.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-sm truncate no-underline text-inherit opacity-90 hover:opacity-100"
-                      >
-                        {p.name}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </>
-            ) : (
-              <>
-                <div className="h-px bg-fd-border my-2" />
-                <p className="text-xs opacity-60 m-0">No recent projects found</p>
-              </>
-            )}
+          <div
+            className="grid transition-[grid-template-rows] duration-300 ease-in-out"
+            style={{ gridTemplateRows: expanded ? '1fr' : '0fr' }}
+          >
+            <div className="overflow-hidden">
+              {contributor.projects.length > 0 ? (
+                <>
+                  <div className="h-px bg-fd-border my-2" />
+                  <ul className="list-none m-0 p-0 grid gap-1">
+                    {contributor.projects.slice(0, 4).map((p) => (
+                      <li key={p.id} className="flex items-center gap-2">
+                        <span
+                          className="w-4 h-4 rounded-sm flex-shrink-0 shadow-sm"
+                          style={{ background: p.color }}
+                        />
+                        <a
+                          href={p.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-sm truncate no-underline text-inherit opacity-90 hover:opacity-100"
+                        >
+                          {p.name}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              ) : (
+                <>
+                  <div className="h-px bg-fd-border my-2" />
+                  <p className="text-xs opacity-60 m-0">No recent projects found</p>
+                </>
+              )}
+            </div>
           </div>
-        </div>
-      </article>
+        </CardContent>
+      </Card>
     </AnimateIn>
   );
 }
