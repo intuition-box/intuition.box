@@ -7,11 +7,10 @@ export function baseOptions(): BaseLayoutProps {
     nav: {
       title: (
         <>
-          <Logomark size={20} />
+          <Logomark size={24} />
           <span>{appName}</span>
         </>
       ),
     },
-    githubUrl: `https://github.com/${gitConfig.user}/${gitConfig.repo}`,
   };
 }
