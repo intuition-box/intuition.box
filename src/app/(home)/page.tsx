@@ -31,8 +31,7 @@ export default async function HomePage() {
         <div className="absolute inset-x-0 top-0 h-[800px] -z-1 pointer-events-none bg-hero-glow" />
       </AnimateIn>
 
-      <section className="relative max-w-5xl mx-auto text-center py-20">
-
+      <section className="relative max-w-5xl mx-auto py-16 px-8 text-center">
         <AnimateIn>
           <Logomark size={80} className="mx-auto mb-8" />
         </AnimateIn>
@@ -49,7 +48,7 @@ export default async function HomePage() {
         </AnimateIn>
       </section>
 
-      <section className="max-w-5xl mx-auto py-16">
+      <section className="max-w-5xl mx-auto py-16 px-8">
         <AnimateOnView>
           <h2 className="text-3xl font-semibold text-center mb-12">
             How it works
@@ -69,7 +68,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="max-w-5xl mx-auto py-16">
+      <section className="max-w-5xl mx-auto py-16 px-8">
         <AnimateOnView>
           <h2 className="text-3xl font-semibold text-center mb-12">
             Our Principles
@@ -154,7 +153,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="max-w-5xl mx-auto px-4 py-16">
+      <section className="max-w-5xl mx-auto py-16 px-8">
         <AnimateOnView>
           <h2 className="text-2xl font-bold text-center mb-10 sm:text-3xl">
             Our Network
@@ -179,29 +178,33 @@ export default async function HomePage() {
       </section>
 
       <AnimateOnView>
-        <section className="bg-linear-to-b from-fd-card from-50% to-ib-brand-dark ring-ib-brand-dark max-w-5xl mx-auto w-full bg-gradient-to-b from-fd-primary/5 to-transparent overflow-hidden rounded-3xl p-8 text-center space-y-6 sm:px-16 sm:py-20">
-          <h2 className="text-3xl font-semibold mb-4">
-            Start Building
-          </h2>
-          <p className="text-fd-muted-foreground mb-6">
-            Join the developer community and use Intuition to transform your ideas into products.
-          </p>
-          <div className="flex flex-wrap justify-center gap-3 pt-2">
-            <Button
-              variant="outline"
-              size="lg"
-              render={<Link href="/docs" />}
-            >
-              Find more
-            </Button>
-            <Button
-              variant="outline"
-              size="lg"
-              render={<a href={GRANTS_URL} target="_blank" rel="noopener noreferrer" />}
-            >
-              Submit a Proposal
-            </Button>
-          </div>
+        <section className="max-w-5xl mx-auto w-full py-16 px-8">
+          <Card className="w-full py-12 px-16 bg-linear-to-b from-fd-card from-50% to-ib-brand-dark ring-ib-brand-dark rounded-3xl text-center">
+            <h2 className="text-3xl font-semibold">
+              Start Building
+            </h2>
+            <p className="text-fd-muted-foreground">
+              Join the developer community and use Intuition to transform your ideas into products.
+            </p>
+            <div className="flex justify-center gap-6 pt-4 max-sm:flex-col max-sm:gap-3">
+              <Button
+                className="bg-ib-white text-ib-brand-dark hover:opacity-60 hover:bg-ib-white"
+                variant="default"
+                size="lg"
+                render={<Link href="/docs" />}
+              >
+                Find more
+              </Button>
+              <Button
+                className="bg-ib-brand text-ib-brand-dark hover:opacity-60 hover:bg-ib-brand"
+                variant="default"
+                size="lg"
+                render={<a href={GRANTS_URL} target="_blank" rel="noopener noreferrer" />}
+              >
+                Submit a Proposal
+              </Button>
+            </div>
+          </Card>
         </section>
       </AnimateOnView>
 
