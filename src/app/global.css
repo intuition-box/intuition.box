@@ -90,20 +90,41 @@
   --color-ib-brand-alpha: rgba(141, 241, 201, 0.1);
   --color-ib-brand-dark: rgb(16, 29, 24);
 
+  /* UI colors */
+  --color-ib-text: rgba(255, 255, 255, 0.6);
+  --color-ib-white: rgb(246, 246, 246);
+  --color-ib-white-alpha: rgba(246, 246, 246, 0.1);
+  --color-ib-black: rgb(11, 16, 19);
+  --color-ib-black-alpha: rgba(11, 16, 19, 0.1);
+  --color-ib-gray: rgb(69, 69, 69);
+  --color-ib-gray-alpha: rgba(69, 69, 69, 0.1);
   --color-ib-red: rgb(251, 51, 114);
   --color-ib-red-alpha: rgba(251, 51, 114, 0.1);
-
   --color-ib-yellow: rgb(254, 244, 44);
   --color-ib-yellow-alpha: rgba(254, 244, 44, 0.1);
-
   --color-ib-teal: rgb(104, 219, 241);
   --color-ib-teal-alpha: rgba(104, 219, 241, 0.1);
-
   --color-ib-purple: rgb(159, 159, 254);
   --color-ib-purple-alpha: rgba(159, 159, 254, 0.1);
-
   --color-ib-lilac: rgb(209, 174, 241);
   --color-ib-lilac-alpha: rgba(209, 174, 241, 0.1);
+
+  --foreground: var(--color-fd-foreground);
+  --background: var(--color-fd-background);
+  --card: var(--color-fd-card);
+  --card-foreground: var(--color-fd-card-foreground);
+  --popover: var(--color-fd-popover);
+  --popover-foreground: var(--color-fd-popover-foreground);
+  --primary: var(--color-fd-primary);
+  --primary-foreground: var(--color-fd-primary-foreground);
+  --secondary: var(--color-fd-secondary);
+  --secondary-foreground: var(--color-fd-secondary-foreground);
+  --accent: var(--color-fd-accent);
+  --accent-foreground: var(--color-fd-accent-foreground);
+  --muted: var(--color-fd-muted);
+  --muted-foreground: var(--color-fd-muted-foreground);
+  --border: var(--color-fd-border);
+  --ring: var(--color-fd-ring);
 }
 
 @layer components {

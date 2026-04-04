@@ -20,7 +20,7 @@ export function GalaxyBackground({ fetchedAt }: GalaxyBackgroundProps) {
   return (
     <>
       <div
-        className="absolute inset-0 z-0 pointer-events-none motion-safe:animate-[spin-galaxy_200s_linear_infinite]"
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 inset-0 z-0 pointer-events-none motion-safe:animate-[spin-galaxy_200s_linear_infinite] w-[1600px] h-[1600px] max-sm:w-[1000px] max-sm:h-[1000px]"
         style={{
           mask: 'var(--galaxy-svg) center / 62% no-repeat',
           WebkitMask: 'var(--galaxy-svg) center / 62% no-repeat',
@@ -43,10 +43,7 @@ export function GalaxyBackground({ fetchedAt }: GalaxyBackgroundProps) {
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[15] pointer-events-none grid place-items-center w-[320px] h-[320px] rounded-full max-sm:w-[148px] max-sm:h-[148px]"
         aria-hidden
       >
-
-        {/* Glow */}
-        <div className="absolute inset-0 rounded-full blur-[12px] opacity-1 bg-[radial-gradient(circle,rgba(200,235,255,0.6)_0%,rgba(94,194,231,0.6)_35%,transparent_70%)]" />
-        <div className="absolute inset-0 rounded-full blur-[25px] opacity-1 motion-safe:animate-[star-pulse_4s_ease-in-out_infinite] bg-[radial-gradient(circle,rgba(200,235,255,0.6)_0%,transparent_70%)]" />
+        <div className="absolute inset-0 rounded-full blur-[25px] opacity-1 motion-safe:animate-[star-pulse_4s_ease-in-out_infinite] bg-radial from-ib-brand/20 from-50% to-ib-brand-dark" />
 
         <div className="relative z-[1] text-center">
           <h2 className="m-0 font-bold tracking-wider max-sm:text-sm">

@@ -2,11 +2,11 @@
 
 import { useMemo, useRef, useState } from 'react';
 import {
-  Drawer,
-  DrawerContent,
-  DrawerHeader,
-  DrawerTitle,
-} from '@waveso/ui/drawer';
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@waveso/ui/dialog';
 import type { ActivityData } from '@/lib/github/types';
 import type { ContributorDisplay, OrbitItem } from '../types';
 import { GITHUB_ORG } from '@/lib/github/constants';
@@ -103,15 +103,15 @@ export function Galaxy({ activity, fetchedAt }: GalaxyProps) {
 
       <ActivityOrbit items={orbitItems} />
 
-      {/* Contributor detail drawer (mobile) */}
-      <Drawer open={!!activeContrib} onOpenChange={(open) => !open && setActiveContrib(null)}>
-        <DrawerContent showCloseButton>
+      {/* Contributor detail dialog */}
+      <Dialog open={!!activeContrib} onOpenChange={(open) => !open && setActiveContrib(null)}>
+        <DialogContent showCloseButton>
           {activeContrib && (
             <>
-              <DrawerHeader>
-                <DrawerTitle className="sr-only">{activeContrib.id}</DrawerTitle>
+              <DialogHeader>
+                <DialogTitle className="sr-only">{activeContrib.id}</DialogTitle>
                 <ContributorHeader contributor={activeContrib} size={40} />
-              </DrawerHeader>
+              </DialogHeader>
 
               <div className="space-y-4 px-4 pb-6">
                 {activeContrib.projects.length > 0 ? (
@@ -142,8 +142,8 @@ export function Galaxy({ activity, fetchedAt }: GalaxyProps) {
               </div>
             </>
           )}
-        </DrawerContent>
-      </Drawer>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
