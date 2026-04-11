@@ -4,7 +4,8 @@
 @import 'fumadocs-ui/css/preset.css';
 
 :root {
-  --galaxy-svg: url('/light-galaxy.svg');
+  --galaxy-light-svg: url('/galaxy-light.svg');
+  --galaxy-dark-svg: url('/galaxy-dark.svg');
 
   --color-fd-background: rgb(18, 18, 18);
   --color-fd-foreground: rgb(235, 235, 235);
