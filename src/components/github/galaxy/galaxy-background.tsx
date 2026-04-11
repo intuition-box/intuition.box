@@ -18,26 +18,17 @@ interface GalaxyBackgroundProps {
 
 export function GalaxyBackground({ fetchedAt }: GalaxyBackgroundProps) {
   return (
-    <>
+    <> 
       <div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 inset-0 z-0 pointer-events-none motion-safe:animate-[spin-galaxy_200s_linear_infinite] w-[1600px] h-[1600px] max-sm:w-[1000px] max-sm:h-[1000px]"
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 inset-0 z-0 pointer-events-none motion-safe:animate-[spin-galaxy_200s_linear_infinite] w-[1600px] h-[1600px] max-sm:w-[1000px] max-sm:h-[1000px] pointer-events-none bg-no-repeat bg-center"
         style={{
-          mask: 'var(--galaxy-svg) center / 62% no-repeat',
-          WebkitMask: 'var(--galaxy-svg) center / 62% no-repeat',
+          backgroundImage: 'var(--galaxy-dark-svg)',
+          backgroundSize: '60%',
+          mask: 'radial-gradient(circle, transparent 0%, transparent 15%, white 60%)',
+          WebkitMask: 'radial-gradient(circle, transparent 0%, transparent 15%, white 60%)',
         }}
         aria-hidden
-      >
-        <FilmGrain
-          density={1}
-          opacity={0.5}
-          fps={24}
-          color="#ffffff"
-          style={{
-            mask: 'radial-gradient(circle, transparent 0%, transparent 15%, white 20%)',
-            WebkitMask: 'radial-gradient(circle, transparent 0%, transparent 15%, white 20%)',
-          }}
-        />
-      </div>
+      />
 
       <div
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[15] pointer-events-none grid place-items-center w-[320px] h-[320px] rounded-full max-sm:w-[148px] max-sm:h-[148px]"
