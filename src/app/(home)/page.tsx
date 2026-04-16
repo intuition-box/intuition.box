@@ -2,11 +2,13 @@ import { Button } from '@waveso/ui/button';
 import { Card, CardContent } from '@waveso/ui/card';
 import { fetchGitHubData } from '@/lib/github/fetch-github-data';
 import { GITHUB_ORG, GOVERNANCE_URL, GRANTS_URL } from '@/lib/github/constants';
+import { fetchCurrentWeek } from '@/lib/calendar/fetch-calendar';
 import { NetworkStats } from '@/components/github/network-stats';
 import { ErrorBoundary } from '@/components/error-boundary';
 import { Galaxy } from '@/components/github/galaxy/galaxy';
 import { DarkVeil } from '@/components/backgrounds/dark-veil';
 import { AnimateIn, AnimateOnView } from '@/components/animate';
+import { WeekGrid } from '@/components/events/week-grid';
 import { Footer } from '@/components/footer';
 import { Logomark } from '@/components/logomark';
 import { Code, Coins, Network, Wallet, Signal, Award, Rocket, GitBranch } from 'lucide-react';
@@ -23,7 +25,10 @@ const STEPS = [
 ] as const;
 
 export default async function HomePage() {
-  const data = await fetchGitHubData(GITHUB_ORG);
+  const [data, week] = await Promise.all([
+    fetchGitHubData(GITHUB_ORG),
+    fetchCurrentWeek().catch(() => null),
+  ]);
 
   return (
     <>
@@ -176,6 +181,14 @@ export default async function HomePage() {
           </ErrorBoundary>
         </div>
       </section>
+
+      {week && (
+        <AnimateOnView>
+          <section className="max-w-5xl mx-auto w-full py-16 px-8">
+            <WeekGrid week={week} />
+          </section>
+        </AnimateOnView>
+      )}
 
       <AnimateOnView>
         <section className="max-w-5xl mx-auto w-full py-16 px-8">
