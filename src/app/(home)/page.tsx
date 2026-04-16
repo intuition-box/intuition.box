@@ -31,7 +31,7 @@ export default async function HomePage() {
         <div className="absolute inset-x-0 top-0 h-[800px] -z-1 pointer-events-none bg-hero-glow" />
       </AnimateIn>
 
-      <section className="relative max-w-5xl mx-auto py-16 px-8 text-center">
+      <section className="relative max-w-5xl mx-auto pt-32 pb-16 px-8 text-center">
         <AnimateIn>
           <Logomark size={80} className="mx-auto mb-8" />
         </AnimateIn>
