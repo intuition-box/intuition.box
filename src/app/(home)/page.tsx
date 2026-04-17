@@ -168,13 +168,6 @@ export default async function HomePage() {
       </section>
 
       <section className="relative">
-        <DarkVeil
-          className="absolute inset-0 z-[5] mix-blend-screen opacity-20 pointer-events-none"
-          style={{ mask: 'radial-gradient(ellipse at center, black 20%, transparent 65%)' }}
-          speed={0.3}
-          warpAmount={0.3}
-          noiseIntensity={0.02}
-        />
         <div className="relative">
           <ErrorBoundary>
             <Galaxy activity={data.activity} fetchedAt={data.counters.fetchedAt} />
