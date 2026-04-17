@@ -1,19 +1,47 @@
+'use client';
+
+import { CalendarPlus, Maximize2 } from 'lucide-react';
 import type { WeekData } from '@/lib/calendar/types';
+import { calendarEmbedUrl, calendarSubscribeUrl } from '@/lib/shared';
 import { EventCard } from './event-card';
+import { TimezoneProvider } from './timezone-context';
+import { TimezoneSelect } from './timezone-select';
 
 interface WeekGridProps {
   week: WeekData;
 }
 
-export function WeekGrid({ week }: WeekGridProps) {
+function WeekGridInner({ week }: WeekGridProps) {
   return (
     <div className="rounded-2xl border border-fd-border bg-fd-card/40 backdrop-blur-sm p-6 md:p-8">
       {/* Header */}
-      <header className="text-center mb-10">
-        <h2 className="text-3xl font-semibold m-0">Intuition Community Events</h2>
-        <p className="text-fd-muted-foreground mt-2 m-0">
-          Weekly Schedule | {week.rangeLabel}
-        </p>
+      <header className="relative mb-10">
+        <a
+          href={calendarSubscribeUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="absolute left-0 top-0 inline-flex items-center gap-2 rounded-md border border-ib-brand/40 bg-ib-brand-alpha px-3 py-1.5 text-xs font-medium text-ib-brand hover:bg-ib-brand/20 transition-colors no-underline"
+        >
+          <CalendarPlus className="size-3.5" />
+          Subscribe
+        </a>
+
+        <a
+          href={calendarEmbedUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="absolute right-0 top-0 inline-flex items-center gap-2 rounded-md border border-fd-border px-3 py-1.5 text-xs font-medium text-fd-muted-foreground hover:bg-fd-accent hover:text-fd-foreground transition-colors no-underline"
+        >
+          <Maximize2 className="size-3.5" />
+          Full calendar
+        </a>
+
+        <div className="text-center">
+          <h2 className="text-3xl font-semibold m-0">Intuition Community Events</h2>
+          <div className="mt-3 flex justify-center">
+            <TimezoneSelect />
+          </div>
+        </div>
       </header>
 
       {/* 5-day grid — items-stretch is the default, so each column fills the tallest column's height */}
@@ -60,6 +88,15 @@ export function WeekGrid({ week }: WeekGridProps) {
           </div>
         ))}
       </div>
+
     </div>
+  );
+}
+
+export function WeekGrid(props: WeekGridProps) {
+  return (
+    <TimezoneProvider>
+      <WeekGridInner {...props} />
+    </TimezoneProvider>
   );
 }
