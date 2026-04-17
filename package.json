@@ -12,6 +12,7 @@
   "dependencies": {
     "@takumi-rs/image-response": "^0.73.1",
     "@waveso/ui": "^0.0.10",
+    "feed": "^5.2.0",
     "fumadocs-core": "16.7.7",
     "fumadocs-mdx": "14.2.11",
     "fumadocs-ui": "16.7.7",
