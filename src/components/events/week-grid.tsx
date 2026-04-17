@@ -38,8 +38,8 @@ function WeekGridInner({ week }: WeekGridProps) {
 
         <div className="text-center">
           <h2 className="text-3xl font-semibold m-0">Intuition Community Events</h2>
-          <div className="mt-3 flex justify-center">
-            <TimezoneSelect />
+          <div className="mt-3 flex gap-2 justify-center text-fd-muted-foreground ">
+            <p>Timezone</p> <TimezoneSelect />
           </div>
         </div>
       </header>
@@ -88,7 +88,6 @@ function WeekGridInner({ week }: WeekGridProps) {
           </div>
         ))}
       </div>
-
     </div>
   );
 }
