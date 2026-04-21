@@ -2,11 +2,13 @@ import { Button } from '@waveso/ui/button';
 import { Card, CardContent } from '@waveso/ui/card';
 import { fetchGitHubData } from '@/lib/github/fetch-github-data';
 import { GITHUB_ORG, GOVERNANCE_URL, GRANTS_URL } from '@/lib/github/constants';
+import { fetchCurrentWeek } from '@/lib/calendar/fetch-calendar';
 import { NetworkStats } from '@/components/github/network-stats';
 import { ErrorBoundary } from '@/components/error-boundary';
 import { Galaxy } from '@/components/github/galaxy/galaxy';
 import { DarkVeil } from '@/components/backgrounds/dark-veil';
 import { AnimateIn, AnimateOnView } from '@/components/animate';
+import { WeekGrid } from '@/components/events/week-grid';
 import { Footer } from '@/components/footer';
 import { Logomark } from '@/components/logomark';
 import { Code, Coins, Network, Wallet, Signal, Award, Rocket, GitBranch } from 'lucide-react';
@@ -23,7 +25,10 @@ const STEPS = [
 ] as const;
 
 export default async function HomePage() {
-  const data = await fetchGitHubData(GITHUB_ORG);
+  const [data, week] = await Promise.all([
+    fetchGitHubData(GITHUB_ORG),
+    fetchCurrentWeek().catch(() => null),
+  ]);
 
   return (
     <>
@@ -31,7 +36,7 @@ export default async function HomePage() {
         <div className="absolute inset-x-0 top-0 h-[800px] -z-1 pointer-events-none bg-hero-glow" />
       </AnimateIn>
 
-      <section className="relative max-w-5xl mx-auto py-16 px-8 text-center">
+      <section className="relative max-w-5xl mx-auto pt-32 pb-16 px-8 text-center">
         <AnimateIn>
           <Logomark size={80} className="mx-auto mb-8" />
         </AnimateIn>
@@ -163,19 +168,20 @@ export default async function HomePage() {
       </section>
 
       <section className="relative">
-        <DarkVeil
-          className="absolute inset-0 z-[5] mix-blend-screen opacity-20 pointer-events-none"
-          style={{ mask: 'radial-gradient(ellipse at center, black 20%, transparent 65%)' }}
-          speed={0.3}
-          warpAmount={0.3}
-          noiseIntensity={0.02}
-        />
         <div className="relative">
           <ErrorBoundary>
             <Galaxy activity={data.activity} fetchedAt={data.counters.fetchedAt} />
           </ErrorBoundary>
         </div>
       </section>
+
+      {week && (
+        <AnimateOnView>
+          <section className="max-w-5xl mx-auto w-full py-16 px-8">
+            <WeekGrid week={week} />
+          </section>
+        </AnimateOnView>
+      )}
 
       <AnimateOnView>
         <section className="max-w-5xl mx-auto w-full py-16 px-8">

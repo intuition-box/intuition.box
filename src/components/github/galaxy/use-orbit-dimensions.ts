@@ -62,14 +62,18 @@ export function useOrbitDimensions(
     const cy = h / 2;
     const margin = 12;
 
+    // Offsets point to the card's CENTER — consumers apply translate(-50%, -50%)
+    // to render the card so actual rendered width/height don't need to be known.
+    const halfW = cardW / 2;
+    const halfH = cardH / 2;
     const safeOffsets = CONTRIB_ANGLES.map((deg) => {
       const rad = degToRad(deg);
-      let x = cx + contribRadius * Math.cos(rad) - cardW / 2;
-      let y = cy + contribRadius * Math.sin(rad) - cardH / 2;
+      let x = cx + contribRadius * Math.cos(rad);
+      let y = cy + contribRadius * Math.sin(rad);
 
-      // Clamp within container bounds
-      x = Math.max(margin, Math.min(x, w - cardW - margin));
-      y = Math.max(margin, Math.min(y, h - cardH - margin));
+      // Clamp so the card's bounding box stays inside the container
+      x = Math.max(halfW + margin, Math.min(x, w - halfW - margin));
+      y = Math.max(halfH + margin, Math.min(y, h - halfH - margin));
 
       return { x, y };
     });
