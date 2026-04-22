@@ -53,6 +53,45 @@ export default async function HomePage() {
         </AnimateIn>
       </section>
 
+      <AnimateOnView>
+        <section className="max-w-5xl mx-auto w-full py-16 px-8">
+          <Card className="w-full py-12 px-16 bg-linear-to-b from-fd-card from-50% to-ib-brand-dark ring-ib-brand-dark rounded-3xl text-center">
+            <h2 className="text-3xl font-semibold">
+              Start Building
+            </h2>
+            <p className="text-fd-muted-foreground">
+              Join the developer community and use Intuition to transform your ideas into products.
+            </p>
+            <div className="flex justify-center gap-4 pt-4 max-sm:flex-col max-sm:gap-3">
+              <Button
+                className="bg-ib-white text-ib-brand-dark hover:opacity-60 hover:bg-ib-white"
+                variant="default"
+                size="lg"
+                render={<Link href="/missions" />}
+              >
+                Work on a Mission
+              </Button>
+              <Button
+                className="bg-ib-brand text-ib-brand-dark hover:opacity-60 hover:bg-ib-brand"
+                variant="default"
+                size="lg"
+                render={<a href="https://atlas.discourse.group/c/ecosystem-development/grant-applications/36" target="_blank" rel="noopener noreferrer" />}
+              >
+                Apply for a Grant
+              </Button>
+              <Button
+                className="bg-ib-brand text-ib-brand-dark hover:opacity-60 hover:bg-ib-brand"
+                variant="default"
+                size="lg"
+                render={<a href="https://atlas.discourse.group/c/governance/intuition-box/35" target="_blank" rel="noopener noreferrer" />}
+              >
+                Submit a Proposal
+              </Button>
+            </div>
+          </Card>
+        </section>
+      </AnimateOnView>
+
       <section className="max-w-5xl mx-auto py-16 px-8">
         <AnimateOnView>
           <h2 className="text-3xl font-semibold text-center mb-12">
@@ -183,36 +222,6 @@ export default async function HomePage() {
         </AnimateOnView>
       )}
 
-      <AnimateOnView>
-        <section className="max-w-5xl mx-auto w-full py-16 px-8">
-          <Card className="w-full py-12 px-16 bg-linear-to-b from-fd-card from-50% to-ib-brand-dark ring-ib-brand-dark rounded-3xl text-center">
-            <h2 className="text-3xl font-semibold">
-              Start Building
-            </h2>
-            <p className="text-fd-muted-foreground">
-              Join the developer community and use Intuition to transform your ideas into products.
-            </p>
-            <div className="flex justify-center gap-6 pt-4 max-sm:flex-col max-sm:gap-3">
-              <Button
-                className="bg-ib-white text-ib-brand-dark hover:opacity-60 hover:bg-ib-white"
-                variant="default"
-                size="lg"
-                render={<Link href="/docs" />}
-              >
-                Find more
-              </Button>
-              <Button
-                className="bg-ib-brand text-ib-brand-dark hover:opacity-60 hover:bg-ib-brand"
-                variant="default"
-                size="lg"
-                render={<a href={GRANTS_URL} target="_blank" rel="noopener noreferrer" />}
-              >
-                Submit a Proposal
-              </Button>
-            </div>
-          </Card>
-        </section>
-      </AnimateOnView>
 
       <Footer />
     </>

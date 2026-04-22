@@ -59,6 +59,26 @@ export default async function MissionsPage() {
         </p>
       </section>
 
+      {/* View Project Board Button */}
+      <section className="max-w-6xl mx-auto px-8 mb-12">
+        <div className="text-center">
+          <Button
+            size="lg"
+            className="bg-fd-primary hover:bg-fd-primary/90 text-fd-primary-foreground font-semibold px-8 py-4"
+            render={
+              <a
+                href="https://github.com/orgs/intuition-box/projects/21"
+                target="_blank"
+                rel="noopener noreferrer"
+              />
+            }
+          >
+            <ExternalLink className="size-5 mr-3" />
+            View Full Project Board on GitHub
+          </Button>
+        </div>
+      </section>
+
       {/* Notice for fallback data */}
       {usingFallbackData && (
         <section className="max-w-6xl mx-auto px-8 mb-4">
@@ -70,7 +90,60 @@ export default async function MissionsPage() {
         </section>
       )}
 
-      {/* Missions Grid */}
+      {/* CTAs Section */}
+      <section className="max-w-5xl mx-auto py-16 px-8">
+        <div className="grid md:grid-cols-3 gap-6">
+          <Card>
+            <CardContent className="p-6 text-center">
+              <h3 className="font-semibold mb-2">How do missions work?</h3>
+              <p className="text-sm text-fd-muted-foreground mb-4">
+                Learn about our mission process, rewards, and how to get started.
+              </p>
+              <Button
+                variant="outline"
+                size="sm"
+                render={<Link href="/docs/missions" />}
+              >
+                Read Documentation
+              </Button>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardContent className="p-6 text-center">
+              <h3 className="font-semibold mb-2">Looking for bigger scope?</h3>
+              <p className="text-sm text-fd-muted-foreground mb-4">
+                Apply for grants with larger rewards and longer-term projects.
+              </p>
+              <Button
+                variant="outline"
+                size="sm"
+                render={<a href={GRANTS_URL} target="_blank" rel="noopener noreferrer" />}
+              >
+                View Grants
+              </Button>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardContent className="p-6 text-center">
+              <h3 className="font-semibold mb-2">Have an idea?</h3>
+              <p className="text-sm text-fd-muted-foreground mb-4">
+                Submit your own mission ideas to help grow the ecosystem.
+              </p>
+              <Button
+                variant="outline"
+                size="sm"
+                render={<a href="https://github.com/orgs/intuition-box/projects/21" target="_blank" rel="noopener noreferrer" />}
+              >
+                Propose Mission
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+
+      {/* Available Missions */}
       <section className="max-w-6xl mx-auto py-8 px-8">
         {openMissions.length > 0 ? (
           <>
@@ -155,59 +228,6 @@ export default async function MissionsPage() {
             </Button>
           </div>
         )}
-      </section>
-
-      {/* CTAs Section */}
-      <section className="max-w-5xl mx-auto py-16 px-8">
-        <div className="grid md:grid-cols-3 gap-6">
-          <Card>
-            <CardContent className="p-6 text-center">
-              <h3 className="font-semibold mb-2">How do missions work?</h3>
-              <p className="text-sm text-fd-muted-foreground mb-4">
-                Learn about our mission process, rewards, and how to get started.
-              </p>
-              <Button
-                variant="outline"
-                size="sm"
-                render={<Link href="/docs/missions" />}
-              >
-                Read Documentation
-              </Button>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardContent className="p-6 text-center">
-              <h3 className="font-semibold mb-2">Looking for bigger scope?</h3>
-              <p className="text-sm text-fd-muted-foreground mb-4">
-                Apply for grants with larger rewards and longer-term projects.
-              </p>
-              <Button
-                variant="outline"
-                size="sm"
-                render={<a href={GRANTS_URL} target="_blank" rel="noopener noreferrer" />}
-              >
-                View Grants
-              </Button>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardContent className="p-6 text-center">
-              <h3 className="font-semibold mb-2">Have an idea?</h3>
-              <p className="text-sm text-fd-muted-foreground mb-4">
-                Submit your own mission ideas to help grow the ecosystem.
-              </p>
-              <Button
-                variant="outline"
-                size="sm"
-                render={<a href="https://github.com/orgs/intuition-box/projects/21" target="_blank" rel="noopener noreferrer" />}
-              >
-                Propose Mission
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
       </section>
     </div>
   );
