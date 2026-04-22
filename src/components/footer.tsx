@@ -16,6 +16,7 @@ const COLUMNS = [
     title: 'Community',
     links: [
       { label: 'Governance', href: 'https://atlas.discourse.group/c/governance/intuition-box/35', external: true },
+      { label: 'Missions', href: '/missions' },
       { label: 'Grants', href: 'https://atlas.discourse.group/c/ecosystem-development/grant-applications/36', external: true },
       { label: 'Discord', href: 'https://discord.gg/0xintuition', external: true },
       { label: 'X', href: 'https://x.com/intuition_box', external: true },

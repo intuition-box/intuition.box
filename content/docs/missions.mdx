@@ -1,0 +1,201 @@
+---
+title: Missions
+description: Quick-turnaround projects that serve the whole builder community — from ideas to rewards
+---
+
+import { Mermaid } from '@/components/mermaid';
+
+## What are Missions?
+
+Missions are focused, short-term projects designed to serve the entire Intuition ecosystem builder community. They represent **open contributions** that advance shared infrastructure, tools, documentation, or resources that benefit everyone.
+
+Unlike grants (which fund longer-term, individual projects), missions are:
+
+- **Quick turnaround** — can be from a few hours of work to several weeks
+- **Community-first** — benefit the whole ecosystem, not just one builder
+- **Open source** — results are public and reusable
+- **Well-scoped** — clear deliverables and success criteria
+
+---
+
+## Mission Principles
+
+### For the Community
+Every mission must serve the broader builder community. Ask yourself:
+- Will this help other developers build on Intuition?
+- Does this create reusable infrastructure or knowledge?
+- Will this reduce friction for ecosystem participants?
+
+### Open by Default
+Mission work and outcomes are open source unless there's a compelling reason otherwise. This includes:
+- Code repositories
+- Documentation and tutorials
+- Tools and templates
+- Research findings
+
+---
+
+## Mission Lifecycle
+
+<Mermaid>
+{`graph LR
+    A[Ideas] --> B[Backlog]
+    B --> C[Application Open]
+    C --> D[In Progress]
+    D --> E[In Review]
+    E --> F[Pending Payment]
+    F --> G[Paid]
+    
+    style A fill:#f9f9f9
+    style B fill:#e1f5fe
+    style C fill:#c8e6c9
+    style D fill:#fff3e0
+    style E fill:#f3e5f5
+    style F fill:#fce4ec
+    style G fill:#e8f5e8`}
+</Mermaid>
+
+### 1. Ideas Phase
+New missions start as ideas in our [GitHub Project Board](https://github.com/orgs/intuition-box/projects/21).
+
+Anyone can propose missions by:
+- Opening a discussion on the project board
+- Describing the problem and proposed solution
+- Explaining community benefit
+- Estimating scope and timeline
+
+### 2. Backlog
+Approved ideas move to the backlog where they're:
+- Refined with clear success criteria
+- Assigned priority levels
+- Given estimated rewards (when applicable)
+
+### 3. Application Open
+When ready, missions move to "Application Open" status with a specific closing date for applications.
+
+**How to Apply:**
+1. Comment on the GitHub issue expressing interest
+2. Share relevant experience or portfolio
+3. Provide a brief approach outline
+4. Mention your estimated timeline
+
+**Application Deadlines & Selection:**
+Each mission has a closing date for applications. The selection process depends on community response:
+
+- **No applications received** → Closing date is extended, reward may be adjusted to attract contributors
+- **Single application** → Evaluated based on qualifications and approach
+- **Multiple applications** → Team reviews all applications and selects the best fit based on experience, approach, and timeline
+
+All applicants are notified of the selection decision regardless of outcome.
+
+<Mermaid>
+{`flowchart TD
+    A[Mission Opens for Applications] --> B{Applications Received?}
+    
+    B -->|No Applications| C[Extend Closing Date]
+    C --> D[Consider Adjusting Reward]
+    D --> E[Re-promote Mission]
+    E --> B
+    
+    B -->|Single Application| F[Review Application]
+    F --> G{Meets Requirements?}
+    G -->|Yes| H[Accept Applicant]
+    G -->|No| I[Decline & Provide Feedback]
+    
+    B -->|Multiple Applications| J[Team Review Process]
+    J --> K[Compare Experience & Approach]
+    K --> L[Select Best Fit]
+    L --> M[Notify All Applicants]
+    
+    H --> N[Mission Assigned]
+    I --> O[Mission Reopened]
+    M --> N
+    
+    style A fill:#e1f5fe
+    style N fill:#c8e6c9
+    style O fill:#fff3e0`}
+</Mermaid>
+
+### 4. In Progress
+Once assigned:
+- Work begins with the selected contributor
+- Regular check-ins ensure progress
+- Community can follow updates on GitHub
+
+### 5. In Review
+Completed work goes through community review:
+- Code review (if applicable)
+- Community feedback
+- Quality assurance
+- Documentation verification
+
+### 6. Pending Payment → Paid
+After successful review:
+- Payment is processed
+- Work is merged/published
+- Mission marked as complete
+
+---
+
+## How to Propose a Mission
+
+Got an idea that would benefit the whole community? Here's how to propose it:
+
+### 1. Check Existing Missions
+Review the [current mission board](https://github.com/orgs/intuition-box/projects/21) to avoid duplicates.
+
+### 2. Open a Proposal
+Create a new issue in our GitHub project with:
+- **Problem Statement** — what needs to be solved?
+- **Proposed Solution** — your approach to solving it
+- **Community Benefit** — how does this help other builders?
+- **Success Criteria** — what does "done" look like?
+- **Estimated Scope** — rough timeline and complexity
+
+### 3. Community Review
+The community and DAO will review proposals considering:
+- Alignment with ecosystem goals
+- Community impact potential
+- Resource availability
+- Technical feasibility
+
+### 4. Mission Creation
+Approved proposals become official missions with:
+- Clear requirements and deliverables
+- Assigned priority level
+- Estimated reward range
+- Application timeline
+
+---
+
+## Ready to Contribute?
+
+<Cards>
+  <Card title="View Available Missions" href="/missions" />
+  <Card title="Propose a Mission" href="https://github.com/orgs/intuition-box/projects/21" />
+  <Card title="Join the Community" href="https://discord.gg/0xintuition" />
+  <Card title="Apply for Grants" href="https://atlas.discourse.group/c/ecosystem-development/grant-applications/36" />
+</Cards>
+
+---
+
+## Questions?
+
+**Where can I ask questions about missions?**  
+Join our Discord and ask in the #builders-chat channel.
+
+**Can I work on multiple missions at once?**  
+Yes, but communicate clearly about your availability and timeline commitments.
+
+**What if I can't complete a mission?**  
+Let us know immediately. We can reassign or break it into smaller pieces.
+
+**Do I need to be a DAO member to contribute?**  
+No, missions are open to all contributors. However, each mission completed also increases DAO governance rights.
+
+**How are disputes resolved?**  
+Through community discussion and DAO governance processes when needed.
+
+---
+
+*Missions are part of the $4,000 monthly allocation for grants, bounties, and missions from the Intuition Box treasury.*
