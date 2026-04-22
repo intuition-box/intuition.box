@@ -16,6 +16,7 @@ function headers(): HeadersInit {
 
 export interface Mission {
   id: string;
+  databaseId?: number;
   title: string;
   status: string;
   priority?: string;
@@ -31,6 +32,7 @@ function getFallbackMissions(): Mission[] {
   return [
     {
       id: 'fallback-1',
+      databaseId: 167766956,
       title: 'Add Intuition to observatory.intuition.box',
       status: 'Application open',
       priority: 'P0',
@@ -41,6 +43,7 @@ function getFallbackMissions(): Mission[] {
     },
     {
       id: 'fallback-2',
+      databaseId: 167766957,
       title: 'Proxy Fee Template',
       status: 'Application open',
       priority: 'P0',
@@ -51,6 +54,7 @@ function getFallbackMissions(): Mission[] {
     },
     {
       id: 'fallback-3',
+      databaseId: 167766958,
       title: 'Improvement of https://graph.intuition.box to mainnet',
       status: 'Application open',
       url: undefined,
@@ -60,6 +64,7 @@ function getFallbackMissions(): Mission[] {
     },
     {
       id: 'fallback-4',
+      databaseId: 167766959,
       title: 'Intuition.box Socials creation',
       status: 'Ideas',
       url: undefined,
@@ -91,6 +96,7 @@ async function fetchMissionsUncached(org: string, projectNumber: number): Promis
                 items(first: 50) {
                   nodes {
                     id
+                    databaseId
                     fieldValues(first: 10) {
                       nodes {
                         ... on ProjectV2ItemFieldTextValue {
@@ -171,6 +177,7 @@ function transformMissionData(items: any[]): Mission[] {
 
     return {
       id: item.id,
+      databaseId: item.databaseId,
       title: fields.Title || issue?.title || 'Untitled Mission',
       status: fields.Status || 'Ideas',
       priority: fields.Priority,
@@ -189,7 +196,7 @@ export async function fetchMissionsData(
 ): Promise<Mission[]> {
   const cachedFetch = unstable_cache(
     () => fetchMissionsUncached(org, projectNumber),
-    [`missions-data-${org}-${projectNumber}`],
+    [`missions-data-${org}-${projectNumber}-v2`], // Updated cache key
     { revalidate: 300 }, // Cache for 5 minutes
   );
 

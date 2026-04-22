@@ -1,11 +1,9 @@
 import { HomeLayout } from 'fumadocs-ui/layouts/home';
 import { baseOptions } from '@/lib/layout.shared';
-import { Navigation } from '@/components/navigation';
 
 export default function Layout({ children }: LayoutProps<'/'>) {
   return (
-    <HomeLayout {...baseOptions()} nav={{ ...baseOptions().nav, enabled: false }}>
-      <Navigation />
+    <HomeLayout {...baseOptions()}>
       {children}
     </HomeLayout>
   );

@@ -120,21 +120,21 @@ export default async function MissionsPage() {
                     )}
 
                     <div className="mt-auto">
-                      {mission.url ? (
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="w-full"
-                          render={<a href={mission.url} target="_blank" rel="noopener noreferrer" />}
-                        >
-                          <ExternalLink className="size-4 mr-2" />
-                          View on GitHub
-                        </Button>
-                      ) : (
-                        <Button variant="outline" size="sm" className="w-full" disabled>
-                          Coming Soon
-                        </Button>
-                      )}
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="w-full"
+                        render={
+                          <a
+                            href={`https://github.com/orgs/intuition-box/projects/21?pane=issue&itemId=${mission.databaseId || mission.id}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          />
+                        }
+                      >
+                        <ExternalLink className="size-4 mr-2" />
+                        View Project Card
+                      </Button>
                     </div>
                   </CardContent>
                 </Card>
@@ -169,7 +169,7 @@ export default async function MissionsPage() {
               <Button
                 variant="outline"
                 size="sm"
-                render={<Link href="/docs" />}
+                render={<Link href="/docs/missions" />}
               >
                 Read Documentation
               </Button>
