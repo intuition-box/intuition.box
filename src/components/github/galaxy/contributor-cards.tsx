@@ -2,9 +2,9 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import { Card, CardContent } from '@waveso/ui/card';
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from '@waveso/ui/tooltip';
 import { AnimateIn } from '@/components/animate';
+import { Card, CardContent } from '@/components/card';
 import type { ContributorDisplay } from '../types';
 import { ContributorHeader } from './contributor-header';
 
@@ -36,13 +36,14 @@ function ContributorCard({
     >
       <AnimateIn scale delay={index * 0.1} transition={{ duration: 0.4 }}>
         <Card
-          className="w-auto max-w-[min(88vw,260px)] py-0 overflow-visible bg-fd-card/80 backdrop-blur-[14px] saturate-[1.15] shadow-lg"
+          variant="compact"
+          className="w-auto max-w-[min(88vw,260px)] overflow-visible bg-fd-card/80 backdrop-blur-[14px] saturate-[1.15] shadow-lg"
           onMouseEnter={() => setExpanded(true)}
           onMouseLeave={() => setExpanded(false)}
           onFocus={() => setExpanded(true)}
           onBlur={() => setExpanded(false)}
         >
-          <CardContent className="p-2.5">
+          <CardContent>
             <ContributorHeader contributor={contributor} size={36} />
 
             <div

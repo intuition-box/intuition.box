@@ -3,6 +3,7 @@
 import { CalendarPlus, Maximize2 } from 'lucide-react';
 import type { WeekData } from '@/lib/calendar/types';
 import { calendarEmbedUrl, calendarSubscribeUrl } from '@/lib/shared';
+import { Card } from '@/components/card';
 import { EventCard } from './event-card';
 import { TimezoneProvider } from './timezone-context';
 import { TimezoneSelect } from './timezone-select';
@@ -75,10 +76,10 @@ function WeekGridInner({ week }: WeekGridProps) {
               </div>
             ) : (
               <div
-                className={`flex-1 min-h-[140px] rounded-lg border border-dashed bg-fd-card/20 grid place-items-center p-3 ${
+                aria-hidden
+                className={`flex-1 min-h-[140px] rounded-xl p-3 grid place-items-center bg-fd-card/20 border border-dashed ${
                   day.isToday ? 'border-ib-brand' : 'border-fd-border/40'
                 }`}
-                aria-hidden
               >
                 <p className="text-[10px] tracking-widest text-fd-muted-foreground/60 uppercase text-center m-0">
                   No events

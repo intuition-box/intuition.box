@@ -2,6 +2,11 @@ import 'server-only';
 
 import { unstable_cache } from 'next/cache';
 import { githubGraphQL, hasGitHubToken } from './client';
+import {
+  GITHUB_ORG,
+  MISSIONS_CACHE_TAG,
+  MISSIONS_PROJECT_NUMBER,
+} from './constants';
 
 export interface Mission {
   id: string;
@@ -166,12 +171,13 @@ function getFallbackMissions(): Mission[] {
 function readFieldValues(item: ProjectV2Item): Record<string, string> {
   const fields: Record<string, string> = {};
   for (const node of item.fieldValues.nodes) {
-    const fieldName = (node as { field?: ProjectV2FieldRef }).field?.name;
+    // Both fragment shapes can show up; just look for whichever value is present.
+    const n = node as { text?: string | null; name?: string | null; field?: { name?: string } };
+    const fieldName = n.field?.name;
     if (!fieldName) continue;
-    if ('text' in node && typeof node.text === 'string') {
-      fields[fieldName] = node.text;
-    } else if ('name' in node && typeof node.name === 'string') {
-      fields[fieldName] = node.name;
+    const value = n.text ?? n.name;
+    if (typeof value === 'string') {
+      fields[fieldName] = value;
     }
   }
   return fields;
@@ -198,6 +204,33 @@ function transformMissionData(items: ProjectV2Item[]): Mission[] {
 
 // ── Fetcher ──────────────────────────────────────────────────────────
 
+/**
+ * One round-trip to GitHub. Distinguishes:
+ *   - `projectV2` missing / null  → treat as transient failure (throw)
+ *   - `projectV2.items.nodes` empty → legitimate empty project (return [])
+ *
+ * Throwing on the first case is important: it stops the caller from
+ * caching an empty result, so the next request retries instead of
+ * pinning "No Missions Available" for a full TTL.
+ */
+async function fetchMissionsOnce(
+  org: string,
+  projectNumber: number,
+): Promise<Mission[]> {
+  const data = await githubGraphQL<MissionsQueryData>(MISSIONS_QUERY, {
+    org,
+    projectNumber,
+  });
+  const projectV2 = data.organization?.projectV2;
+  if (!projectV2) {
+    throw new Error(
+      `[missions] projectV2 was null for org=${org} project=${projectNumber}. ` +
+        'Likely a transient GitHub error or insufficient token scope.',
+    );
+  }
+  return transformMissionData(projectV2.items?.nodes ?? []);
+}
+
 async function fetchMissionsUncached(
   org: string,
   projectNumber: number,
@@ -207,16 +240,19 @@ async function fetchMissionsUncached(
     return getFallbackMissions();
   }
 
+  // One retry with a short delay handles flaky GitHub responses (the
+  // most common shape of "everything broke until you reload").
   try {
-    const data = await githubGraphQL<MissionsQueryData>(MISSIONS_QUERY, {
-      org,
-      projectNumber,
-    });
-    const items = data.organization?.projectV2?.items.nodes ?? [];
-    return transformMissionData(items);
-  } catch (error) {
-    console.log('[missions] Failed to fetch missions data, using fallback:', error);
-    return getFallbackMissions();
+    return await fetchMissionsOnce(org, projectNumber);
+  } catch (firstError) {
+    console.warn('[missions] First fetch failed, retrying once:', firstError);
+    await new Promise((resolve) => setTimeout(resolve, 400));
+    try {
+      return await fetchMissionsOnce(org, projectNumber);
+    } catch (secondError) {
+      console.error('[missions] Both attempts failed, using fallback:', secondError);
+      return getFallbackMissions();
+    }
   }
 }
 
@@ -227,13 +263,16 @@ async function fetchMissionsUncached(
 
 const cachedFetch = unstable_cache(
   (org: string, projectNumber: number) => fetchMissionsUncached(org, projectNumber),
-  ['missions-data', 'v2'],
-  { revalidate: 300 },
+  ['missions-data', 'v3'],
+  // Short TTL (60s) so edits propagate within a minute. The cache is
+  // also tagged so a server action can call `revalidateTag(MISSIONS_CACHE_TAG)`
+  // for instant refresh on demand.
+  { revalidate: 60, tags: [MISSIONS_CACHE_TAG] },
 );
 
 export async function fetchMissionsData(
-  org: string = 'intuition-box',
-  projectNumber: number = 21,
+  org: string = GITHUB_ORG,
+  projectNumber: number = MISSIONS_PROJECT_NUMBER,
 ): Promise<Mission[]> {
   try {
     return await cachedFetch(org, projectNumber);

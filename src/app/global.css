@@ -129,13 +129,64 @@
 }
 
 @layer components {
-  .bg-hero-glow {
+  /*
+   * Hero glow: two stacked radial gradients positioned high up so the
+   * focal points sit just behind a centered title. Each tone keeps the
+   * same geometry (size + position) and only swaps the two color stops.
+   */
+  .bg-hero-glow,
+  .bg-hero-glow-mint,
+  .bg-hero-glow-yellow,
+  .bg-hero-glow-teal,
+  .bg-hero-glow-purple,
+  .bg-hero-glow-lilac,
+  .bg-hero-glow-red {
     background-repeat: no-repeat;
+    background-size: 1400px 1400px, 980px 720px;
+    background-position: 50% -466px, 50% -126px;
+  }
+
+  /* default — orange + indigo (homepage) */
+  .bg-hero-glow {
     background-image:
       radial-gradient(rgb(252 120 64 / .1), rgb(252 120 64 / .02) 30%, transparent 50%),
       radial-gradient(rgb(94 106 210 / .1), rgb(5 106 210 / .02) 30%, transparent 50%);
-    background-size: 1400px 1400px, 980px 720px;
-    background-position: 50% -466px, 50% -126px;
+  }
+
+  .bg-hero-glow-mint {
+    background-image:
+      radial-gradient(rgb(141 241 201 / .15), rgb(141 241 201 / .04) 30%, transparent 50%),
+      radial-gradient(rgb(94 106 210 / .08), rgb(94 106 210 / .02) 30%, transparent 50%);
+  }
+
+  .bg-hero-glow-yellow {
+    background-image:
+      radial-gradient(rgb(254 244 44 / .12), rgb(254 244 44 / .03) 30%, transparent 50%),
+      radial-gradient(rgb(252 120 64 / .08), rgb(252 120 64 / .02) 30%, transparent 50%);
+  }
+
+  .bg-hero-glow-teal {
+    background-image:
+      radial-gradient(rgb(104 219 241 / .14), rgb(104 219 241 / .03) 30%, transparent 50%),
+      radial-gradient(rgb(141 241 201 / .08), rgb(141 241 201 / .02) 30%, transparent 50%);
+  }
+
+  .bg-hero-glow-purple {
+    background-image:
+      radial-gradient(rgb(159 159 254 / .14), rgb(159 159 254 / .03) 30%, transparent 50%),
+      radial-gradient(rgb(104 219 241 / .08), rgb(104 219 241 / .02) 30%, transparent 50%);
+  }
+
+  .bg-hero-glow-lilac {
+    background-image:
+      radial-gradient(rgb(209 174 241 / .14), rgb(209 174 241 / .03) 30%, transparent 50%),
+      radial-gradient(rgb(159 159 254 / .08), rgb(159 159 254 / .02) 30%, transparent 50%);
+  }
+
+  .bg-hero-glow-red {
+    background-image:
+      radial-gradient(rgb(251 51 114 / .12), rgb(251 51 114 / .03) 30%, transparent 50%),
+      radial-gradient(rgb(252 120 64 / .08), rgb(252 120 64 / .02) 30%, transparent 50%);
   }
 }
 

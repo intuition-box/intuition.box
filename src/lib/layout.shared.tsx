@@ -9,7 +9,7 @@ export function baseOptions(): BaseLayoutProps {
       title: <Logomark size={24} />,
     },
     links: [
-      { text: 'Documentation', url: '/docs', active: 'nested-url' },
+      { text: 'Docs', url: '/docs', active: 'nested-url' },
       { text: 'Blog', url: '/blog', active: 'nested-url' },
       { text: 'Missions', url: '/missions', active: 'nested-url' },
       { text: 'Grants', url: GRANTS_URL, external: true },
