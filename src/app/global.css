@@ -202,13 +202,9 @@ body:before {
 }
 
 /*
- * Reduced motion: disable all Galaxy animations
+ * Reduced motion is already handled at the source: every Galaxy animation
+ * is applied via Tailwind's `motion-safe:animate-[...]` variant, which
+ * Tailwind compiles into `@media (prefers-reduced-motion: no-preference)`.
+ * Users with `prefers-reduced-motion: reduce` never get the animation
+ * applied in the first place — no override needed here.
  */
-@media (prefers-reduced-motion: reduce) {
-
-  .motion-safe\:animate-\[spin-galaxy_200s_linear_infinite\],
-  .motion-safe\:animate-\[star-pulse_4s_ease-in-out_infinite\],
-  .motion-safe\:animate-\[orbit-spin_linear_infinite\] {
-    animation: none !important;
-  }
-}

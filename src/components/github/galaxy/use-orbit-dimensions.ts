@@ -78,7 +78,25 @@ export function useOrbitDimensions(
       return { x, y };
     });
 
-    setDims({ width: w, height: h, isMobile, contribRadius, safeOffsets, ready: true });
+    setDims((prev) => {
+      // Skip the update if every value is identical to the previous tick.
+      // ResizeObserver fires on every fractional pixel change in some
+      // browsers; without this, every resize causes a full Galaxy re-render.
+      if (
+        prev.ready &&
+        prev.width === w &&
+        prev.height === h &&
+        prev.isMobile === isMobile &&
+        prev.contribRadius === contribRadius &&
+        prev.safeOffsets.length === safeOffsets.length &&
+        prev.safeOffsets.every(
+          (o, i) => o.x === safeOffsets[i].x && o.y === safeOffsets[i].y,
+        )
+      ) {
+        return prev;
+      }
+      return { width: w, height: h, isMobile, contribRadius, safeOffsets, ready: true };
+    });
   }, [containerRef]);
 
   useEffect(() => {

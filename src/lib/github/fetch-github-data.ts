@@ -1,6 +1,7 @@
 import 'server-only';
 
 import { unstable_cache } from 'next/cache';
+import { GH_REST_API, githubFetch } from './client';
 import type {
   GitHubData,
   OrgCounters,
@@ -9,21 +10,6 @@ import type {
   ProjectActivity,
   CommitItem,
 } from './types';
-
-const GH_API = 'https://api.github.com';
-
-function headers(): HeadersInit {
-  const h: Record<string, string> = { Accept: 'application/vnd.github+json' };
-  const token = process.env.GITHUB_TOKEN;
-  if (token) h.Authorization = `Bearer ${token}`;
-  return h;
-}
-
-async function fetchJSON<T>(url: string): Promise<T> {
-  const res = await fetch(url, { headers: headers() });
-  if (!res.ok) throw new Error(`GitHub API ${res.status}: ${url}`);
-  return res.json() as Promise<T>;
-}
 
 // ── GitHub API response types ────────────────────────────────────────
 
@@ -61,14 +47,14 @@ interface GHCommit {
 // ── Fetchers ─────────────────────────────────────────────────────────
 
 async function fetchOrgRepos(org: string): Promise<GHRepo[]> {
-  const repos = await fetchJSON<GHRepo[]>(
-    `${GH_API}/orgs/${org}/repos?per_page=100&type=public&sort=pushed`,
+  const repos = await githubFetch<GHRepo[]>(
+    `${GH_REST_API}/orgs/${org}/repos?per_page=100&type=public&sort=pushed`,
   );
   return repos.filter((r) => !r.private && !r.archived);
 }
 
 async function fetchOrgEvents(org: string): Promise<GHEvent[]> {
-  return fetchJSON<GHEvent[]>(`${GH_API}/orgs/${org}/events?per_page=100`);
+  return githubFetch<GHEvent[]>(`${GH_REST_API}/orgs/${org}/events?per_page=100`);
 }
 
 async function fetchRepoCommits(
@@ -76,8 +62,8 @@ async function fetchRepoCommits(
   repo: string,
   limit = 3,
 ): Promise<GHCommit[]> {
-  return fetchJSON<GHCommit[]>(
-    `${GH_API}/repos/${org}/${repo}/commits?per_page=${limit}`,
+  return githubFetch<GHCommit[]>(
+    `${GH_REST_API}/repos/${org}/${repo}/commits?per_page=${limit}`,
   );
 }
 
@@ -235,22 +221,24 @@ async function fetchGitHubDataUncached(
 
 // ── Cached export ────────────────────────────────────────────────────
 // Single cache entry for the entire function — all fetches revalidate
-// together so data is never mixed-age across repos/events/commits.
+// together so data is never mixed-age across repos/events/commits. The
+// cache wrapper is hoisted to module scope so we don't allocate a new
+// one per request (args become part of the cache key).
+
+const cachedFetch = unstable_cache(
+  (org: string, repoLimit: number, perRepoCommits: number) =>
+    fetchGitHubDataUncached(org, repoLimit, perRepoCommits),
+  ['github-data'],
+  { revalidate: 3600 },
+);
 
 export async function fetchGitHubData(
   org: string,
   options: { repoLimit?: number; perRepoCommits?: number } = {},
 ): Promise<GitHubData> {
   const { repoLimit = 8, perRepoCommits = 2 } = options;
-
-  const cachedFetch = unstable_cache(
-    () => fetchGitHubDataUncached(org, repoLimit, perRepoCommits),
-    [`github-data-${org}`],
-    { revalidate: 3600 },
-  );
-
   try {
-    return await cachedFetch();
+    return await cachedFetch(org, repoLimit, perRepoCommits);
   } catch (error) {
     console.error('[github-stats] Failed to fetch GitHub data:', error);
     return emptyData();

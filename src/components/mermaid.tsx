@@ -1,19 +1,29 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import mermaid from 'mermaid';
 
 interface MermaidProps {
   children: string;
   className?: string;
 }
 
+/**
+ * Renders a Mermaid diagram. The `mermaid` library (~600KB) is dynamically
+ * imported on first render — without this, every page that transitively
+ * touches this file (via fumadocs-mdx's generated `.source/server.ts`) ships
+ * the entire library in its bundle.
+ */
 export function Mermaid({ children, className = '' }: MermaidProps) {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (ref.current && children) {
-      // Initialize mermaid with custom config
+    if (!ref.current || !children) return;
+    let cancelled = false;
+
+    void (async () => {
+      const { default: mermaid } = await import('mermaid');
+      if (cancelled) return;
+
       mermaid.initialize({
         startOnLoad: false,
         theme: 'neutral',
@@ -27,21 +37,24 @@ export function Mermaid({ children, className = '' }: MermaidProps) {
         },
       });
 
-      // Generate unique ID for this diagram
-      const id = `mermaid-${Math.random().toString(36).substr(2, 9)}`;
+      const id = `mermaid-${Math.random().toString(36).slice(2, 11)}`;
 
-      // Render the diagram
-      mermaid.render(id, children).then(({ svg }) => {
-        if (ref.current) {
+      try {
+        const { svg } = await mermaid.render(id, children);
+        if (!cancelled && ref.current) {
           ref.current.innerHTML = svg;
         }
-      }).catch(error => {
-        console.error('Mermaid rendering error:', error);
-        if (ref.current) {
-          ref.current.innerHTML = `<pre class="text-red-500">Error rendering diagram: ${error.message}</pre>`;
+      } catch (error) {
+        const message = error instanceof Error ? error.message : 'unknown error';
+        if (!cancelled && ref.current) {
+          ref.current.textContent = `Error rendering diagram: ${message}`;
         }
-      });
-    }
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
   }, [children]);
 
   return (

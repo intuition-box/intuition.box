@@ -20,10 +20,7 @@ function AnimatedNumber({ value, duration = 900 }: { value: number; duration?: n
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          setVisible(true);
-          observer.disconnect();
-        }
+        if (entry.isIntersecting) setVisible(true);
       },
       { threshold: 0.3 },
     );
@@ -33,14 +30,19 @@ function AnimatedNumber({ value, duration = 900 }: { value: number; duration?: n
   }, []);
 
   useEffect(() => {
-    if (!visible || value === 0) return;
+    if (!visible) return;
+    if (value === 0) {
+      setDisplay(0);
+      return;
+    }
 
+    const fromValue = display;
     const start = performance.now();
     const easeOut = (t: number) => 1 - Math.pow(1 - t, 3);
 
     const tick = (now: number) => {
       const t = Math.min(1, (now - start) / duration);
-      setDisplay(Math.round(value * easeOut(t)));
+      setDisplay(Math.round(fromValue + (value - fromValue) * easeOut(t)));
       if (t < 1) {
         rafRef.current = requestAnimationFrame(tick);
       }
@@ -50,6 +52,10 @@ function AnimatedNumber({ value, duration = 900 }: { value: number; duration?: n
     return () => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
+    // `display` is intentionally excluded — using it as the animation start
+    // would re-trigger the effect on every frame. We only want a fresh
+    // animation when `visible`, `value`, or `duration` change.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [visible, value, duration]);
 
   return (
