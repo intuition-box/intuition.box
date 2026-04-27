@@ -92,6 +92,17 @@ async function fetchGitHubDataUncached(
     fetchOrgEvents(org),
   ]);
 
+  // Both critical fetches failed — bail so the cache doesn't store an
+  // empty result. The outer wrapper will retry, then fall back without
+  // caching that fallback.
+  if (reposResult.status === 'rejected' && eventsResult.status === 'rejected') {
+    throw new Error(
+      `[github-stats] Both repos and events fetches failed: ` +
+        `repos=${reposResult.reason instanceof Error ? reposResult.reason.message : String(reposResult.reason)}; ` +
+        `events=${eventsResult.reason instanceof Error ? eventsResult.reason.message : String(eventsResult.reason)}`,
+    );
+  }
+
   const repoList = reposResult.status === 'fulfilled' ? reposResult.value : [];
   const events = eventsResult.status === 'fulfilled' ? eventsResult.value : [];
 
@@ -224,6 +235,13 @@ async function fetchGitHubDataUncached(
 // together so data is never mixed-age across repos/events/commits. The
 // cache wrapper is hoisted to module scope so we don't allocate a new
 // one per request (args become part of the cache key).
+//
+// Caching contract: on critical failure, `fetchGitHubDataUncached` throws
+// rather than returning a zeroed result. Thrown errors aren't cached by
+// `unstable_cache`, so the next request retries instead of pinning an
+// empty state for an hour. The outer wrapper handles one automatic retry
+// plus a final fallback to `emptyData()` (which is intentionally NOT
+// cached — see `fetchGitHubData` below).
 
 const cachedFetch = unstable_cache(
   (org: string, repoLimit: number, perRepoCommits: number) =>
@@ -237,10 +255,25 @@ export async function fetchGitHubData(
   options: { repoLimit?: number; perRepoCommits?: number } = {},
 ): Promise<GitHubData> {
   const { repoLimit = 8, perRepoCommits = 2 } = options;
+
+  // One retry with a short backoff handles flaky GitHub responses. Both
+  // failures bubble up as thrown errors, so neither attempt poisons the
+  // cache with empty data.
   try {
     return await cachedFetch(org, repoLimit, perRepoCommits);
-  } catch (error) {
-    console.error('[github-stats] Failed to fetch GitHub data:', error);
-    return emptyData();
+  } catch (firstError) {
+    console.warn('[github-stats] First fetch failed, retrying once:', firstError);
+    await new Promise((resolve) => setTimeout(resolve, 400));
+    try {
+      return await cachedFetch(org, repoLimit, perRepoCommits);
+    } catch (secondError) {
+      // Final fallback. Returned from outside the cached function so
+      // it's NOT stored in the cache — the next request will try again.
+      console.error(
+        '[github-stats] Both attempts failed, returning empty (not cached):',
+        secondError,
+      );
+      return emptyData();
+    }
   }
 }
