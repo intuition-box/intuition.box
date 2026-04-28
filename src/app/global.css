@@ -188,6 +188,16 @@
       radial-gradient(rgb(251 51 114 / .12), rgb(251 51 114 / .03) 30%, transparent 50%),
       radial-gradient(rgb(252 120 64 / .08), rgb(252 120 64 / .02) 30%, transparent 50%);
   }
+
+  /*
+   * Fumadocs applies `-mx-1 first:ms-0 last:me-0` to icon-only nav links
+   * so they sit tight against each other and against the GitHub icon.
+   * Loosen that here so each icon has a small breathing room. Targets
+   * only secondary nav buttons that have an aria-label (icon links).
+   */
+  #nd-nav a[aria-label] {
+    margin-inline: 0.125rem;
+  }
 }
 
 body {

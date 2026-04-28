@@ -4,6 +4,9 @@ export const docsRoute = '/docs';
 export const docsImageRoute = '/og/docs';
 export const docsContentRoute = '/llms.mdx/docs';
 export const blogRoute = '/blog';
+
+export const discordUrl = 'https://discord.gg/0xintuition';
+export const twitterUrl = 'https://x.com/intuition_box';
 export const calendarSubscribeUrl =
   'https://calendar.google.com/calendar/u/0?cid=Y180Y2U4YzUyZmFiOGUzYzQ1NjA0YTM0YjZkNjFhM2M4NTI5OWE3MzgwNmJkZWIxZjI2MWIxZGVlZmEyMGUyN2IyQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20';
 export const calendarEmbedUrl =
