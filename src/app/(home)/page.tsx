@@ -1,5 +1,10 @@
 import { Button } from '@waveso/ui/button';
-import { Card, CardContent } from '@waveso/ui/card';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/components/card';
 import { fetchGitHubData } from '@/lib/github/fetch-github-data';
 import { GITHUB_ORG, GOVERNANCE_URL, GRANTS_URL } from '@/lib/github/constants';
 import { fetchCurrentWeek } from '@/lib/calendar/fetch-calendar';
@@ -11,6 +16,7 @@ import { AnimateIn, AnimateOnView } from '@/components/animate';
 import { WeekGrid } from '@/components/events/week-grid';
 import { Footer } from '@/components/footer';
 import { Logomark } from '@/components/logomark';
+import { PageHero } from '@/components/page-hero';
 import { Code, Coins, Network, Wallet, Signal, Award, Rocket, GitBranch } from 'lucide-react';
 import Link from 'next/link';
 
@@ -32,26 +38,54 @@ export default async function HomePage() {
 
   return (
     <>
-      <AnimateIn distance={0} transition={{ duration: 1.2 }}>
-        <div className="absolute inset-x-0 top-0 h-[800px] -z-1 pointer-events-none bg-hero-glow" />
-      </AnimateIn>
+      <PageHero
+        tone="default"
+        before={<Logomark size={80} />}
+        title="Intuition Box"
+        description="We fund work, govern decisions, and shape the Intuition ecosystem with a coordination protocol for everyone."
+      />
 
-      <section className="relative max-w-5xl mx-auto pt-32 pb-16 px-8 text-center">
-        <AnimateIn>
-          <Logomark size={80} className="mx-auto mb-8" />
-        </AnimateIn>
-
-        <AnimateIn delay={0.08}>
-          <h1 className="text-6xl leading-none font-bold mb-6 tracking-tight bg-clip-text text-transparent antialiased [box-decoration-break:clone] sm:text-5xl bg-linear-[103deg] from-fd-primary from-15% to-fd-muted-foreground to-85%">
-            Intuition Box
-          </h1>
-        </AnimateIn>
-        <AnimateIn delay={0.16}>
-          <p className="text-lg text-fd-muted-foreground max-w-2xl mx-auto mb-8">
-            We fund work, govern decisions, and shape the Intuition ecosystem with a coordination protocol for everyone.
-          </p>
-        </AnimateIn>
-      </section>
+      <AnimateOnView>
+        <section className="max-w-5xl mx-auto w-full py-16 px-8">
+          <Card
+            variant="interactive"
+            className="w-full text-center rounded-3xl bg-linear-to-b from-fd-card from-50% to-ib-brand-dark border-ib-brand-dark ring-ib-brand-dark"
+          >
+            <CardContent className="py-12 px-16 flex flex-col gap-4">
+              <h2 className="text-3xl font-semibold m-0">Start Building</h2>
+              <p className="text-fd-muted-foreground m-0">
+                Join the developer community and use Intuition to transform your ideas into products.
+              </p>
+              <div className="flex justify-center gap-4 pt-4 max-sm:flex-col max-sm:gap-3">
+                <Button
+                  className="bg-ib-white text-ib-brand-dark hover:opacity-60 hover:bg-ib-white"
+                  variant="default"
+                  size="lg"
+                  render={<Link href="/missions" />}
+                >
+                  Work on a Mission
+                </Button>
+                <Button
+                  className="bg-ib-brand text-ib-brand-dark hover:opacity-60 hover:bg-ib-brand"
+                  variant="default"
+                  size="lg"
+                  render={<a href="https://atlas.discourse.group/c/ecosystem-development/grant-applications/36" target="_blank" rel="noopener noreferrer" />}
+                >
+                  Apply for a Grant
+                </Button>
+                <Button
+                  className="bg-ib-brand text-ib-brand-dark hover:opacity-60 hover:bg-ib-brand"
+                  variant="default"
+                  size="lg"
+                  render={<a href="https://atlas.discourse.group/c/governance/intuition-box/35" target="_blank" rel="noopener noreferrer" />}
+                >
+                  Submit a Proposal
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </section>
+      </AnimateOnView>
 
       <section className="max-w-5xl mx-auto py-16 px-8">
         <AnimateOnView>
@@ -62,10 +96,10 @@ export default async function HomePage() {
         <div className="grid md:grid-cols-7 gap-4">
           {STEPS.map((step, i) => (
             <AnimateOnView key={step} delay={i * 0.08} distance={30}>
-              <Card className="h-full hover:scale-105 transition-transform">
-                <CardContent className="p-4 text-center">
-                  <p className="text-sm text-fd-muted-foreground">Step {i + 1}</p>
-                  <h3 className="font-medium mt-2">{step}</h3>
+              <Card className="h-full text-center">
+                <CardContent className="py-2">
+                  <p className="text-sm text-fd-muted-foreground m-0">Step {i + 1}</p>
+                  <h3 className="font-medium mt-2 m-0">{step}</h3>
                 </CardContent>
               </Card>
             </AnimateOnView>
@@ -82,9 +116,11 @@ export default async function HomePage() {
         <div className="grid md:grid-cols-2 gap-6">
           <AnimateOnView>
             <Card className="h-full">
-              <CardContent className="p-8 space-y-8">
-                <h3 className="text-xl font-bold">For Builders</h3>
-                <ul className="space-y-6">
+              <CardHeader>
+                <CardTitle className="text-xl font-bold">For Builders</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="space-y-6 m-0 list-none p-0">
                   <li className="flex gap-3">
                     <Code className="size-5 text-fd-primary/40 shrink-0 mt-0.5" />
                     <div>
@@ -119,10 +155,12 @@ export default async function HomePage() {
           </AnimateOnView>
 
           <AnimateOnView delay={0.15}>
-            <Card className="h-full bg-fd-card">
-              <CardContent className="p-8 space-y-8">
-                <h3 className="text-xl font-bold">For the Ecosystem</h3>
-                <ul className="space-y-6">
+            <Card className="h-full">
+              <CardHeader>
+                <CardTitle className="text-xl font-bold">For the Ecosystem</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="space-y-6 m-0 list-none p-0">
                   <li className="flex gap-3">
                     <Signal className="size-5 text-fd-primary/40 shrink-0 mt-0.5" />
                     <div>
@@ -183,36 +221,6 @@ export default async function HomePage() {
         </AnimateOnView>
       )}
 
-      <AnimateOnView>
-        <section className="max-w-5xl mx-auto w-full py-16 px-8">
-          <Card className="w-full py-12 px-16 bg-linear-to-b from-fd-card from-50% to-ib-brand-dark ring-ib-brand-dark rounded-3xl text-center">
-            <h2 className="text-3xl font-semibold">
-              Start Building
-            </h2>
-            <p className="text-fd-muted-foreground">
-              Join the developer community and use Intuition to transform your ideas into products.
-            </p>
-            <div className="flex justify-center gap-6 pt-4 max-sm:flex-col max-sm:gap-3">
-              <Button
-                className="bg-ib-white text-ib-brand-dark hover:opacity-60 hover:bg-ib-white"
-                variant="default"
-                size="lg"
-                render={<Link href="/docs" />}
-              >
-                Find more
-              </Button>
-              <Button
-                className="bg-ib-brand text-ib-brand-dark hover:opacity-60 hover:bg-ib-brand"
-                variant="default"
-                size="lg"
-                render={<a href={GRANTS_URL} target="_blank" rel="noopener noreferrer" />}
-              >
-                Submit a Proposal
-              </Button>
-            </div>
-          </Card>
-        </section>
-      </AnimateOnView>
 
       <Footer />
     </>

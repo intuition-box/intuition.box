@@ -9,6 +9,8 @@ import {
 } from '@waveso/ui/dialog';
 import { Calendar, FileText, MapPin, Expand } from 'lucide-react';
 import type { CalendarEvent } from '@/lib/calendar/types';
+import { cardClasses } from '@/components/card';
+import { cn } from '@/lib/cn';
 import { useTimezone } from './timezone-context';
 
 interface EventCardProps {
@@ -57,7 +59,10 @@ export function EventCard({ event }: EventCardProps) {
           <button
             type="button"
             aria-label={`View details for ${event.title}`}
-            className="text-left rounded-lg border border-fd-border bg-fd-card p-3 flex flex-col gap-1.5 transition-colors hover:bg-fd-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fd-ring cursor-pointer"
+            className={cn(
+              cardClasses('compact'),
+              'text-left transition-colors hover:bg-fd-accent hover:border-fd-accent cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fd-ring',
+            )}
           />
         }
       >

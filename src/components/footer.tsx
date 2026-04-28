@@ -8,7 +8,6 @@ const COLUMNS = [
     title: 'Developers',
     links: [
       { label: 'Docs', href: '/docs' },
-      { label: 'GitHub', href: 'https://github.com/intuition-box', external: true },
       { label: 'Colony', href: 'https://app.colony.io/intuition_box', external: true },
     ],
   },
@@ -16,9 +15,8 @@ const COLUMNS = [
     title: 'Community',
     links: [
       { label: 'Governance', href: 'https://atlas.discourse.group/c/governance/intuition-box/35', external: true },
+      { label: 'Missions', href: '/missions' },
       { label: 'Grants', href: 'https://atlas.discourse.group/c/ecosystem-development/grant-applications/36', external: true },
-      { label: 'Discord', href: 'https://discord.gg/0xintuition', external: true },
-      { label: 'X', href: 'https://x.com/intuition_box', external: true },
     ],
   },
   {
