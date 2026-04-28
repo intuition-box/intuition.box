@@ -15,7 +15,7 @@ export function baseOptions(): BaseLayoutProps {
       { text: 'Docs', url: '/docs', active: 'nested-url' },
       { text: 'Blog', url: '/blog', active: 'nested-url' },
       { text: 'Missions', url: '/missions', active: 'nested-url' },
-      { text: 'Grants', url: GRANTS_URL, external: true },
+      { text: 'Grants', url: GRANTS_URL },
       {
         type: 'icon',
         text: 'Discord',

@@ -198,6 +198,27 @@
   #nd-nav a[aria-label] {
     margin-inline: 0.125rem;
   }
+
+  /*
+   * Docs sidebar: separator between the top-level nav menu items
+   * (Docs / Blog / Missions / Grants) and the docs page tree
+   * (Welcome / FAQ / …). Fumadocs already adds `mb-4` (1rem of
+   * margin-bottom) to the last nav menu item; we paint a 1px line
+   * in the middle of that gap via a pseudo-element, so it reads as
+   * a section divider rather than a border on the link itself.
+   */
+  #nd-sidebar a.mb-4 {
+    position: relative;
+  }
+  #nd-sidebar a.mb-4::after {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    bottom: -0.5rem;
+    height: 1px;
+    background: var(--color-fd-border);
+    pointer-events: none;
+  }
 }
 
 body {
