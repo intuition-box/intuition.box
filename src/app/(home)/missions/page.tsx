@@ -109,7 +109,7 @@ export default async function MissionsPage() {
           <div>
             <h2 className="text-2xl font-semibold m-0">Available Missions</h2>
             <p className="text-sm text-fd-muted-foreground mt-1 m-0">
-              {missions.length} mission{missions.length !== 1 ? 's' : ''} from{' '}
+              Live from{' '}
               <a
                 href={MISSIONS_PROJECT_URL}
                 target="_blank"
@@ -118,7 +118,7 @@ export default async function MissionsPage() {
               >
                 the project board
               </a>
-              .
+              . Filter by status, sort by priority or recency.
             </p>
           </div>
           <div className="flex items-center gap-2">

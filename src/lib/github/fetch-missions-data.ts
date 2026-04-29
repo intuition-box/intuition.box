@@ -14,6 +14,10 @@ export interface Mission {
   title: string;
   status: string;
   priority?: string;
+  /** USDC Amount on the project board, when present. */
+  reward?: number;
+  /** ISO timestamp of the underlying issue's last update. */
+  updatedAt?: string;
   url?: string;
   body?: string;
   labels: Array<{ name: string }>;
@@ -37,9 +41,15 @@ interface ProjectV2ItemFieldSingleSelectValue {
   field?: ProjectV2FieldRef;
 }
 
+interface ProjectV2ItemFieldNumberValue {
+  number?: number;
+  field?: ProjectV2FieldRef;
+}
+
 type ProjectV2ItemFieldValue =
   | ProjectV2ItemFieldTextValue
   | ProjectV2ItemFieldSingleSelectValue
+  | ProjectV2ItemFieldNumberValue
   | Record<string, never>;
 
 interface ProjectV2IssueContent {
@@ -47,6 +57,7 @@ interface ProjectV2IssueContent {
   url?: string;
   number?: number;
   body?: string | null;
+  updatedAt?: string;
   labels?: { nodes: Array<{ name: string }> };
   assignees?: { nodes: Array<{ login: string }> };
 }
@@ -54,6 +65,8 @@ interface ProjectV2IssueContent {
 interface ProjectV2Item {
   id: string;
   databaseId?: number;
+  /** Item-level updated timestamp; present on drafts where `content` is null. */
+  updatedAt?: string;
   fieldValues: { nodes: ProjectV2ItemFieldValue[] };
   content: ProjectV2IssueContent | null;
 }
@@ -76,6 +89,7 @@ const MISSIONS_QUERY = /* GraphQL */ `
           nodes {
             id
             databaseId
+            updatedAt
             fieldValues(first: 10) {
               nodes {
                 ... on ProjectV2ItemFieldTextValue {
@@ -94,6 +108,14 @@ const MISSIONS_QUERY = /* GraphQL */ `
                     }
                   }
                 }
+                ... on ProjectV2ItemFieldNumberValue {
+                  number
+                  field {
+                    ... on ProjectV2FieldCommon {
+                      name
+                    }
+                  }
+                }
               }
             }
             content {
@@ -102,6 +124,7 @@ const MISSIONS_QUERY = /* GraphQL */ `
                 url
                 number
                 body
+                updatedAt
                 labels(first: 10) {
                   nodes {
                     name
@@ -124,6 +147,9 @@ const MISSIONS_QUERY = /* GraphQL */ `
 // ── Fallback data (shown when no token is configured) ────────────────
 
 function getFallbackMissions(): Mission[] {
+  // Static dates so the fallback renders identically across SSR and client.
+  const recent = '2026-04-25T12:00:00Z';
+  const older = '2026-04-10T12:00:00Z';
   return [
     {
       id: 'fallback-1',
@@ -131,6 +157,8 @@ function getFallbackMissions(): Mission[] {
       title: 'Add Intuition to observatory.intuition.box',
       status: 'Application open',
       priority: 'P0',
+      reward: 2000,
+      updatedAt: recent,
       body: 'Integrate Intuition protocol data into the observatory platform to provide comprehensive ecosystem insights for the builder community.',
       labels: [{ name: 'integration' }, { name: 'data' }],
       assignees: [],
@@ -141,6 +169,8 @@ function getFallbackMissions(): Mission[] {
       title: 'Proxy Fee Template',
       status: 'Application open',
       priority: 'P0',
+      reward: 1500,
+      updatedAt: recent,
       body: 'Create a standardized template for proxy fee contracts that builders can easily implement and customize for their applications.',
       labels: [{ name: 'smart-contracts' }, { name: 'template' }],
       assignees: [],
@@ -150,6 +180,8 @@ function getFallbackMissions(): Mission[] {
       databaseId: 167766958,
       title: 'Improvement of https://graph.intuition.box to mainnet',
       status: 'Application open',
+      reward: 3000,
+      updatedAt: older,
       body: 'Enhance the graph explorer interface and extend support for mainnet data visualization and querying capabilities.',
       labels: [{ name: 'frontend' }, { name: 'mainnet' }],
       assignees: [],
@@ -159,6 +191,7 @@ function getFallbackMissions(): Mission[] {
       databaseId: 167766959,
       title: 'Intuition.box Socials creation',
       status: 'Ideas',
+      updatedAt: older,
       body: 'Establish and manage social media presence for Intuition Box to engage with the developer community and share updates.',
       labels: [{ name: 'marketing' }, { name: 'community' }],
       assignees: [],
@@ -168,19 +201,35 @@ function getFallbackMissions(): Mission[] {
 
 // ── Transform ────────────────────────────────────────────────────────
 
-function readFieldValues(item: ProjectV2Item): Record<string, string> {
-  const fields: Record<string, string> = {};
+function readFieldValues(item: ProjectV2Item): Record<string, string | number> {
+  const fields: Record<string, string | number> = {};
   for (const node of item.fieldValues.nodes) {
-    // Both fragment shapes can show up; just look for whichever value is present.
-    const n = node as { text?: string | null; name?: string | null; field?: { name?: string } };
+    // Three fragment shapes can show up; just look for whichever value is present.
+    const n = node as {
+      text?: string | null;
+      name?: string | null;
+      number?: number | null;
+      field?: { name?: string };
+    };
     const fieldName = n.field?.name;
     if (!fieldName) continue;
-    const value = n.text ?? n.name;
-    if (typeof value === 'string') {
-      fields[fieldName] = value;
+    if (typeof n.text === 'string') {
+      fields[fieldName] = n.text;
+    } else if (typeof n.name === 'string') {
+      fields[fieldName] = n.name;
+    } else if (typeof n.number === 'number') {
+      fields[fieldName] = n.number;
     }
   }
   return fields;
+}
+
+function asString(value: string | number | undefined): string | undefined {
+  return typeof value === 'string' ? value : undefined;
+}
+
+function asNumber(value: string | number | undefined): number | undefined {
+  return typeof value === 'number' ? value : undefined;
 }
 
 function transformMissionData(items: ProjectV2Item[]): Mission[] {
@@ -190,9 +239,13 @@ function transformMissionData(items: ProjectV2Item[]): Mission[] {
     return {
       id: item.id,
       databaseId: item.databaseId,
-      title: fields.Title ?? issue?.title ?? 'Untitled Mission',
-      status: fields.Status ?? 'Ideas',
-      priority: fields.Priority,
+      title: asString(fields.Title) ?? issue?.title ?? 'Untitled Mission',
+      status: asString(fields.Status) ?? 'Ideas',
+      priority: asString(fields.Priority),
+      reward: asNumber(fields['USDC Amount']),
+      // Prefer the linked issue's updatedAt; fall back to the project item's
+      // own updatedAt so drafts (content === null) still get a timestamp.
+      updatedAt: issue?.updatedAt ?? item.updatedAt,
       url: issue?.url,
       body: issue?.body ?? undefined,
       labels: issue?.labels?.nodes ?? [],
@@ -263,7 +316,7 @@ async function fetchMissionsUncached(
 
 const cachedFetch = unstable_cache(
   (org: string, projectNumber: number) => fetchMissionsUncached(org, projectNumber),
-  ['missions-data', 'v3'],
+  ['missions-data', 'v4'],
   // Short TTL (60s) so edits propagate within a minute. The cache is
   // also tagged so a server action can call `revalidateTag(MISSIONS_CACHE_TAG)`
   // for instant refresh on demand.
