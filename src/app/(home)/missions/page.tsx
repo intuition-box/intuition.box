@@ -6,6 +6,7 @@ import {
   CardHeader,
 } from '@/components/card';
 import Link from 'next/link';
+import { Suspense } from 'react';
 import { GRANTS_URL, MISSIONS_PROJECT_URL } from '@/lib/github/constants';
 import {
   fetchMissionsData,
@@ -171,7 +172,9 @@ export default async function MissionsPage() {
         </div>
 
         {missions.length > 0 ? (
-          <MissionsGrid missions={missions} />
+          <Suspense fallback={null}>
+            <MissionsGrid missions={missions} />
+          </Suspense>
         ) : (
           <div className="text-center py-16">
             <h2 className="text-2xl font-semibold mb-4">No Missions Available</h2>
