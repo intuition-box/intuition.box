@@ -9,10 +9,10 @@ import {
 import {
   Card as WavesoCard,
   CardAction,
-  CardContent,
+  CardContent as WavesoCardContent,
   CardDescription,
-  CardFooter,
-  CardHeader,
+  CardFooter as WavesoCardFooter,
+  CardHeader as WavesoCardHeader,
   CardTitle,
 } from '@waveso/ui/card';
 import { cn } from '@/lib/cn';
@@ -50,11 +50,13 @@ export function getCardColumnWidth(variant: CardVariant = 'default'): number {
  * element — e.g. a `<button>` trigger inside a Dialog where you need real
  * button semantics for accessibility.
  */
-export function cardClasses(variant: CardVariant = 'default'): string {
-  const compact = variant === 'compact';
+export function cardClasses(_variant: CardVariant = 'default'): string {
+  // Mirrors the `<Card>` wrapper defaults so non-div triggers (e.g. a
+  // `<button>` Dialog trigger) match real Cards exactly: solid bg, single
+  // 1px border (no doubled ring), uniform 20px padding regardless of variant.
   return cn(
-    'ring-foreground/10 bg-card text-card-foreground flex flex-col overflow-hidden rounded-xl text-sm ring-1',
-    compact ? 'gap-3 py-3 px-3' : 'gap-4 py-4 px-4',
+    'bg-fd-card text-card-foreground border border-fd-border flex flex-col overflow-hidden rounded-xl text-sm',
+    'gap-4 p-5',
   );
 }
 
@@ -64,13 +66,37 @@ export interface CardProps extends ComponentProps<typeof WavesoCard> {
   variant?: CardVariant;
 }
 
-export function Card({ variant: variantProp, ...rest }: CardProps) {
+export function Card({
+  variant: variantProp,
+  className,
+  ...rest
+}: CardProps) {
   const ctx = useContext(CardContext);
   const variant = variantProp ?? ctx.variant;
   // wave-ui's own `size` prop only accepts default / sm. Map compact → sm,
   // everything else inherits the default visual scale.
   const wavesoSize = variant === 'compact' ? 'sm' : 'default';
-  return <WavesoCard size={wavesoSize} data-variant={variant} {...rest} />;
+  return (
+    <WavesoCard
+      size={wavesoSize}
+      data-variant={variant}
+      // Site-wide card defaults:
+      //  - `bg-fd-card`: solid card fill
+      //  - `border border-fd-border`: 1px subtle gray border
+      //  - `ring-0`: nullify library `ring-1 ring-foreground/10` so the
+      //    border is the only edge — avoids a doubled ring+border line
+      // Consumers can still override any of these via `className`.
+      className={cn(
+        // Site-wide 20px padding via py-5; the `data-[size=sm]:py-5`
+        // override beats wave-ui's `data-[size=sm]:py-3` so compact
+        // cards also get 20px (otherwise the same-specificity conditional
+        // wins by source order).
+        'py-5 data-[size=sm]:py-5 bg-fd-card border border-fd-border ring-0',
+        className,
+      )}
+      {...rest}
+    />
+  );
 }
 
 // ── Layout primitive ─────────────────────────────────────────────────
@@ -111,13 +137,55 @@ export function CardGrid({
   );
 }
 
+// ── Slot overrides ───────────────────────────────────────────────────
+// Site-wide 20px horizontal padding (`px-5`) on every slot, replacing
+// wave-ui's `px-4` (default) / `px-3` (compact). Keeps padding uniform
+// regardless of card variant.
+
+export function CardHeader({
+  className,
+  ...rest
+}: ComponentProps<typeof WavesoCardHeader>) {
+  return (
+    <WavesoCardHeader
+      className={cn('px-5 group-data-[size=sm]/card:px-5', className)}
+      {...rest}
+    />
+  );
+}
+
+export function CardContent({
+  className,
+  ...rest
+}: ComponentProps<typeof WavesoCardContent>) {
+  return (
+    <WavesoCardContent
+      className={cn('px-5 group-data-[size=sm]/card:px-5', className)}
+      {...rest}
+    />
+  );
+}
+
+/**
+ * wave-ui's `CardFooter` defaults to a divider + filled action shelf
+ * (`border-t bg-muted/50 p-4`). We drop the top border site-wide and
+ * apply the uniform 20px padding so footer matches header/content.
+ */
+export function CardFooter({
+  className,
+  ...rest
+}: ComponentProps<typeof WavesoCardFooter>) {
+  return (
+    <WavesoCardFooter
+      className={cn(
+        'p-5 group-data-[size=sm]/card:p-5 border-t-0',
+        className,
+      )}
+      {...rest}
+    />
+  );
+}
+
 // ── Re-exports ───────────────────────────────────────────────────────
 
-export {
-  CardAction,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-};
+export { CardAction, CardDescription, CardTitle };

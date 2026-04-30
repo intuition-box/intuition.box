@@ -7,7 +7,7 @@
   --galaxy-light-svg: url('/galaxy-light.svg');
   --galaxy-dark-svg: url('/galaxy-dark.svg');
 
-  --color-fd-background: rgb(18, 18, 18);
+  --color-fd-background: rgb(9, 9, 11);
   --color-fd-foreground: rgb(235, 235, 235);
   --color-fd-muted: rgb(33, 33, 33);
   --color-fd-muted-foreground: rgba(179, 179, 179, 0.8);
@@ -15,7 +15,7 @@
   --color-fd-popover-foreground: rgb(222, 222, 222);
   --color-fd-card: rgb(18, 18, 18);
   --color-fd-card-foreground: rgb(250, 250, 250);
-  --color-fd-border: rgba(102, 102, 102, 0.2);
+  --color-fd-border: rgba(102, 102, 102, 0.1);
   --color-fd-primary: rgb(250, 250, 250);
   --color-fd-primary-foreground: rgb(23, 23, 23);
   --color-fd-secondary: rgb(33, 33, 33);
@@ -40,6 +40,8 @@
   --color-ib-gray-alpha: rgba(69, 69, 69, 0.1);
   --color-ib-red: rgb(251, 51, 114);
   --color-ib-red-alpha: rgba(251, 51, 114, 0.1);
+  --color-ib-orange: rgb(252, 120, 64);
+  --color-ib-orange-alpha: rgba(252, 120, 64, 0.1);
   --color-ib-yellow: rgb(254, 244, 44);
   --color-ib-yellow-alpha: rgba(254, 244, 44, 0.1);
   --color-ib-teal: rgb(104, 219, 241);
@@ -101,6 +103,8 @@
   --color-ib-gray-alpha: rgba(69, 69, 69, 0.1);
   --color-ib-red: rgb(251, 51, 114);
   --color-ib-red-alpha: rgba(251, 51, 114, 0.1);
+  --color-ib-orange: rgb(252, 120, 64);
+  --color-ib-orange-alpha: rgba(252, 120, 64, 0.1);
   --color-ib-yellow: rgb(254, 244, 44);
   --color-ib-yellow-alpha: rgba(254, 244, 44, 0.1);
   --color-ib-teal: rgb(104, 219, 241);
@@ -136,6 +140,8 @@
    */
   .bg-hero-glow,
   .bg-hero-glow-mint,
+  .bg-hero-glow-missions,
+  .bg-hero-glow-grants,
   .bg-hero-glow-yellow,
   .bg-hero-glow-teal,
   .bg-hero-glow-purple,
@@ -150,6 +156,18 @@
   .bg-hero-glow {
     background-image:
       radial-gradient(rgb(252 120 64 / .1), rgb(252 120 64 / .02) 30%, transparent 50%),
+      radial-gradient(rgb(94 106 210 / .1), rgb(5 106 210 / .02) 30%, transparent 50%);
+  }
+
+  .bg-hero-glow-missions {
+    background-image:
+      radial-gradient(rgb(16 29 24 / .85), rgb(16 29 24 / .3) 30%, transparent 50%),
+      radial-gradient(rgb(94 106 210 / .1), rgb(5 106 210 / .02) 30%, transparent 50%);
+  }
+
+  .bg-hero-glow-grants {
+    background-image:
+      radial-gradient(rgb(16 29 24 / .1), rgb(16 29 24 / .05) 30%, transparent 50%),
       radial-gradient(rgb(94 106 210 / .1), rgb(5 106 210 / .02) 30%, transparent 50%);
   }
 
@@ -218,6 +236,24 @@
     height: 1px;
     background: var(--color-fd-border);
     pointer-events: none;
+  }
+
+  /*
+   * wave-ui ScrollArea: brand-colored thumb, hidden by default, shown
+   * only when Base UI sets `data-hovering` (cursor in scroll area) or
+   * `data-scrolling` (active scroll). Higher specificity beats Tailwind
+   * `bg-border` on the thumb.
+   */
+  [data-slot="scroll-area"] [data-slot="scroll-area-scrollbar"] {
+    opacity: 0;
+    transition: opacity 150ms ease;
+  }
+  [data-slot="scroll-area"] [data-slot="scroll-area-scrollbar"][data-hovering],
+  [data-slot="scroll-area"] [data-slot="scroll-area-scrollbar"][data-scrolling] {
+    opacity: 1;
+  }
+  [data-slot="scroll-area"] [data-slot="scroll-area-thumb"] {
+    background-color: var(--color-ib-brand);
   }
 }
 

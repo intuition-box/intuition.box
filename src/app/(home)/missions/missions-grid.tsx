@@ -1,6 +1,14 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import {
+  useCallback,
+  useMemo,
+  useRef,
+  type ComponentProps,
+  type KeyboardEvent,
+  type ReactNode,
+} from 'react';
+import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { Badge } from '@waveso/ui/badge';
 import { Button } from '@waveso/ui/button';
 import {
@@ -12,14 +20,18 @@ import {
   DialogTrigger,
 } from '@waveso/ui/dialog';
 import { Masonry, MasonryItem } from '@waveso/ui/masonry';
+import { ScrollArea } from '@waveso/ui/scroll-area';
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
   SelectTrigger,
   SelectValue,
 } from '@waveso/ui/select';
+import { RefreshButton } from './refresh-button';
 import { cardClasses, getCardColumnWidth } from '@/components/card';
+import { MarkdownBody, bodyToPreview } from '@/components/markdown-body';
 import {
   ExternalLink,
   Clock,
@@ -29,8 +41,9 @@ import {
   PlayCircle,
   Eye,
   CreditCard,
+  Users,
+  FileText,
 } from 'lucide-react';
-import type { ComponentProps, ReactNode } from 'react';
 import type { Mission } from '@/lib/github/fetch-missions-data';
 import { MISSIONS_PROJECT_URL } from '@/lib/github/constants';
 import { cn } from '@/lib/cn';
@@ -38,24 +51,58 @@ import { cn } from '@/lib/cn';
 type BadgeVariant = ComponentProps<typeof Badge>['variant'];
 
 interface StatusToken {
-  variant: BadgeVariant;
+  /** Tailwind classes layered onto wave-ui's `outline` variant. */
+  className: string;
   icon: ReactNode;
   /** Lower = appears earlier in default ("status") sort. */
   weight: number;
 }
 
+// Color spec (per Saulo): Ideas/Pending Payment outline · Backlog & Paid green
+// · Application open orange · In progress yellow · In review purple.
 const STATUS_TOKENS: Record<string, StatusToken> = {
-  'Application open': { variant: 'success', icon: <Clock className="size-3" />, weight: 0 },
-  'In progress': { variant: 'warning', icon: <PlayCircle className="size-3" />, weight: 1 },
-  'In review': { variant: 'default', icon: <Eye className="size-3" />, weight: 2 },
-  'Pending Payment': { variant: 'warning', icon: <CreditCard className="size-3" />, weight: 3 },
-  Backlog: { variant: 'outline', icon: <CircleDashed className="size-3" />, weight: 4 },
-  Ideas: { variant: 'secondary', icon: <Zap className="size-3" />, weight: 5 },
-  Paid: { variant: 'success', icon: <CheckCircle className="size-3" />, weight: 6 },
+  'Application open': {
+    className:
+      'bg-ib-orange-alpha text-ib-orange border-ib-orange/30',
+    icon: <Clock className="size-3" />,
+    weight: 0,
+  },
+  'In progress': {
+    className:
+      'bg-ib-yellow-alpha text-ib-yellow border-ib-yellow/30',
+    icon: <PlayCircle className="size-3" />,
+    weight: 1,
+  },
+  'In review': {
+    className:
+      'bg-ib-purple-alpha text-ib-purple border-ib-purple/30',
+    icon: <Eye className="size-3" />,
+    weight: 2,
+  },
+  'Pending Payment': {
+    className: 'border-fd-border text-fd-muted-foreground bg-transparent',
+    icon: <CreditCard className="size-3" />,
+    weight: 3,
+  },
+  Backlog: {
+    className: 'bg-ib-brand-alpha text-ib-brand border-ib-brand/30',
+    icon: <CircleDashed className="size-3" />,
+    weight: 4,
+  },
+  Ideas: {
+    className: 'border-fd-border text-fd-muted-foreground bg-transparent',
+    icon: <Zap className="size-3" />,
+    weight: 5,
+  },
+  Paid: {
+    className: 'bg-ib-brand-alpha text-ib-brand border-ib-brand/30',
+    icon: <CheckCircle className="size-3" />,
+    weight: 6,
+  },
 };
 
 const FALLBACK_TOKEN: StatusToken = {
-  variant: 'secondary',
+  className: 'border-fd-border text-fd-muted-foreground bg-transparent',
   icon: <Clock className="size-3" />,
   weight: 99,
 };
@@ -75,6 +122,12 @@ const SORT_OPTIONS: Array<{ value: SortKey; label: string }> = [
   { value: 'status', label: 'Status' },
   { value: 'updated', label: 'Recently updated' },
 ];
+
+const DEFAULT_SORT: SortKey = 'priority';
+
+function statusToSlug(status: string): string {
+  return status.toLowerCase().replace(/\s+/g, '-');
+}
 
 const RELATIVE_TIME = new Intl.RelativeTimeFormat('en', { numeric: 'auto' });
 
@@ -109,10 +162,12 @@ interface MissionsGridProps {
 }
 
 export function MissionsGrid({ missions }: MissionsGridProps) {
-  const [selectedStatus, setSelectedStatus] = useState<StatusFilter>('all');
-  const [sortBy, setSortBy] = useState<SortKey>('priority');
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
-  // Statuses present in the data, ordered by canonical weight.
+  // Statuses present in the data, ordered by canonical weight. Computed
+  // before reading URL state because we use it to validate the slug.
   const statuses = useMemo(() => {
     const seen = new Set<string>();
     for (const m of missions) seen.add(m.status);
@@ -121,6 +176,55 @@ export function MissionsGrid({ missions }: MissionsGridProps) {
     );
   }, [missions]);
 
+  // ── URL state ────────────────────────────────────────────────────
+  // Status as slug ("in-progress"), sort as-is. Default values (`all`,
+  // `priority`) are dropped from the URL so a clean page has no params.
+  const statusSlug = searchParams.get('status');
+  const selectedStatus: StatusFilter = useMemo(() => {
+    if (!statusSlug) return 'all';
+    const match = statuses.find((s) => statusToSlug(s) === statusSlug);
+    return match ?? 'all';
+  }, [statusSlug, statuses]);
+
+  const sortParam = searchParams.get('sort') as SortKey | null;
+  const sortBy: SortKey = SORT_OPTIONS.some((o) => o.value === sortParam)
+    ? (sortParam as SortKey)
+    : DEFAULT_SORT;
+
+  const updateParams = useCallback(
+    (next: { status?: StatusFilter; sort?: SortKey }) => {
+      const params = new URLSearchParams(searchParams.toString());
+      if ('status' in next) {
+        if (next.status && next.status !== 'all') {
+          params.set('status', statusToSlug(next.status));
+        } else {
+          params.delete('status');
+        }
+      }
+      if ('sort' in next) {
+        if (next.sort && next.sort !== DEFAULT_SORT) {
+          params.set('sort', next.sort);
+        } else {
+          params.delete('sort');
+        }
+      }
+      const qs = params.toString();
+      // `replace` so the back button isn't polluted with every chip click.
+      router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
+    },
+    [searchParams, router, pathname],
+  );
+
+  const setSelectedStatus = useCallback(
+    (status: StatusFilter) => updateParams({ status }),
+    [updateParams],
+  );
+  const setSortBy = useCallback(
+    (sort: SortKey) => updateParams({ sort }),
+    [updateParams],
+  );
+
+  // ── Filter + sort ────────────────────────────────────────────────
   const visibleMissions = useMemo(() => {
     const filtered =
       selectedStatus === 'all'
@@ -132,7 +236,6 @@ export function MissionsGrid({ missions }: MissionsGridProps) {
         const pa = PRIORITY_WEIGHT[a.priority ?? ''] ?? 0;
         const pb = PRIORITY_WEIGHT[b.priority ?? ''] ?? 0;
         if (pa !== pb) return pb - pa;
-        // Tiebreaker: status weight, then recency.
         const sa = getStatusToken(a.status).weight;
         const sb = getStatusToken(b.status).weight;
         if (sa !== sb) return sa - sb;
@@ -144,7 +247,6 @@ export function MissionsGrid({ missions }: MissionsGridProps) {
         if (sa !== sb) return sa - sb;
         return compareUpdatedDesc(a, b);
       }
-      // sortBy === 'updated'
       return compareUpdatedDesc(a, b);
     });
 
@@ -160,7 +262,6 @@ export function MissionsGrid({ missions }: MissionsGridProps) {
         onStatusChange={setSelectedStatus}
         sortBy={sortBy}
         onSortChange={setSortBy}
-        visibleCount={visibleMissions.length}
         totalCount={missions.length}
       />
 
@@ -210,7 +311,6 @@ interface ToolbarProps {
   onStatusChange: (next: StatusFilter) => void;
   sortBy: SortKey;
   onSortChange: (next: SortKey) => void;
-  visibleCount: number;
   totalCount: number;
 }
 
@@ -221,10 +321,8 @@ function Toolbar({
   onStatusChange,
   sortBy,
   onSortChange,
-  visibleCount,
   totalCount,
 }: ToolbarProps) {
-  // Per-status counts so the chips can show "Application open · 4".
   const counts = useMemo(() => {
     const map: Record<string, number> = {};
     for (const m of missions) {
@@ -233,20 +331,71 @@ function Toolbar({
     return map;
   }, [missions]);
 
+  // Roving tabindex for the radiogroup: only the active chip is tabbable.
+  // Arrow keys move focus + selection between siblings.
+  const groupRef = useRef<HTMLDivElement>(null);
+  const allValues: StatusFilter[] = ['all', ...statuses];
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    const { key } = event;
+    if (
+      key !== 'ArrowRight' &&
+      key !== 'ArrowLeft' &&
+      key !== 'Home' &&
+      key !== 'End'
+    ) {
+      return;
+    }
+    event.preventDefault();
+    const currentIndex = allValues.indexOf(selectedStatus);
+    if (currentIndex === -1) return;
+
+    let nextIndex = currentIndex;
+    if (key === 'ArrowRight') {
+      nextIndex = (currentIndex + 1) % allValues.length;
+    } else if (key === 'ArrowLeft') {
+      nextIndex =
+        (currentIndex - 1 + allValues.length) % allValues.length;
+    } else if (key === 'Home') {
+      nextIndex = 0;
+    } else if (key === 'End') {
+      nextIndex = allValues.length - 1;
+    }
+
+    const nextValue = allValues[nextIndex];
+    onStatusChange(nextValue);
+
+    // Move focus to the chip that's about to become active.
+    requestAnimationFrame(() => {
+      const next = groupRef.current?.querySelector<HTMLButtonElement>(
+        `[data-chip-value="${chipDataValue(nextValue)}"]`,
+      );
+      next?.focus();
+    });
+  };
+
   return (
-    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-      <div className="flex flex-wrap items-center gap-1.5">
+    <div className="flex items-center justify-between gap-6">
+      <div
+        ref={groupRef}
+        role="radiogroup"
+        aria-label="Filter missions by status"
+        onKeyDown={handleKeyDown}
+        className="flex flex-wrap items-center gap-1.5"
+      >
         <FilterChip
+          value="all"
           active={selectedStatus === 'all'}
-          onClick={() => onStatusChange('all')}
+          onSelect={onStatusChange}
           label="All"
           count={totalCount}
         />
         {statuses.map((status) => (
           <FilterChip
             key={status}
+            value={status}
             active={selectedStatus === status}
-            onClick={() => onStatusChange(status)}
+            onSelect={onStatusChange}
             label={status}
             count={counts[status] ?? 0}
             icon={getStatusToken(status).icon}
@@ -254,26 +403,28 @@ function Toolbar({
         ))}
       </div>
 
-      <div className="flex items-center gap-3 text-sm text-fd-muted-foreground">
-        <span className="tabular-nums">
-          {visibleCount === totalCount
-            ? `${totalCount} mission${totalCount === 1 ? '' : 's'}`
-            : `${visibleCount} of ${totalCount}`}
-        </span>
+      <div className="flex items-center gap-2">
+        <RefreshButton />
         <Select<SortKey>
           value={sortBy}
           onValueChange={(v) => onSortChange(v as SortKey)}
         >
           <SelectTrigger size="sm" className="min-w-[180px]">
             <span className="text-fd-muted-foreground">Sort:</span>
-            <SelectValue />
+            <SelectValue>
+              {(value) =>
+                SORT_OPTIONS.find((o) => o.value === value)?.label ?? value
+              }
+            </SelectValue>
           </SelectTrigger>
           <SelectContent align="end">
-            {SORT_OPTIONS.map((opt) => (
-              <SelectItem key={opt.value} value={opt.value}>
-                {opt.label}
-              </SelectItem>
-            ))}
+            <SelectGroup>
+              {SORT_OPTIONS.map((opt) => (
+                <SelectItem key={opt.value} value={opt.value}>
+                  {opt.label}
+                </SelectItem>
+              ))}
+            </SelectGroup>
           </SelectContent>
         </Select>
       </div>
@@ -281,23 +432,40 @@ function Toolbar({
   );
 }
 
+function chipDataValue(value: StatusFilter): string {
+  return value === 'all' ? 'all' : statusToSlug(value);
+}
+
 interface FilterChipProps {
+  value: StatusFilter;
   active: boolean;
   label: string;
   count: number;
   icon?: ReactNode;
-  onClick: () => void;
+  onSelect: (value: StatusFilter) => void;
 }
 
-function FilterChip({ active, label, count, icon, onClick }: FilterChipProps) {
+function FilterChip({
+  value,
+  active,
+  label,
+  count,
+  icon,
+  onSelect,
+}: FilterChipProps) {
   return (
     <button
       type="button"
-      onClick={onClick}
-      aria-pressed={active}
+      role="radio"
+      aria-checked={active}
+      // Roving tabindex: only the active chip is reachable by Tab; arrow
+      // keys move focus among siblings inside the radiogroup.
+      tabIndex={active ? 0 : -1}
+      data-chip-value={chipDataValue(value)}
+      onClick={() => onSelect(value)}
       className={cn(
         'rounded-full px-3 py-1 text-xs font-medium transition-colors',
-        'border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fd-ring',
+        'border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fd-foreground/40',
         active
           ? 'border-fd-foreground/30 bg-fd-foreground/10 text-fd-foreground'
           : 'border-fd-border bg-transparent text-fd-muted-foreground hover:text-fd-foreground hover:border-fd-foreground/20',
@@ -321,13 +489,36 @@ function FilterChip({ active, label, count, icon, onClick }: FilterChipProps) {
 
 // ── Mission card ─────────────────────────────────────────────────────
 
+function StatusBadge({
+  status,
+  variant,
+}: {
+  status: string;
+  variant?: BadgeVariant;
+}) {
+  const token = getStatusToken(status);
+  return (
+    <Badge variant={variant ?? 'outline'} className={cn('gap-1', token.className)}>
+      {token.icon}
+      {status}
+    </Badge>
+  );
+}
+
+// `Ideas` / `Backlog` already imply "not yet a workable Issue" — the Draft
+// badge would be redundant noise on those statuses. Only surface Draft when
+// status has progressed past early scoping (e.g. Application open without
+// an Issue created yet — a process bug worth flagging).
+const DRAFT_REDUNDANT_STATUSES = new Set(['Ideas', 'Backlog']);
+
 function MissionCard({ mission }: { mission: Mission }) {
-  const status = getStatusToken(mission.status);
   // Prefer the actual issue URL; fall back to the project-board pane
   // when GitHub didn't return a content URL (drafts have none).
   const href =
     mission.url ??
     `${MISSIONS_PROJECT_URL}?pane=issue&itemId=${mission.databaseId ?? mission.id}`;
+  const isDraft = !mission.url && !DRAFT_REDUNDANT_STATUSES.has(mission.status);
+  const previewBody = bodyToPreview(mission.body);
 
   return (
     <Dialog>
@@ -344,20 +535,33 @@ function MissionCard({ mission }: { mission: Mission }) {
         }
       >
         <div className="flex items-start justify-between gap-2">
-          <Badge variant={status.variant} className="gap-1">
-            {status.icon}
-            {mission.status}
-          </Badge>
+          <div className="flex flex-wrap items-center gap-1.5">
+            <StatusBadge status={mission.status} />
+            {isDraft && (
+              <Badge
+                variant="outline"
+                className="gap-1 border-fd-border/60 text-fd-muted-foreground"
+              >
+                <FileText className="size-3" />
+                Draft
+              </Badge>
+            )}
+          </div>
           <div className="flex items-center gap-1.5">
             {mission.priority && (
               <Badge variant="outline">{mission.priority}</Badge>
             )}
             {typeof mission.reward === 'number' && (
-              <Badge variant="default">{formatReward(mission.reward)}</Badge>
+              <Badge
+                variant="outline"
+                className="bg-ib-brand-alpha text-ib-brand border-ib-brand/30"
+              >
+                {formatReward(mission.reward)}
+              </Badge>
             )}
           </div>
         </div>
-        <h3 className="text-lg leading-tight font-semibold text-fd-foreground m-0 mt-1">
+        <h3 className="text-lg leading-tight font-semibold text-fd-foreground m-0">
           {mission.title}
         </h3>
         {mission.updatedAt && (
@@ -371,13 +575,13 @@ function MissionCard({ mission }: { mission: Mission }) {
             </time>
           </p>
         )}
-        {mission.body && (
+        {previewBody && (
           <p className="text-sm text-fd-muted-foreground line-clamp-3 m-0">
-            {mission.body}
+            {previewBody}
           </p>
         )}
-        {mission.labels.length > 0 && (
-          <div className="flex flex-wrap gap-1">
+        {(mission.labels.length > 0 || mission.assignees.length > 0) && (
+          <div className="flex flex-wrap gap-1 items-center">
             {mission.labels.slice(0, 3).map((label) => (
               <Badge key={label.name} variant="outline">
                 {label.name}
@@ -386,23 +590,52 @@ function MissionCard({ mission }: { mission: Mission }) {
             {mission.labels.length > 3 && (
               <Badge variant="outline">+{mission.labels.length - 3}</Badge>
             )}
+            {mission.assignees.length > 0 && (
+              <Badge variant="outline" className="gap-1">
+                <Users className="size-3" />
+                Assigned
+                {mission.assignees.length > 1 && (
+                  <span className="tabular-nums">
+                    · {mission.assignees.length}
+                  </span>
+                )}
+              </Badge>
+            )}
           </div>
         )}
       </DialogTrigger>
 
-      <DialogContent showCloseButton className="sm:max-w-screen-sm p-6">
+      <DialogContent
+        showCloseButton
+        className="sm:max-w-screen-sm max-h-[85vh] p-0 overflow-hidden"
+      >
+        <ScrollArea className="max-h-[85vh]">
+          <div className="flex flex-col gap-5 p-5">
         <DialogHeader className="gap-2">
           <div className="flex items-center justify-between gap-2 flex-wrap pr-8">
-            <Badge variant={status.variant} className="gap-1">
-              {status.icon}
-              {mission.status}
-            </Badge>
+            <div className="flex flex-wrap items-center gap-1.5">
+              <StatusBadge status={mission.status} />
+              {isDraft && (
+                <Badge
+                  variant="outline"
+                  className="gap-1 border-fd-border/60 text-fd-muted-foreground"
+                >
+                  <FileText className="size-3" />
+                  Draft
+                </Badge>
+              )}
+            </div>
             <div className="flex items-center gap-1.5">
               {mission.priority && (
                 <Badge variant="outline">{mission.priority}</Badge>
               )}
               {typeof mission.reward === 'number' && (
-                <Badge variant="default">{formatReward(mission.reward)}</Badge>
+                <Badge
+                  variant="outline"
+                  className="bg-ib-brand-alpha text-ib-brand border-ib-brand/30"
+                >
+                  {formatReward(mission.reward)}
+                </Badge>
               )}
             </div>
           </div>
@@ -422,51 +655,45 @@ function MissionCard({ mission }: { mission: Mission }) {
           )}
         </DialogHeader>
 
-        <div className="flex flex-col gap-5 mt-2">
-          {mission.body && (
-            <p className="text-sm text-fd-muted-foreground whitespace-pre-wrap m-0">
-              {mission.body}
+        {mission.body && <MarkdownBody>{mission.body}</MarkdownBody>}
+
+        {mission.labels.length > 0 && (
+          <div className="flex flex-col gap-1.5">
+            <p className="text-[10px] tracking-widest text-fd-muted-foreground uppercase m-0">
+              Labels
             </p>
-          )}
-
-          {mission.labels.length > 0 && (
-            <div className="flex flex-col gap-1.5">
-              <p className="text-[10px] tracking-widest text-fd-muted-foreground uppercase m-0">
-                Labels
-              </p>
-              <div className="flex flex-wrap gap-1">
-                {mission.labels.map((label) => (
-                  <Badge key={label.name} variant="outline">
-                    {label.name}
-                  </Badge>
-                ))}
-              </div>
+            <div className="flex flex-wrap gap-1">
+              {mission.labels.map((label) => (
+                <Badge key={label.name} variant="outline">
+                  {label.name}
+                </Badge>
+              ))}
             </div>
-          )}
+          </div>
+        )}
 
-          {mission.assignees.length > 0 && (
-            <div className="flex flex-col gap-1.5">
-              <p className="text-[10px] tracking-widest text-fd-muted-foreground uppercase m-0">
-                Assigned to
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {mission.assignees.map((a) => (
-                  <a
-                    key={a.login}
-                    href={`https://github.com/${a.login}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-sm text-fd-foreground underline underline-offset-2 hover:text-fd-primary"
-                  >
-                    @{a.login}
-                  </a>
-                ))}
-              </div>
+        {mission.assignees.length > 0 && (
+          <div className="flex flex-col gap-1.5">
+            <p className="text-[10px] tracking-widest text-fd-muted-foreground uppercase m-0">
+              Assigned to
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {mission.assignees.map((a) => (
+                <a
+                  key={a.login}
+                  href={`https://github.com/${a.login}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-fd-foreground underline underline-offset-2 hover:text-ib-brand"
+                >
+                  @{a.login}
+                </a>
+              ))}
             </div>
-          )}
-        </div>
+          </div>
+        )}
 
-        <DialogFooter>
+        <DialogFooter className="-mx-5 -mb-5 bg-muted/50 border-t p-5">
           <Button
             className="w-full"
             render={<a href={href} target="_blank" rel="noopener noreferrer" />}
@@ -475,6 +702,8 @@ function MissionCard({ mission }: { mission: Mission }) {
             {mission.url ? 'View on GitHub' : 'View on Project Board'}
           </Button>
         </DialogFooter>
+          </div>
+        </ScrollArea>
       </DialogContent>
     </Dialog>
   );
