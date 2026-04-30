@@ -14,7 +14,6 @@ import { Galaxy } from '@/components/github/galaxy/galaxy';
 import { DarkVeil } from '@/components/backgrounds/dark-veil';
 import { AnimateIn, AnimateOnView } from '@/components/animate';
 import { WeekGrid } from '@/components/events/week-grid';
-import { Footer } from '@/components/footer';
 import { Logomark } from '@/components/logomark';
 import { PageHero } from '@/components/page-hero';
 import { Code, Coins, Network, Wallet, Signal, Award, Rocket, GitBranch } from 'lucide-react';
@@ -45,47 +44,13 @@ export default async function HomePage() {
         description="We fund work, govern decisions, and shape the Intuition ecosystem with a coordination protocol for everyone."
       />
 
-      <AnimateOnView>
-        <section className="max-w-5xl mx-auto w-full py-16 px-8">
-          <Card
-            variant="interactive"
-            className="w-full text-center rounded-3xl bg-linear-to-b from-fd-card from-50% to-ib-brand-dark border-ib-brand-dark ring-ib-brand-dark"
-          >
-            <CardContent className="py-12 px-16 flex flex-col gap-4">
-              <h2 className="text-3xl font-semibold m-0">Start Building</h2>
-              <p className="text-fd-muted-foreground m-0">
-                Join the developer community and use Intuition to transform your ideas into products.
-              </p>
-              <div className="flex justify-center gap-4 pt-4 max-sm:flex-col max-sm:gap-3">
-                <Button
-                  className="bg-ib-white text-ib-brand-dark hover:opacity-60 hover:bg-ib-white"
-                  variant="default"
-                  size="lg"
-                  render={<Link href="/missions" />}
-                >
-                  Work on a Mission
-                </Button>
-                <Button
-                  className="bg-ib-brand text-ib-brand-dark hover:opacity-60 hover:bg-ib-brand"
-                  variant="default"
-                  size="lg"
-                  render={<a href="https://atlas.discourse.group/c/ecosystem-development/grant-applications/36" target="_blank" rel="noopener noreferrer" />}
-                >
-                  Apply for a Grant
-                </Button>
-                <Button
-                  className="bg-ib-brand text-ib-brand-dark hover:opacity-60 hover:bg-ib-brand"
-                  variant="default"
-                  size="lg"
-                  render={<a href="https://atlas.discourse.group/c/governance/intuition-box/35" target="_blank" rel="noopener noreferrer" />}
-                >
-                  Submit a Proposal
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        </section>
-      </AnimateOnView>
+      {week && (
+        <AnimateOnView>
+          <section className="max-w-5xl mx-auto w-full py-16 px-8">
+            <WeekGrid week={week} />
+          </section>
+        </AnimateOnView>
+      )}
 
       <section className="max-w-5xl mx-auto py-16 px-8">
         <AnimateOnView>
@@ -213,16 +178,47 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {week && (
-        <AnimateOnView>
-          <section className="max-w-5xl mx-auto w-full py-16 px-8">
-            <WeekGrid week={week} />
-          </section>
-        </AnimateOnView>
-      )}
-
-
-      <Footer />
+      <AnimateOnView>
+        <section className="max-w-5xl mx-auto w-full py-16 px-8">
+          <Card
+            variant="interactive"
+            className="w-full text-center rounded-3xl bg-linear-to-b from-fd-card from-50% to-ib-brand-dark border-ib-brand-dark ring-ib-brand-dark"
+          >
+            <CardContent className="py-12 px-16 flex flex-col gap-4">
+              <h2 className="text-3xl font-semibold m-0">Start Building</h2>
+              <p className="text-fd-muted-foreground m-0">
+                Join the developer community and use Intuition to transform your ideas into products.
+              </p>
+              <div className="flex justify-center gap-4 pt-4 max-sm:flex-col max-sm:gap-3">
+                <Button
+                  className="bg-ib-white text-ib-brand-dark hover:opacity-60 hover:bg-ib-white"
+                  variant="default"
+                  size="lg"
+                  render={<Link href="/missions" />}
+                >
+                  Work on a Mission
+                </Button>
+                <Button
+                  className="bg-ib-brand text-ib-brand-dark hover:opacity-60 hover:bg-ib-brand"
+                  variant="default"
+                  size="lg"
+                  render={<a href="https://atlas.discourse.group/c/ecosystem-development/grant-applications/36" target="_blank" rel="noopener noreferrer" />}
+                >
+                  Apply for a Grant
+                </Button>
+                <Button
+                  className="bg-ib-brand text-ib-brand-dark hover:opacity-60 hover:bg-ib-brand"
+                  variant="default"
+                  size="lg"
+                  render={<a href="https://atlas.discourse.group/c/governance/intuition-box/35" target="_blank" rel="noopener noreferrer" />}
+                >
+                  Submit a Proposal
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </section>
+      </AnimateOnView>
     </>
   );
 }

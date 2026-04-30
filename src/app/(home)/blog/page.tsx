@@ -48,7 +48,7 @@ export default function BlogIndexPage() {
         <CardGrid>
           {posts.map((post) => (
             <Link key={post.url} href={post.url} className="no-underline">
-              <Card className="h-full transition-colors hover:bg-fd-accent">
+              <Card className="h-full transition-colors hover:bg-fd-accent/40 hover:ring-fd-accent border-ib-purple-alpha">
                 <CardHeader>
                   <CardTitle className="text-lg font-semibold text-fd-foreground">
                     {post.data.title}
@@ -61,7 +61,7 @@ export default function BlogIndexPage() {
                     </p>
                   </CardContent>
                 )}
-                <CardFooter className="text-xs text-fd-muted-foreground gap-2 flex-wrap mt-auto">
+                <CardFooter className="text-xs text-fd-muted-foreground gap-2 flex-wrap mt-auto bg-transparent bg-linear-to-b from-transparent to-ib-purple-dark">
                   <span>{formatAuthors(post.data.author)}</span>
                   {post.data.category && (
                     <>

@@ -10,6 +10,7 @@ import { cn } from '@/lib/cn';
 export type HeroTone =
   | 'default'
   | 'mint'
+  | 'missions'
   | 'yellow'
   | 'teal'
   | 'purple'
@@ -21,6 +22,7 @@ export type HeroTone =
 const TONE_GLOW: Record<HeroTone, string> = {
   default: 'bg-hero-glow',
   mint: 'bg-hero-glow-mint',
+  missions: 'bg-hero-glow-missions',
   yellow: 'bg-hero-glow-yellow',
   teal: 'bg-hero-glow-teal',
   purple: 'bg-hero-glow-purple',
@@ -51,11 +53,16 @@ export function PageHero({
   className,
 }: PageHeroProps) {
   return (
-    <header className={cn('relative isolate', className)}>
+    <header className={cn('relative isolate -z-10', className)}>
       <div
         aria-hidden
         className={cn(
-          'absolute inset-x-0 top-0 h-[800px] -z-10 pointer-events-none',
+          // Extends 70px above the hero (so the glow continues behind the
+          // navbar) and a fixed height that gives the radial gradients
+          // room to fade out smoothly past the hero's content. Clipping
+          // at the hero's bottom edge made the gradient feel truncated
+          // ("doesn't expand") on shorter heroes.
+          'absolute inset-x-0 -top-[70px] h-[870px] -z-10 pointer-events-none',
           TONE_GLOW[tone],
         )}
       />
