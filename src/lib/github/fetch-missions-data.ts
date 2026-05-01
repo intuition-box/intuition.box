@@ -232,6 +232,19 @@ function asNumber(value: string | number | undefined): number | undefined {
   return typeof value === 'number' ? value : undefined;
 }
 
+/**
+ * Parse a reward amount out of an issue body's `**Reward:** $N USDC` line.
+ * Used as a fallback when the project board's `USDC Amount` number field
+ * isn't populated but the issue body still describes the bounty in prose.
+ */
+function rewardFromBody(body: string | null | undefined): number | undefined {
+  if (!body) return undefined;
+  const m = body.match(/\*\*\s*Reward\s*:?\s*\*\*\s*\$([\d,]+)/i);
+  if (!m) return undefined;
+  const n = Number(m[1].replace(/,/g, ''));
+  return Number.isFinite(n) ? n : undefined;
+}
+
 function transformMissionData(items: ProjectV2Item[]): Mission[] {
   return items.map((item) => {
     const fields = readFieldValues(item);
@@ -242,7 +255,7 @@ function transformMissionData(items: ProjectV2Item[]): Mission[] {
       title: asString(fields.Title) ?? issue?.title ?? 'Untitled Mission',
       status: asString(fields.Status) ?? 'Ideas',
       priority: asString(fields.Priority),
-      reward: asNumber(fields['USDC Amount']),
+      reward: asNumber(fields['USDC Amount']) ?? rewardFromBody(issue?.body),
       // Prefer the linked issue's updatedAt; fall back to the project item's
       // own updatedAt so drafts (content === null) still get a timestamp.
       updatedAt: issue?.updatedAt ?? item.updatedAt,

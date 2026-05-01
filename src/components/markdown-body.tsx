@@ -1,6 +1,6 @@
 'use client';
 
-import ReactMarkdown, { type Components } from 'react-markdown';
+import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { cn } from '@/lib/cn';
 
@@ -10,159 +10,22 @@ interface MarkdownBodyProps {
 }
 
 /**
- * Tight, prose-like markdown renderer for issue/mission bodies.
- *
- * Avoids fumadocs's `prose` plugin so the rules stay scoped and small —
- * we don't want headers as big as page H2s inside a card dialog. Each
- * element gets a small custom style that matches the rest of the site.
+ * Runtime markdown renderer for content fetched at request time
+ * (mission bodies, etc.). Uses fumadocs's typography preset (`prose`)
+ * so the look matches docs/blog automatically. `prose-sm` keeps the
+ * scale tight enough for a dialog/card context. Link colors are
+ * pinned to brand tokens via `prose-a:` modifiers.
  */
-const components: Components = {
-  h1: ({ children, ...props }) => (
-    <h3
-      className="text-base font-semibold text-fd-foreground m-0 mt-4 first:mt-0"
-      {...props}
-    >
-      {children}
-    </h3>
-  ),
-  h2: ({ children, ...props }) => (
-    <h3
-      className="text-sm font-semibold text-fd-foreground m-0 mt-4 first:mt-0 uppercase tracking-wide"
-      {...props}
-    >
-      {children}
-    </h3>
-  ),
-  h3: ({ children, ...props }) => (
-    <h4
-      className="text-sm font-semibold text-fd-foreground m-0 mt-3 first:mt-0"
-      {...props}
-    >
-      {children}
-    </h4>
-  ),
-  h4: ({ children, ...props }) => (
-    <h5
-      className="text-sm font-medium text-fd-foreground m-0 mt-3 first:mt-0"
-      {...props}
-    >
-      {children}
-    </h5>
-  ),
-  p: ({ children, ...props }) => (
-    <p className="text-sm text-fd-muted-foreground m-0 leading-relaxed" {...props}>
-      {children}
-    </p>
-  ),
-  a: ({ children, href, ...props }) => (
-    <a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="text-fd-foreground underline underline-offset-2 hover:text-ib-brand transition-colors"
-      {...props}
-    >
-      {children}
-    </a>
-  ),
-  ul: ({ children, ...props }) => (
-    <ul
-      className="list-disc list-outside ps-5 m-0 text-sm text-fd-muted-foreground space-y-1"
-      {...props}
-    >
-      {children}
-    </ul>
-  ),
-  ol: ({ children, ...props }) => (
-    <ol
-      className="list-decimal list-outside ps-5 m-0 text-sm text-fd-muted-foreground space-y-1"
-      {...props}
-    >
-      {children}
-    </ol>
-  ),
-  li: ({ children, ...props }) => (
-    <li className="leading-relaxed" {...props}>
-      {children}
-    </li>
-  ),
-  code: ({ children, className, ...props }) => {
-    // `code` inside a `pre` is the block form. ReactMarkdown sets a
-    // language- className on inline blocks too, but inline code never has
-    // a parent <pre> so we let the css cascade differentiate via :where.
-    const isInline = !/^language-/.test(className ?? '');
-    if (isInline) {
-      return (
-        <code
-          className="rounded bg-fd-muted px-1 py-0.5 text-[0.8125rem] font-mono text-fd-foreground"
-          {...props}
-        >
-          {children}
-        </code>
-      );
-    }
-    return (
-      <code className={cn('font-mono text-xs', className)} {...props}>
-        {children}
-      </code>
-    );
-  },
-  pre: ({ children, ...props }) => (
-    <pre
-      className="rounded-lg bg-fd-muted px-3 py-2 overflow-x-auto text-xs leading-relaxed m-0"
-      {...props}
-    >
-      {children}
-    </pre>
-  ),
-  blockquote: ({ children, ...props }) => (
-    <blockquote
-      className="border-l-2 border-fd-border ps-3 text-fd-muted-foreground italic m-0"
-      {...props}
-    >
-      {children}
-    </blockquote>
-  ),
-  hr: (props) => <hr className="border-fd-border my-4" {...props} />,
-  strong: ({ children, ...props }) => (
-    <strong className="font-semibold text-fd-foreground" {...props}>
-      {children}
-    </strong>
-  ),
-  table: ({ children, ...props }) => (
-    <div className="overflow-x-auto">
-      <table
-        className="w-full text-sm border-collapse border border-fd-border rounded-md m-0"
-        {...props}
-      >
-        {children}
-      </table>
-    </div>
-  ),
-  th: ({ children, ...props }) => (
-    <th
-      className="text-left font-semibold text-fd-foreground border border-fd-border px-2 py-1"
-      {...props}
-    >
-      {children}
-    </th>
-  ),
-  td: ({ children, ...props }) => (
-    <td
-      className="text-fd-muted-foreground border border-fd-border px-2 py-1 align-top"
-      {...props}
-    >
-      {children}
-    </td>
-  ),
-};
-
 export function MarkdownBody({ children, className }: MarkdownBodyProps) {
   return (
-    <div className={cn('flex flex-col gap-3', className)}>
-      <ReactMarkdown remarkPlugins={[remarkGfm]} components={components}>
-        {children}
-      </ReactMarkdown>
+    <div
+      className={cn(
+        'prose prose-invert prose-sm max-w-none',
+        'prose-a:text-fd-foreground prose-a:underline-offset-2 hover:prose-a:text-ib-brand',
+        className,
+      )}
+    >
+      <ReactMarkdown remarkPlugins={[remarkGfm]}>{children}</ReactMarkdown>
     </div>
   );
 }
