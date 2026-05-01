@@ -607,12 +607,10 @@ function MissionCard({ mission }: { mission: Mission }) {
 
       <DialogContent
         showCloseButton
-        className="sm:max-w-screen-sm max-h-[85vh] p-0 overflow-hidden"
+        className="sm:max-w-screen-sm max-h-[85vh] p-0 overflow-hidden flex flex-col"
       >
-        <ScrollArea className="max-h-[85vh]">
-          <div className="flex flex-col gap-5 p-5">
-        <DialogHeader className="gap-2">
-          <div className="flex items-center justify-between gap-2 flex-wrap pr-8">
+        <DialogHeader className="shrink-0 gap-2 border-b p-5 pr-12">
+          <div className="flex items-center justify-between gap-2 flex-wrap">
             <div className="flex flex-wrap items-center gap-1.5">
               <StatusBadge status={mission.status} />
               {isDraft && (
@@ -639,10 +637,14 @@ function MissionCard({ mission }: { mission: Mission }) {
               )}
             </div>
           </div>
-          <DialogTitle className="pr-8 text-xl leading-snug">
+          <DialogTitle className="text-xl leading-snug">
             {mission.title}
           </DialogTitle>
-          {mission.updatedAt && (
+        </DialogHeader>
+
+        <div className="flex-1 min-h-0 overflow-y-auto">
+          <div className="flex flex-col gap-5 p-5">
+        {mission.updatedAt && (
             <p
               className="text-xs text-fd-muted-foreground m-0"
               suppressHydrationWarning
@@ -653,7 +655,6 @@ function MissionCard({ mission }: { mission: Mission }) {
               </time>
             </p>
           )}
-        </DialogHeader>
 
         {mission.body && <MarkdownBody>{mission.body}</MarkdownBody>}
 
@@ -692,8 +693,9 @@ function MissionCard({ mission }: { mission: Mission }) {
             </div>
           </div>
         )}
-
-        <DialogFooter className="-mx-5 -mb-5 bg-muted/50 border-t p-5">
+          </div>
+        </div>
+        <DialogFooter className="shrink-0 bg-muted/50 border-t p-5">
           <Button
             className="w-full"
             render={<a href={href} target="_blank" rel="noopener noreferrer" />}
@@ -702,8 +704,6 @@ function MissionCard({ mission }: { mission: Mission }) {
             {mission.url ? 'View on GitHub' : 'View on Project Board'}
           </Button>
         </DialogFooter>
-          </div>
-        </ScrollArea>
       </DialogContent>
     </Dialog>
   );
