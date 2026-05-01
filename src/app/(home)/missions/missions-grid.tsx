@@ -4,6 +4,7 @@ import {
   useCallback,
   useMemo,
   useRef,
+  useState,
   type ComponentProps,
   type KeyboardEvent,
   type ReactNode,
@@ -20,7 +21,6 @@ import {
   DialogTrigger,
 } from '@waveso/ui/dialog';
 import { Masonry, MasonryItem } from '@waveso/ui/masonry';
-import { ScrollArea } from '@waveso/ui/scroll-area';
 import {
   Select,
   SelectContent,
@@ -46,6 +46,7 @@ import {
 } from 'lucide-react';
 import type { Mission } from '@/lib/github/fetch-missions-data';
 import { MISSIONS_PROJECT_URL } from '@/lib/github/constants';
+import { IBOX_PRICE_USD } from '@/lib/config';
 import { cn } from '@/lib/cn';
 
 type BadgeVariant = ComponentProps<typeof Badge>['variant'];
@@ -511,6 +512,93 @@ function StatusBadge({
 // an Issue created yet — a process bug worth flagging).
 const DRAFT_REDUNDANT_STATUSES = new Set(['Ideas', 'Backlog']);
 
+
+function RewardConfiguratorButton({
+  reward,
+  stopPropagation: shouldStop = false,
+}: {
+  reward: number;
+  stopPropagation?: boolean;
+}) {
+  const [open, setOpen] = useState(false);
+  // 0–100 % of the USDC reward the user wants to convert to extra iBox
+  const [conversionPct, setConversionPct] = useState(0);
+
+  const usdcAmount = Math.round(reward * (1 - conversionPct / 100));
+  // Minimum 10% bonus is always on top; slider adds more on top of that
+  const iboxBonus = Math.round((reward * 0.1) / IBOX_PRICE_USD);
+  const iboxExtra = Math.round((reward * (conversionPct / 100)) / IBOX_PRICE_USD);
+  const iboxAmount = iboxBonus + iboxExtra;
+
+  return (
+    <>
+      <button
+        type="button"
+        onClick={(e) => {
+          if (shouldStop) e.stopPropagation();
+          setOpen(true);
+        }}
+        className="cursor-pointer"
+      >
+        <Badge
+          variant="outline"
+          className="bg-ib-brand-alpha text-ib-brand border-ib-brand/30 pointer-events-none"
+        >
+          {formatReward(reward)}
+        </Badge>
+      </button>
+
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent showCloseButton className="sm:max-w-xs">
+          <DialogHeader>
+            <DialogTitle className="text-center">Adjust your reward</DialogTitle>
+          </DialogHeader>
+          <div className="flex flex-col gap-6 py-2">
+            <div className="flex items-baseline justify-center gap-3">
+              <div className="text-right">
+                <span className="text-2xl font-bold tabular-nums">{usdcAmount}</span>
+                <span className="text-sm text-fd-muted-foreground ml-1">USDC</span>
+              </div>
+              <span className="text-fd-muted-foreground">+</span>
+              <div>
+                <span className="text-2xl font-bold tabular-nums">{iboxAmount}</span>
+                <span className="text-sm text-fd-muted-foreground ml-1">iBox</span>
+              </div>
+            </div>
+            <input
+              type="range"
+              min={0}
+              max={100}
+              value={conversionPct}
+              onChange={(e) => setConversionPct(Number(e.target.value))}
+              className="w-full accent-ib-brand cursor-pointer"
+            />
+            <p className="text-xs text-fd-muted-foreground text-center m-0">
+              Slide right to receive more iBox tokens instead of USDC.
+              A minimum of 10% is always paid in iBox.
+            </p>
+          </div>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              className="w-full"
+              render={
+                <a
+                  href="https://coinmarketcap.com/currencies/intuition/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                />
+              }
+            >
+              Read more
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
+  );
+}
+
 function MissionCard({ mission }: { mission: Mission }) {
   // Prefer the actual issue URL; fall back to the project-board pane
   // when GitHub didn't return a content URL (drafts have none).
@@ -523,9 +611,11 @@ function MissionCard({ mission }: { mission: Mission }) {
   return (
     <Dialog>
       <DialogTrigger
+        nativeButton={false}
         render={
-          <button
-            type="button"
+          <div
+            role="button"
+            tabIndex={0}
             aria-label={`View details for ${mission.title}`}
             className={cn(
               cardClasses('default'),
@@ -552,12 +642,7 @@ function MissionCard({ mission }: { mission: Mission }) {
               <Badge variant="outline">{mission.priority}</Badge>
             )}
             {typeof mission.reward === 'number' && (
-              <Badge
-                variant="outline"
-                className="bg-ib-brand-alpha text-ib-brand border-ib-brand/30"
-              >
-                {formatReward(mission.reward)}
-              </Badge>
+              <RewardConfiguratorButton reward={mission.reward} stopPropagation />
             )}
           </div>
         </div>
@@ -607,12 +692,10 @@ function MissionCard({ mission }: { mission: Mission }) {
 
       <DialogContent
         showCloseButton
-        className="sm:max-w-screen-sm max-h-[85vh] p-0 overflow-hidden"
+        className="sm:max-w-screen-sm max-h-[85vh] p-0 overflow-hidden flex flex-col"
       >
-        <ScrollArea className="max-h-[85vh]">
-          <div className="flex flex-col gap-5 p-5">
-        <DialogHeader className="gap-2">
-          <div className="flex items-center justify-between gap-2 flex-wrap pr-8">
+        <DialogHeader className="shrink-0 gap-2 border-b p-5 pr-12">
+          <div className="flex items-center justify-between gap-2 flex-wrap">
             <div className="flex flex-wrap items-center gap-1.5">
               <StatusBadge status={mission.status} />
               {isDraft && (
@@ -630,19 +713,18 @@ function MissionCard({ mission }: { mission: Mission }) {
                 <Badge variant="outline">{mission.priority}</Badge>
               )}
               {typeof mission.reward === 'number' && (
-                <Badge
-                  variant="outline"
-                  className="bg-ib-brand-alpha text-ib-brand border-ib-brand/30"
-                >
-                  {formatReward(mission.reward)}
-                </Badge>
+                <RewardConfiguratorButton reward={mission.reward} />
               )}
             </div>
           </div>
-          <DialogTitle className="pr-8 text-xl leading-snug">
+          <DialogTitle className="text-xl leading-snug">
             {mission.title}
           </DialogTitle>
-          {mission.updatedAt && (
+        </DialogHeader>
+
+        <div className="flex-1 min-h-0 overflow-y-auto">
+          <div className="flex flex-col gap-5 p-5">
+        {mission.updatedAt && (
             <p
               className="text-xs text-fd-muted-foreground m-0"
               suppressHydrationWarning
@@ -653,7 +735,6 @@ function MissionCard({ mission }: { mission: Mission }) {
               </time>
             </p>
           )}
-        </DialogHeader>
 
         {mission.body && <MarkdownBody>{mission.body}</MarkdownBody>}
 
@@ -692,8 +773,9 @@ function MissionCard({ mission }: { mission: Mission }) {
             </div>
           </div>
         )}
-
-        <DialogFooter className="-mx-5 -mb-5 bg-muted/50 border-t p-5">
+          </div>
+        </div>
+        <DialogFooter className="shrink-0 bg-muted/50 border-t p-5">
           <Button
             className="w-full"
             render={<a href={href} target="_blank" rel="noopener noreferrer" />}
@@ -702,8 +784,6 @@ function MissionCard({ mission }: { mission: Mission }) {
             {mission.url ? 'View on GitHub' : 'View on Project Board'}
           </Button>
         </DialogFooter>
-          </div>
-        </ScrollArea>
       </DialogContent>
     </Dialog>
   );
