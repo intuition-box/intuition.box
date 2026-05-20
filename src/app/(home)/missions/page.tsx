@@ -94,6 +94,26 @@ export default async function MissionsPage() {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <Card variant="compact" className="text-center border-ib-brand-dark ring-ib-brand-dark">
             <CardHeader>
+              <h3 className="text-lg leading-tight font-semibold text-fd-foreground m-0">See Missions board!</h3>
+            </CardHeader>
+            <CardContent className="flex-1">
+              <p className="text-sm text-fd-muted-foreground m-0">
+                Everyone is welcome to propose new missions.
+              </p>
+            </CardContent>
+            <CardFooter className="justify-center pb-0 bg-transparent bg-linear-to-b from-transparent to-ib-brand-dark">
+              <Button
+                size="sm"
+                className="bg-ib-brand text-ib-brand-dark hover:opacity-60 hover:bg-ib-brand"
+                render={<a href={MISSIONS_PROJECT_URL} target="_blank" rel="noopener noreferrer" />}
+              >
+                Propose mission
+              </Button>
+            </CardFooter>
+          </Card>
+
+          <Card variant="compact" className="text-center border-ib-brand-dark ring-ib-brand-dark">
+            <CardHeader>
               <h3 className="text-lg leading-tight font-semibold text-fd-foreground m-0">How missions work?</h3>
             </CardHeader>
             <CardContent className="flex-1">
@@ -128,26 +148,6 @@ export default async function MissionsPage() {
                 render={<a href={GRANTS_URL} target="_blank" rel="noopener noreferrer" />}
               >
                 View grants
-              </Button>
-            </CardFooter>
-          </Card>
-
-          <Card variant="compact" className="text-center border-ib-brand-dark ring-ib-brand-dark">
-            <CardHeader>
-              <h3 className="text-lg leading-tight font-semibold text-fd-foreground m-0">Have an idea?</h3>
-            </CardHeader>
-            <CardContent className="flex-1">
-              <p className="text-sm text-fd-muted-foreground m-0">
-                Submit your own mission to grow the ecosystem.
-              </p>
-            </CardContent>
-            <CardFooter className="justify-center pb-0 bg-transparent bg-linear-to-b from-transparent to-ib-brand-dark">
-              <Button
-                size="sm"
-                className="bg-ib-brand text-ib-brand-dark hover:opacity-60 hover:bg-ib-brand"
-                render={<a href={MISSIONS_PROJECT_URL} target="_blank" rel="noopener noreferrer" />}
-              >
-                Propose mission
               </Button>
             </CardFooter>
           </Card>
