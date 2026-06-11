@@ -1,7 +1,9 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import type { Metadata } from 'next';
 import { blogSource } from '@/lib/blog-source';
-import { appName } from '@/lib/shared';
+import { formatAuthors, formatDate } from '@/lib/format';
+import { cn } from '@/lib/cn';
 import {
   Card,
   CardContent,
@@ -12,18 +14,9 @@ import {
 } from '@/components/card';
 import { PageHero } from '@/components/page-hero';
 
-const formatDate = (value: string | Date) =>
-  new Intl.DateTimeFormat('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  }).format(new Date(value));
-
-const formatAuthors = (author: string | string[]): string =>
-  Array.isArray(author) ? author.join(', ') : author;
-
+// Root layout's title template appends `| ${appName}`.
 export const metadata: Metadata = {
-  title: `Blog | ${appName}`,
+  title: 'Blog',
   description: 'Updates, essays, and announcements from the Intuition Box DAO.',
 };
 
@@ -48,7 +41,25 @@ export default function BlogIndexPage() {
         <CardGrid>
           {posts.map((post) => (
             <Link key={post.url} href={post.url} className="no-underline">
-              <Card className="h-full transition-colors hover:bg-fd-accent/40 hover:ring-fd-accent border-ib-purple-alpha">
+              <Card
+                className={cn(
+                  'h-full transition-colors hover:bg-fd-accent/40 border-ib-purple-alpha',
+                  // Flush cover image at the top — only drop the padding
+                  // when there is actually an image to fill it.
+                  post.data.cover_image && 'pt-0',
+                )}
+              >
+                {post.data.cover_image && (
+                  <div className="relative aspect-[16/9] w-full">
+                    <Image
+                      src={post.data.cover_image}
+                      alt=""
+                      fill
+                      sizes="(max-width: 768px) 100vw, 400px"
+                      className="object-cover"
+                    />
+                  </div>
+                )}
                 <CardHeader>
                   <CardTitle className="text-lg font-semibold text-fd-foreground">
                     {post.data.title}
@@ -63,10 +74,10 @@ export default function BlogIndexPage() {
                 )}
                 <CardFooter className="text-xs text-fd-muted-foreground gap-2 flex-wrap mt-auto bg-transparent bg-linear-to-b from-transparent to-ib-purple-dark">
                   <span>{formatAuthors(post.data.author)}</span>
-                  {post.data.category && (
+                  {post.data.tags && post.data.tags.length > 0 && (
                     <>
                       <span aria-hidden>·</span>
-                      <span>{post.data.category}</span>
+                      <span>{post.data.tags.join(', ')}</span>
                     </>
                   )}
                   <span aria-hidden>·</span>

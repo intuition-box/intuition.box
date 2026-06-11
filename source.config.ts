@@ -25,9 +25,29 @@ export const blog = defineCollections({
     author: z.string().or(z.array(z.string())),
     date: z.string().date().or(z.date()),
     // Optional taxonomy + media metadata
-    category: z.string().optional(),
+    tags: z.array(z.string()).optional(),
     cover_image: z.string().url().optional(),
     paragraph_url: z.string().url().optional(),
+  }),
+});
+
+export const spotlights = defineCollections({
+  type: 'doc',
+  dir: 'content/spotlights',
+  schema: pageSchema.extend({
+    date: z.string().date().or(z.date()),
+    // Author is optional — spotlight drafts are often written before the
+    // byline is decided. Accepts one name or a list, same as blog.
+    author: z.string().or(z.array(z.string())).optional(),
+    // The builder(s) being spotlighted, e.g. "Kylan Hurt".
+    builder: z.string().optional(),
+    tags: z.array(z.string()).optional(),
+    project_url: z.string().url().optional(),
+    // Plain string (not .url()) — spotlight covers live in /public/images.
+    cover_image: z.string().optional(),
+    // Drafts stay in the repo but are excluded from the index, sitemap,
+    // and static params.
+    draft: z.boolean().optional(),
   }),
 });
 

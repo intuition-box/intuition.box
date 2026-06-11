@@ -1,4 +1,5 @@
 import { Button } from '@waveso/ui/button';
+import type { Metadata } from 'next';
 import {
   Card,
   CardContent,
@@ -14,6 +15,13 @@ import {
 } from '@/lib/github/fetch-missions-data';
 import { PageHero } from '@/components/page-hero';
 import { MissionsGrid } from './missions-grid';
+
+// Root layout's title template appends `| ${appName}`.
+export const metadata: Metadata = {
+  title: 'Missions',
+  description:
+    'Open contributions that serve the whole builder community — from ideas to rewards.',
+};
 
 const USD = new Intl.NumberFormat('en-US', {
   style: 'currency',

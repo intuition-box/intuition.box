@@ -212,7 +212,7 @@ export default async function HomePage() {
                   className="bg-ib-brand text-ib-brand-dark hover:opacity-60 hover:bg-ib-brand"
                   variant="default"
                   size="lg"
-                  render={<a href="https://atlas.discourse.group/c/ecosystem-development/grant-applications/36" target="_blank" rel="noopener noreferrer" />}
+                  render={<a href={GRANTS_URL} target="_blank" rel="noopener noreferrer" />}
                 >
                   Apply for a Grant
                 </Button>
@@ -220,7 +220,7 @@ export default async function HomePage() {
                   className="bg-ib-brand text-ib-brand-dark hover:opacity-60 hover:bg-ib-brand"
                   variant="default"
                   size="lg"
-                  render={<a href="https://atlas.discourse.group/c/governance/intuition-box/35" target="_blank" rel="noopener noreferrer" />}
+                  render={<a href={GOVERNANCE_URL} target="_blank" rel="noopener noreferrer" />}
                 >
                   Submit a Proposal
                 </Button>
