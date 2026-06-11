@@ -7,6 +7,7 @@ builder: Samuel Chauche, Maxime Saint-Joannis
 tags: [Grants, Curation]
 project_url: https://passive-records.box
 cover_image: /images/spotlights_sofia.jpg
+draft: true
 ---
 
 The Intuition Grants Program supports builders exploring new ways to create, curate, and leverage knowledge on top of the Intuition Protocol.
