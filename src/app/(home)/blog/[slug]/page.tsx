@@ -59,7 +59,7 @@ export default async function BlogPostPage(props: PageProps<'/blog/[slug]'>) {
               fill
               priority
               sizes="(max-width: 860px) 100vw, 860px"
-              className="object-cover"
+              className="object-cover object-top"
             />
           </figure>
         )}

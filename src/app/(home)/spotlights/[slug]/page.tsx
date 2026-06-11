@@ -58,15 +58,36 @@ export default async function SpotlightPage(
         </Link>
 
         {coverImage && (
-          <figure className="mb-10 overflow-hidden rounded-2xl border border-fd-border relative aspect-[16/9]">
-            <Image
-              src={coverImage}
-              alt={post.data.title}
-              fill
-              priority
-              sizes="(max-width: 860px) 100vw, 860px"
-              className="object-cover"
-            />
+          <figure className="mb-10">
+            <div className="overflow-hidden rounded-2xl border border-fd-border relative aspect-[16/9]">
+              <Image
+                src={coverImage}
+                alt={post.data.title}
+                fill
+                priority
+                sizes="(max-width: 860px) 100vw, 860px"
+                className="object-cover object-top"
+              />
+            </div>
+            {post.data.cover_credit && (
+              <figcaption className="mt-3 text-right text-xs text-fd-muted-foreground">
+                {post.data.cover_credit.url ? (
+                  <a
+                    href={post.data.cover_credit.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline underline-offset-2 hover:text-fd-foreground"
+                  >
+                    {post.data.cover_credit.name}
+                  </a>
+                ) : (
+                  post.data.cover_credit.name
+                )}
+                {post.data.cover_credit.note && (
+                  <>. {post.data.cover_credit.note}</>
+                )}
+              </figcaption>
+            )}
           </figure>
         )}
       </div>

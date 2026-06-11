@@ -45,6 +45,15 @@ export const spotlights = defineCollections({
     project_url: z.string().url().optional(),
     // Plain string (not .url()) — spotlight covers live in /public/images.
     cover_image: z.string().optional(),
+    // Photo attribution rendered under the cover. `name` is the credited
+    // party (linked when `url` is present); `note` is the rights text.
+    cover_credit: z
+      .object({
+        name: z.string(),
+        url: z.string().url().optional(),
+        note: z.string().optional(),
+      })
+      .optional(),
     // Drafts stay in the repo but are excluded from the index, sitemap,
     // and static params.
     draft: z.boolean().optional(),
