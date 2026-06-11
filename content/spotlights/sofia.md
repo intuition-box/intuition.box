@@ -1,7 +1,7 @@
 ---
 title: "Intuition Spotlights: Sofia"
 description: Meet the team behind Sofia, a bookmarking tool that transforms individual curation into collective intelligence.
-date: 2026-05-01
+date: 2026-06-02
 author: Zet, Saulo
 builder: Samuel Chauche, Maxime Saint-Joannis
 tags: [Grants, Curation]
