@@ -106,4 +106,4 @@ Future work includes expanding reputation methodologies, improving developer too
 
 - Website: https://ludarep.xyz
 - GitHub: https://github.com/rudazy
-- X: https://x.com/RIKI
+- X: https://x.com/Ludarep
