@@ -44,10 +44,12 @@
   --color-ib-orange-alpha: rgba(252, 120, 64, 0.1);
   --color-ib-yellow: rgb(254, 244, 44);
   --color-ib-yellow-alpha: rgba(254, 244, 44, 0.1);
+  --color-ib-yellow-dark: rgb(29, 28, 10);
   --color-ib-teal: rgb(104, 219, 241);
   --color-ib-teal-alpha: rgba(104, 219, 241, 0.1);
   --color-ib-purple: rgb(159, 159, 254);
   --color-ib-purple-alpha: rgba(159, 159, 254, 0.1);
+  --color-ib-purple-dark: rgb(19, 19, 31);
   --color-ib-lilac: rgb(209, 174, 241);
   --color-ib-lilac-alpha: rgba(209, 174, 241, 0.1);
 
@@ -107,10 +109,12 @@
   --color-ib-orange-alpha: rgba(252, 120, 64, 0.1);
   --color-ib-yellow: rgb(254, 244, 44);
   --color-ib-yellow-alpha: rgba(254, 244, 44, 0.1);
+  --color-ib-yellow-dark: rgb(29, 28, 10);
   --color-ib-teal: rgb(104, 219, 241);
   --color-ib-teal-alpha: rgba(104, 219, 241, 0.1);
   --color-ib-purple: rgb(159, 159, 254);
   --color-ib-purple-alpha: rgba(159, 159, 254, 0.1);
+  --color-ib-purple-dark: rgb(19, 19, 31);
   --color-ib-lilac: rgb(209, 174, 241);
   --color-ib-lilac-alpha: rgba(209, 174, 241, 0.1);
 
@@ -141,7 +145,6 @@
   .bg-hero-glow,
   .bg-hero-glow-mint,
   .bg-hero-glow-missions,
-  .bg-hero-glow-grants,
   .bg-hero-glow-yellow,
   .bg-hero-glow-teal,
   .bg-hero-glow-purple,
@@ -162,12 +165,6 @@
   .bg-hero-glow-missions {
     background-image:
       radial-gradient(rgb(16 29 24 / .85), rgb(16 29 24 / .3) 30%, transparent 50%),
-      radial-gradient(rgb(94 106 210 / .1), rgb(5 106 210 / .02) 30%, transparent 50%);
-  }
-
-  .bg-hero-glow-grants {
-    background-image:
-      radial-gradient(rgb(16 29 24 / .1), rgb(16 29 24 / .05) 30%, transparent 50%),
       radial-gradient(rgb(94 106 210 / .1), rgb(5 106 210 / .02) 30%, transparent 50%);
   }
 
@@ -219,7 +216,7 @@
 
   /*
    * Docs sidebar: separator between the top-level nav menu items
-   * (Docs / Blog / Missions / Grants) and the docs page tree
+   * (Docs / Blog / Missions / Spotlights) and the docs page tree
    * (Welcome / FAQ / …). Fumadocs already adds `mb-4` (1rem of
    * margin-bottom) to the last nav menu item; we paint a 1px line
    * in the middle of that gap via a pseudo-element, so it reads as
@@ -326,3 +323,57 @@ body:before {
  * Users with `prefers-reduced-motion: reduce` never get the animation
  * applied in the first place — no override needed here.
  */
+/*
+ * Article pull-quotes (blog + spotlight detail pages): full-bleed strip.
+ *
+ * Deliberately OUTSIDE @layer: fumadocs's `.prose` typography rules are
+ * unlayered, and unlayered author CSS beats anything inside @layer
+ * regardless of specificity — these rules must be unlayered too (and
+ * later in source order) to override the prose defaults.
+ *
+ * The blockquote stays in normal flow inside the article column, so its
+ * text shares the exact same left/right edges as the body copy. The
+ * bright band is a ::before pseudo-element stretched to the viewport
+ * edges behind the text — alignment can never drift, regardless of
+ * scrollbar width or viewport size.
+ */
+.article-prose blockquote {
+  --tw-prose-quotes: var(--color-fd-foreground);
+  --tw-prose-quote-borders: transparent;
+  position: relative;
+  isolation: isolate;
+  margin-block: 3rem;
+  padding-block: 2.5rem;
+  padding-inline: 0;
+  color: var(--color-fd-foreground);
+  border: none;
+  font-size: 1.25rem;
+  line-height: 1.6;
+}
+
+/* The strip background, painted to the viewport edges behind the text. */
+.article-prose blockquote::before {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  inset-inline: calc(50% - 50vw);
+  background: color-mix(in srgb, var(--color-ib-white) 25%, transparent);
+  z-index: -1;
+}
+
+/*
+ * The typography plugin injects decorative open/close quote glyphs
+ * (content: open-quote / close-quote). Our articles already carry
+ * literal quotation marks in the markdown, so the injected ones double
+ * up AND hang outside the text edge, breaking alignment with the body
+ * column. Remove them.
+ */
+.article-prose blockquote p:first-of-type::before,
+.article-prose blockquote p:last-of-type::after {
+  content: none;
+}
+
+/* Spotlights give the pull-quote more room to breathe than the blog. */
+.spotlight-prose blockquote {
+  margin-block: 6rem;
+}

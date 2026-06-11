@@ -5,19 +5,25 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/card';
+import { Suspense } from 'react';
 import { fetchGitHubData } from '@/lib/github/fetch-github-data';
 import { GITHUB_ORG, GOVERNANCE_URL, GRANTS_URL } from '@/lib/github/constants';
 import { fetchCurrentWeek } from '@/lib/calendar/fetch-calendar';
 import { NetworkStats } from '@/components/github/network-stats';
 import { ErrorBoundary } from '@/components/error-boundary';
-import { Galaxy } from '@/components/github/galaxy/galaxy';
-import { DarkVeil } from '@/components/backgrounds/dark-veil';
-import { AnimateIn, AnimateOnView } from '@/components/animate';
+import { Galaxy } from '@/components/github/galaxy/galaxy-client';
+import { AnimateOnView } from '@/components/animate';
 import { WeekGrid } from '@/components/events/week-grid';
 import { Logomark } from '@/components/logomark';
 import { PageHero } from '@/components/page-hero';
 import { Code, Coins, Network, Wallet, Signal, Award, Rocket, GitBranch } from 'lucide-react';
 import Link from 'next/link';
+
+// ISR: regenerate the homepage at most once per 60s. Keeps the calendar
+// section "live" (within 60s of board changes) while still serving cached
+// HTML for most requests. GitHub data layer has its own 1h cache —
+// regeneration just re-reads from that cache when it's still warm.
+export const revalidate = 60;
 
 const STEPS = [
   'Contributors',
@@ -45,11 +51,13 @@ export default async function HomePage() {
       />
 
       {week && (
-        <AnimateOnView>
-          <section className="max-w-5xl mx-auto w-full py-16 px-8">
-            <WeekGrid week={week} />
-          </section>
-        </AnimateOnView>
+        <Suspense fallback={null}>
+          <AnimateOnView>
+            <section className="max-w-5xl mx-auto w-full py-16 px-8">
+              <WeekGrid week={week} />
+            </section>
+          </AnimateOnView>
+        </Suspense>
       )}
 
       <section className="max-w-5xl mx-auto py-16 px-8">
@@ -173,7 +181,9 @@ export default async function HomePage() {
       <section className="relative">
         <div className="relative">
           <ErrorBoundary>
-            <Galaxy activity={data.activity} fetchedAt={data.counters.fetchedAt} />
+            <Suspense fallback={null}>
+              <Galaxy activity={data.activity} fetchedAt={data.counters.fetchedAt} />
+            </Suspense>
           </ErrorBoundary>
         </div>
       </section>
@@ -202,7 +212,7 @@ export default async function HomePage() {
                   className="bg-ib-brand text-ib-brand-dark hover:opacity-60 hover:bg-ib-brand"
                   variant="default"
                   size="lg"
-                  render={<a href="https://atlas.discourse.group/c/ecosystem-development/grant-applications/36" target="_blank" rel="noopener noreferrer" />}
+                  render={<a href={GRANTS_URL} target="_blank" rel="noopener noreferrer" />}
                 >
                   Apply for a Grant
                 </Button>
@@ -210,7 +220,7 @@ export default async function HomePage() {
                   className="bg-ib-brand text-ib-brand-dark hover:opacity-60 hover:bg-ib-brand"
                   variant="default"
                   size="lg"
-                  render={<a href="https://atlas.discourse.group/c/governance/intuition-box/35" target="_blank" rel="noopener noreferrer" />}
+                  render={<a href={GOVERNANCE_URL} target="_blank" rel="noopener noreferrer" />}
                 >
                   Submit a Proposal
                 </Button>

@@ -2,21 +2,23 @@ import Link from 'next/link';
 import { GradientRevealText } from '@/components/gradient-reveal-text';
 import { AnimateOnView } from '@/components/animate';
 import { Logomark } from '@/components/logomark';
+import { GOVERNANCE_URL } from '@/lib/github/constants';
+import { spotlightsRoute } from '@/lib/shared';
 
 const COLUMNS = [
   {
     title: 'Developers',
     links: [
       { label: 'Docs', href: '/docs' },
+      { label: 'Missions', href: '/missions' },
       { label: 'Colony', href: 'https://app.colony.io/intuition_box', external: true },
     ],
   },
   {
     title: 'Community',
     links: [
-      { label: 'Governance', href: 'https://atlas.discourse.group/c/governance/intuition-box/35', external: true },
-      { label: 'Missions', href: '/missions' },
-      { label: 'Grants', href: 'https://atlas.discourse.group/c/ecosystem-development/grant-applications/36', external: true },
+      { label: 'Governance', href: GOVERNANCE_URL, external: true },
+      { label: 'Spotlights', href: spotlightsRoute },
     ],
   },
   {

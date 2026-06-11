@@ -3,22 +3,26 @@ import Image from 'next/image';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
-import { blogSource } from '@/lib/blog-source';
+import {
+  getPublishedSpotlights,
+  spotlightsSource,
+} from '@/lib/spotlights-source';
 import { getMDXComponents } from '@/components/mdx';
-import { blogRoute } from '@/lib/shared';
+import { spotlightsRoute } from '@/lib/shared';
 import { formatAuthors, formatDate } from '@/lib/format';
 
 export function generateStaticParams() {
-  // fumadocs returns `{ slug: string[] }`; our [slug] route needs a single string.
-  return blogSource.getPages().map((post) => ({ slug: post.slugs[0] }));
+  // fumadocs returns `{ slug: string[] }`; our [slug] route needs a single
+  // string. Drafts are excluded — they 404 until published.
+  return getPublishedSpotlights().map((post) => ({ slug: post.slugs[0] }));
 }
 
 export async function generateMetadata(
-  props: PageProps<'/blog/[slug]'>,
+  props: PageProps<'/spotlights/[slug]'>,
 ): Promise<Metadata> {
   const params = await props.params;
-  const post = blogSource.getPage([params.slug]);
-  if (!post) return {};
+  const post = spotlightsSource.getPage([params.slug]);
+  if (!post || post.data.draft) return {};
   return {
     // Root layout's title template appends `| ${appName}`.
     title: post.data.title,
@@ -29,10 +33,12 @@ export async function generateMetadata(
   };
 }
 
-export default async function BlogPostPage(props: PageProps<'/blog/[slug]'>) {
+export default async function SpotlightPage(
+  props: PageProps<'/spotlights/[slug]'>,
+) {
   const params = await props.params;
-  const post = blogSource.getPage([params.slug]);
-  if (!post) notFound();
+  const post = spotlightsSource.getPage([params.slug]);
+  if (!post || post.data.draft) notFound();
 
   const MDX = post.data.body;
   const coverImage = post.data.cover_image;
@@ -44,11 +50,11 @@ export default async function BlogPostPage(props: PageProps<'/blog/[slug]'>) {
       {/* Hero & back link — 860px wide */}
       <div className="max-w-[860px] mx-auto w-full px-6 md:px-8">
         <Link
-          href={blogRoute}
+          href={spotlightsRoute}
           className="inline-flex items-center gap-1.5 text-sm text-fd-muted-foreground hover:text-fd-foreground no-underline mb-8"
         >
           <ArrowLeft className="size-4" />
-          Back to blog
+          Back to spotlights
         </Link>
 
         {coverImage && (
@@ -76,24 +82,31 @@ export default async function BlogPostPage(props: PageProps<'/blog/[slug]'>) {
               {post.data.description}
             </p>
           )}
+          {/* Same meta-row convention as the blog: bold lead name = author.
+              The spotlighted builder is already named in the description
+              and the article body, so it stays out of the byline row. */}
           <div className="flex items-center gap-3 mt-6 text-sm text-fd-muted-foreground flex-wrap">
-            <span className="font-medium text-fd-foreground">
-              {formatAuthors(post.data.author)}
-            </span>
-            {post.data.tags && post.data.tags.length > 0 && (
+            {post.data.author && (
               <>
+                <span className="font-medium text-fd-foreground">
+                  {formatAuthors(post.data.author)}
+                </span>
                 <span aria-hidden>·</span>
-                <span>{post.data.tags.join(', ')}</span>
               </>
             )}
-            <span aria-hidden>·</span>
+            {post.data.tags && post.data.tags.length > 0 && (
+              <>
+                <span>{post.data.tags.join(', ')}</span>
+                <span aria-hidden>·</span>
+              </>
+            )}
             <time dateTime={new Date(post.data.date).toISOString()}>
               {formatDate(post.data.date)}
             </time>
           </div>
         </header>
 
-        <div className="prose prose-invert max-w-none article-prose">
+        <div className="prose prose-invert max-w-none article-prose spotlight-prose">
           <MDX components={getMDXComponents()} />
         </div>
       </div>

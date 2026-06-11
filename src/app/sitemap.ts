@@ -1,9 +1,10 @@
 import type { MetadataRoute } from 'next';
 import { source } from '@/lib/source';
 import { blogSource } from '@/lib/blog-source';
+import { getPublishedSpotlights } from '@/lib/spotlights-source';
 import { siteUrl } from '@/lib/shared';
 
-const STATIC_ROUTES = ['', '/docs', '/blog', '/missions'] as const;
+const STATIC_ROUTES = ['', '/docs', '/blog', '/missions', '/spotlights'] as const;
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
@@ -29,5 +30,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.6,
   }));
 
-  return [...staticEntries, ...docsEntries, ...blogEntries];
+  const spotlightEntries: MetadataRoute.Sitemap = getPublishedSpotlights().map(
+    (post) => ({
+      url: `${siteUrl}${post.url}`,
+      lastModified: new Date(post.data.date),
+      changeFrequency: 'yearly',
+      priority: 0.6,
+    }),
+  );
+
+  return [...staticEntries, ...docsEntries, ...blogEntries, ...spotlightEntries];
 }
