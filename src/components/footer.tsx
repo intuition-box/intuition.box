@@ -11,7 +11,6 @@ const COLUMNS = [
     links: [
       { label: 'Docs', href: '/docs' },
       { label: 'Missions', href: '/missions' },
-      { label: 'Colony', href: 'https://app.colony.io/intuition_box', external: true },
     ],
   },
   {
