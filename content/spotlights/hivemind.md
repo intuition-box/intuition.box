@@ -21,13 +21,11 @@ He received his first Bitcoin in 2012 from Roger Ver and began working full-time
 
 In 2024, Kylan turned his attention toward Intuition after seeing an opportunity to solve a problem he had been thinking about for years: reputation on the open web.
 
----
 
 > Reputation depends on one's viewpoint.
 >
 > — Kylan Hurt
 
----
 
 ## Hive Mind
 

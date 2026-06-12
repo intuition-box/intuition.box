@@ -22,13 +22,11 @@ His research and implementation work spans EigenTrust, AgentRank, graph database
 
 Outside of software, Elijah also operates a traditional business, giving him a perspective grounded in both technical experimentation and real-world execution.
 
----
 
 > Everyone wants to know who to trust onchain. I'm just trying to make that an actual question you can ask and get an answer to.
 >
 > — Elijah Esin
 
----
 
 ## Intuition MCP
 

@@ -34,13 +34,11 @@ Operating under the handle Wieedze, Maxime has spent the past year building acro
 
 Outside of development, he designs synthesizer presets, produces sound for psytrance artists, and built TrackHunter, a discovery platform for DJs.
 
----
 
 > Platforms reward activity. They can't surface judgment.
 >
 > — Sofia Team
 
----
 
 ## Sofia
 

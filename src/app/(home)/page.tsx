@@ -63,26 +63,6 @@ export default async function HomePage() {
       <section className="max-w-5xl mx-auto py-16 px-8">
         <AnimateOnView>
           <h2 className="text-3xl font-semibold text-center mb-12">
-            How it works
-          </h2>
-        </AnimateOnView>
-        <div className="grid md:grid-cols-7 gap-4">
-          {STEPS.map((step, i) => (
-            <AnimateOnView key={step} delay={i * 0.08} distance={30}>
-              <Card className="h-full text-center">
-                <CardContent className="py-2">
-                  <p className="text-sm text-fd-muted-foreground m-0">Step {i + 1}</p>
-                  <h3 className="font-medium mt-2 m-0">{step}</h3>
-                </CardContent>
-              </Card>
-            </AnimateOnView>
-          ))}
-        </div>
-      </section>
-
-      <section className="max-w-5xl mx-auto py-16 px-8">
-        <AnimateOnView>
-          <h2 className="text-3xl font-semibold text-center mb-12">
             Our Principles
           </h2>
         </AnimateOnView>
@@ -194,14 +174,14 @@ export default async function HomePage() {
             variant="interactive"
             className="w-full text-center rounded-3xl bg-linear-to-b from-fd-card from-50% to-ib-brand-dark border-ib-brand-dark ring-ib-brand-dark"
           >
-            <CardContent className="py-12 px-16 flex flex-col gap-4">
+            <CardContent className="relative overflow-hidden py-12 px-16 flex flex-col gap-4">
               <h2 className="text-3xl font-semibold m-0">Start Building</h2>
               <p className="text-fd-muted-foreground m-0">
                 Join the developer community and use Intuition to transform your ideas into products.
               </p>
               <div className="flex justify-center gap-4 pt-4 max-sm:flex-col max-sm:gap-3">
                 <Button
-                  className="bg-ib-white text-ib-brand-dark hover:opacity-60 hover:bg-ib-white"
+                  className="bg-ib-brand text-ib-brand-dark hover:opacity-60 hover:bg-ib-brand"
                   variant="default"
                   size="lg"
                   render={<Link href="/missions" />}
@@ -209,22 +189,18 @@ export default async function HomePage() {
                   Work on a Mission
                 </Button>
                 <Button
-                  className="bg-ib-brand text-ib-brand-dark hover:opacity-60 hover:bg-ib-brand"
+                  className="bg-ib-white text-ib-brand-dark hover:opacity-60 hover:bg-ib-white"
                   variant="default"
                   size="lg"
                   render={<a href={GRANTS_URL} target="_blank" rel="noopener noreferrer" />}
                 >
                   Apply for a Grant
                 </Button>
-                <Button
-                  className="bg-ib-brand text-ib-brand-dark hover:opacity-60 hover:bg-ib-brand"
-                  variant="default"
-                  size="lg"
-                  render={<a href={GOVERNANCE_URL} target="_blank" rel="noopener noreferrer" />}
-                >
-                  Submit a Proposal
-                </Button>
               </div>
+              <div
+                aria-hidden
+                className="opacity-10 pointer-events-none absolute inset-0 bg-assets-art h-full w-full bg-cover bg-center bg-no-repeat"
+              />
             </CardContent>
           </Card>
         </section>

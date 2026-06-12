@@ -1,6 +1,4 @@
 import Link from 'next/link';
-import { GradientRevealText } from '@/components/gradient-reveal-text';
-import { AnimateOnView } from '@/components/animate';
 import { Logomark } from '@/components/logomark';
 import { GOVERNANCE_URL } from '@/lib/github/constants';
 import { spotlightsRoute } from '@/lib/shared';
@@ -32,16 +30,16 @@ const COLUMNS = [
 
 export function Footer() {
   return (
-    <footer className="max-w-5xl mx-auto w-full relative pt-40">
-      <div className="px-8 flex flex-col text-fd-muted-foreground sm:flex-row sm:space-between">
-        <p className="flex flex-col gap-4 items-center font-medium sm:mr-auto">
+    <footer className="w-full relative py-40">
+      <div className="max-w-5xl mx-auto w-full px-8 flex flex-col text-fd-muted-foreground sm:flex-row sm:space-between">
+        <p className="max-sm:items-start max-sm:mb-2 flex flex-col gap-4 items-center font-medium sm:mr-auto">
           <Logomark size={60} />
           <span className="text-sm">
             © {new Date().getFullYear()} Intuition Box, LLC
           </span>
         </p>
 
-        <div className="mt-8 flex flex-col text-center gap-10 sm:mt-0 sm:grid sm:grid-cols-3 lg:grid-cols-3">
+        <div className="mt-8 flex flex-col text-center gap-10 max-sm:text-left sm:mt-0 sm:grid sm:grid-cols-3 lg:grid-cols-3">
           {COLUMNS.map((col) => (
             <div key={col.title} className="flex flex-col space-y-4">
               <p className="font-bold text-fd-foreground">
@@ -74,10 +72,6 @@ export function Footer() {
           ))}
         </div>
       </div>
-
-      <AnimateOnView distance={0}>
-        <GradientRevealText className="mt-20 px-8" text="INTUITION" colors={['#8df1c9', '#8df1c9']} hoverOpacity={0.3} strokeWidth={0.1} />
-      </AnimateOnView>
     </footer>
   );
 }
