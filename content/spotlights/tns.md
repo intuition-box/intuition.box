@@ -3,6 +3,7 @@ title: "Intuition Spotlights: TNS"
 description: Meet Samoris, builder of Trust Name Service, a decentralized naming layer for Intuition.
 date: 2026-06-03
 author: Zet, Saulo
+project_url: https://tns.intuition.box
 cover_image: /images/spotlights_tns.jpg
 tags: [Grants, Identity]
 ---

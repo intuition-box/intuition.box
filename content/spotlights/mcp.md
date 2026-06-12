@@ -3,6 +3,7 @@ title: "Intuition Spotlights: MCP"
 description: Meet Elijah Esin, builder of Intuition MCP, a trust engine that helps AI agents evaluate reputation onchain.
 date: 2026-06-02
 author: Zet, Saulo
+project_url: https://mcp.intuition.box
 cover_image: /images/spotlights_mcp.png
 tags: [Grants, AI Agents]
 ---

@@ -5,7 +5,7 @@ date: 2026-06-02
 author: Zet, Saulo
 builder: Samuel Chauche, Maxime Saint-Joannis
 tags: [Grants, Curation]
-project_url: https://passive-records.box
+project_url: https://sofia.intuition.box
 cover_image: /images/spotlights_sofia.jpg
 draft: true
 ---
@@ -44,15 +44,15 @@ Outside of development, he designs synthesizer presets, produces sound for psytr
 
 ## Sofia
 
-Sofia is a bookmarking tool with memory.
+Sofia is a reputation layer for the web.
 
-Every time a user saves and certifies a page, Sofia records that action, the moment it happened, and the user's willingness to stand behind that judgment. Through Intuition, those signals become verifiable and persistent.
+Every time a user saves and certifies a page, Sofia records that action, the moment it happened, and the user's willingness to stand behind that judgment by staking $TRUST on it. Through Intuition, those signals become verifiable, economically backed, and persistent.
 
-Individually, Sofia creates a track record of what someone found valuable.
+Individually, Sofia builds a track record of what someone found valuable and was willing to vouch for.
 
-Collectively, it transforms thousands of individual bookmarks into a shared layer of intelligence.
+Collectively, it turns thousands of individual judgments into a shared layer of intelligence and into trust circles, where users follow not who is loudest, but whose judgment they actually rely on.
 
-The result is something larger than a bookmarking application: a system that helps communities understand what they value, who consistently surfaces high-signal information, and how collective knowledge evolves over time.
+The result is something larger than a save-it-for-later tool: a system that helps communities understand what they value, who consistently surfaces high-signal information, and how collective knowledge evolves over time.
 
 ---
 
@@ -62,7 +62,7 @@ Most online platforms optimize for activity.
 
 Likes, shares, views, impressions, and engagement metrics dominate how information is surfaced and distributed.
 
-Yet activity does not necessarily reflect judgment.
+Yet activity does not necessarily reflect judgment. And in web3, it doesn't even reliably reflect a real human — bots and Sybil accounts manufacture attention at scale.
 
 Communities often struggle to identify:
 
@@ -70,8 +70,9 @@ Communities often struggle to identify:
 - What content continues to prove useful over time
 - Where meaningful signal is emerging
 - Who is actually contributing knowledge rather than attention
+- Who is a real, credible person rather than a sophisticated bot
 
-For DAOs, research groups, and online communities, this creates a visibility problem. Valuable curation often disappears into timelines, chat rooms, and private bookmarks.
+For DAOs, research groups, and online communities, this creates a visibility problem. Valuable curation and genuine expertise disappear into timelines, chat rooms, and private bookmarks.
 
 ---
 
@@ -96,11 +97,11 @@ This creates a new primitive for collective intelligence: a verifiable record of
 
 For the Sofia team, Intuition provided a primitive they had been searching for without realizing it.
 
-The protocol's ability to express trust, relationships, and knowledge as structured on-chain data aligned naturally with their vision.
+The protocol's ability to express trust, relationships, and knowledge as structured on-chain data — atoms and triples — aligned naturally with their vision. Reputation in Sofia reflects real, staked on-chain activity, not a follower count.
 
 Rather than building another bookmarking application, Sofia could become a knowledge layer powered by attestations, relationships, and community-driven signals.
 
-The result is a product that treats human judgment as something worth preserving and making queryable.
+The result is a product that treats human judgment as something worth preserving, staking on, and making queryable.
 
 ---
 
@@ -134,10 +135,11 @@ As Intuition's Knowledge Graph grows, Sofia aims to become one of the primary wa
 
 ### Sofia
 
-- Website: https://passive-records.box
+- Website: https://sofia.intuition.box
 
 ### Samuel
 
+- Website: https://passive-records.box
 - GitHub: https://github.com/SamuelChauche
 - X: https://x.com/Passive_records
 
