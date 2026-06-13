@@ -1,13 +1,13 @@
 ---
 title: "Intuition Spotlights: Sofia"
 description: Meet the team behind Sofia, a bookmarking tool that transforms individual curation into collective intelligence.
-date: 2026-06-02
+date: 2026-06-11
 author: Zet, Saulo
 builder: Samuel Chauche, Maxime Saint-Joannis
 tags: [Grants, Curation]
 project_url: https://sofia.intuition.box
 cover_image: /images/spotlights_sofia.jpg
-draft: true
+
 ---
 
 The Intuition Grants Program supports builders exploring new ways to create, curate, and leverage knowledge on top of the Intuition Protocol.
@@ -107,23 +107,23 @@ The result is a product that treats human judgment as something worth preserving
 
 One of the biggest lessons from building Sofia was realizing that product development extends far beyond writing code.
 
-As the team discovered, shipping software is only a fraction of the challenge.
+The team made a deliberate choice to go deep on the product before opening to a market. That depth came at a cost: community, distribution, and marketing were under-invested, and visible activity slowed while the team rebuilt.
 
-User onboarding, fundraising, community building, marketing, documentation, and customer discovery all play equally important roles in determining whether a product succeeds.
+As the team discovered, shipping software is only a fraction of the challenge. Onboarding, fundraising, community building, and customer discovery determine whether a product actually reaches anyone.
 
-Another key lesson was the importance of feedback.
+Another key lesson was the importance of feedback. Product-market fit cannot be designed in isolation. Real users ultimately define what a product becomes, and that feedback is what pointed toward the next direction.
 
-Product-market fit cannot be designed in isolation. Real users ultimately define what a product becomes.
-
-The team learned that listening closely to users and adapting quickly often matters more than any initial roadmap.
+The team learned adapting quickly often matters more than any initial roadmap.
 
 ---
 
 ## What's Next?
 
-The Sofia team continues exploring how communities can transform individual acts of curation into collective intelligence.
+The Sofia team is focused on turning individual acts of curation into collective intelligence for organizations, starting with DAOs.
 
-Future work includes improving onboarding, expanding community features, and refining the mechanisms that help surface meaningful signals across groups and ecosystems.
+Circle Pro brings Sofia's trust circles to communities: a DAO sponsors its members' activity, while gaining the analytics and filtering to see who holds real expertise, who contributes, and who should be trusted with governance.
+
+Near-term work includes onboarding the first partner DAOs, refining onboarding, rebuilding community engagement, and validating how communities will surface this.
 
 As Intuition's Knowledge Graph grows, Sofia aims to become one of the primary ways communities discover, preserve, and coordinate around high-signal information.
 
