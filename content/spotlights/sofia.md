@@ -24,7 +24,7 @@ Samuel builds under the identity Passive Records, inspired by the ActiveRecord p
 
 Based in the south of France, Samuel spends his time hiking, shooting film photography, and experimenting with modular synthesis. That balance between analog patience and digital experimentation heavily influences how he approaches product design and engineering.
 
-### Meet Maxime Saint-Joannis
+## Meet Maxime Saint-Joannis
 
 Maxime is a full-stack Web3 developer and core contributor at Sofia.
 
