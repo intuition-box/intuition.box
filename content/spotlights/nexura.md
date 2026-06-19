@@ -36,6 +36,8 @@ After launching OracleLend alongside Reuben on the Intuition Testnet, he helped 
 That observation became the foundation for Nexura, where Nuel now focuses on product and growth.
 
 
+> You don't need everything figured out before you start building, but you do need a clear direction.
+>
 > The biggest barrier to building is not technical skill, it's believing you're not the kind of person who can build. Once that mindset changes, everything becomes possible.
 >
 > — Nexura Team
@@ -95,11 +97,11 @@ Around the same time, Billy and Matt shared their vision of onboarding one milli
 
 ## Lessons Learned
 
-The biggest lesson has been that shipping the product is only half the battle. Listening to users, understanding their frustrations, and adapting quickly matter more than features alone — many of Nexura's most impactful improvements came directly from community feedback.
+For Reuben, the biggest lesson has been that shipping the product is only half the battle. Listening to users, understanding their frustrations, and adapting quickly matters more than features alone — many of Nexura's most impactful improvements came directly from community feedback.
 
-The second lesson is that you don't have to build alone. Collaboration produces better results than working in isolation, and Intuition's culture of support — experienced developers reachable through dedicated Discord channels — makes it far easier to keep building with confidence.
+For Nuel, it's that you don't have to build alone. Collaboration produces better results than working in isolation, and Intuition's culture of support — experienced developers reachable through dedicated Discord channels — makes it far easier to keep building with confidence.
 
-The team's advice to future builders is simple: don't wait until everything is perfect. Start small, solve a real problem, stay close to your users, and play the long game. Build because the problem matters, not because a grant is attached to it.
+Their advice to future builders converges on the same idea: don't wait until everything is perfect. Start small, solve a real problem, stay close to your users, and play the long game — building because the problem matters, not because a grant is attached to it.
 
 ---
 
