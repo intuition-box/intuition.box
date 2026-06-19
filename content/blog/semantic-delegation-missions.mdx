@@ -1,0 +1,68 @@
+---
+title: "Semantic Delegation: Five Missions to Scope Permissions by Meaning"
+date: 2026-06-19
+author: Zet, Saulo
+tags: [Missions, MetaMask, Delegation, ERC-7710]
+cover_image: /images/blog_semantic_delegation.jpg
+description: "We're co-launching five builder missions with MetaMask at the intersection of the ERC-7710 Delegation Framework and the Intuition Knowledge Graph."
+---
+
+**A smart-account delegation can tell you exactly which addresses and function selectors it covers, and nothing about what that authority actually means.**
+
+This week we co-launched a cohort of five builder missions with MetaMask — \$7,500 USDC — at the intersection of the ERC-7710 Delegation Framework and the Intuition Knowledge Graph. We call the idea Semantic Delegation: smart-account permissions get sharper when the authority being delegated resolves over the Knowledge Graph at execution time, scoped by meaning.
+
+ERC-7710 already scopes authority well at the contract level. A delegation can be constrained by function call, amount, recipient, or expiry, chained downstream, and revoked at any time, and the Delegation Toolkit ships with 32 audited caveat enforcers covering the common cases. For all that power, the framework still treats authority as plumbing that moves permissions around without any sense of what they're for.
+
+But "address X can call function Y with parameters Z" doesn't capture intent. A delegator who wants to authorize "spending on agentic commerce up to \$1,000," or "voting on design proposals," or "acting on chains I consider safe," has to translate an idea held in human terms into a set of low-level calldata constraints, and the translation loses the meaning along the way.
+
+The Intuition Knowledge Graph closes that gap.
+
+## What the graph is doing
+
+The Intuition Knowledge Graph is decentralized, cryptoeconomically-curated structured data. Atoms are identities — for people, agents, contracts, concepts, anything you can name. Triples are claims connecting them: subject → predicate → object. Every claim is staked: curators put \$TRUST behind the claims they believe and against the ones they dispute, which makes the graph a queryable substrate of attestations where each claim carries a measurable weight of conviction.
+
+For delegation, the move is to wire a caveat enforcer that queries the graph at execution time, so that instead of `if msg.sender == address(0x...)` the check becomes `if subject is-a-sub-domain-of trusted_scope` — a condition that resolves over meaning rather than addresses.
+
+## Five missions
+
+We just opened a cohort of five missions putting builders to work on this intersection. The cohort carries \$7,500 USDC, one builder or team is selected per mission, and screening starts the week of June 22.
+
+**M09 — Delegation Framework Tutorial for Intuition.** \$1,000. The warm-up mission: a complete tutorial covering the delegation lifecycle on Intuition chain — the ERC-7702 upgrade, signing with caveats, redemption, and revocation — delivered as a written guide, a video walkthrough, and a public demo repo. If you've shipped delegation code on any chain, this is the cleanest way into the cohort.
+
+**M10 — Liquid Democracy POC, Graph Domain Caveats.** \$1,000. A three-tier delegation chain — voter → delegate → executor — scoped by graph domain. Build a Graph Domain Caveat Enforcer that validates proposal domains against a delegation's root scope, traversing the Knowledge Graph for is-a-sub-domain-of relationships. A "branding" proposal passes the enforcer when the delegation root is "design," because the graph encodes the relationship. The deliverable stays deliberately small: three accounts, full test coverage, and a minimal UI.
+
+**M11 — Liquid Democracy Production Implementation.** \$3,000. Gated on M10. The biggest mission in the cohort and the canonical example of Semantic Delegation. This mission takes the POC to production: hardened contracts with snapshot-hash anti-manipulation, a delegation factory, and a governance UI with real-time delegated-authority display, deployed on the intuition.box subdomain with an audit-ready test suite at 100% branch coverage. It opens once M10 ships and is validated.
+
+**M12 — Delegation Integration into the Intuition Skill.** \$500. The Intuition Skill gives any agent — Claude Code, Codex, any compatible runtime — the protocol knowledge to create atoms, triples, and stake on the graph. Today every operation gets attributed to the agent's own wallet, which fragments reputation across addresses no one recognizes. M12 adds ERC-7710 as the default signing mechanism, so agents continue to act under delegated authority from the human while reputation consolidates on the human's main wallet.
+
+**M13 — Community Caveat Enforcers Registry.** \$2,000. A permissionless dapp for discovering and curating ERC-7710 caveat enforcers. Seeds the 32 audited official MetaMask Delegation Toolkit enforcers. The community attests, disputes, and stakes \$TRUST to curate which enforcers are safe, audited, and composable for which use cases. Composability relationships live on-chain as attestable triples that any app can read, so the curation stays permissionless and weighted by stake.
+
+## From the launch Space
+
+We took all five missions live on a joint Twitter Space with the MetaMask team on Tuesday. A community member packaged the whole session — both replays, the full transcript, speaker notes, themes, and a glossary — on [Resonance](https://resonance.intuition.box/c/semantic-delegation), so you can revisit any of it. Here's what stuck.
+
+**The framework is older, and more overlooked, than you think.** Ryan McPeck (Mosso), who leads smart accounts at MetaMask, walked through the origin story: it started as Dan Finlay's open-source `delegatable` project, got hacked on at ETH Denver 2023, and was eventually productionized into the audited Delegation Framework that now ships in the wallet — fully open source for anyone to build on. His words for it: "a huge overlooked open-source contribution to the Ethereum ecosystem that most people just sleep on."
+
+**It's object capabilities, all the way down.** Kames, who leads smart-contract engineering at Intuition, traced the design back to object capabilities — a 1970s idea for delegating authority in decentralized systems. Think of signing a postcard that grants a friend permission to withdraw \$10, but only on a full moon, or only when ETH is above some price. The powerful part is that your friend can re-sign that postcard to *their* friend, attenuating it further — a chain of trust. Pair an ERC-20 transfer enforcer with an expiration enforcer and you've expressed "transfer 100 USDC a day for the next 7 days" with two composable pieces.
+
+**The graph turns literal permissions into fluid ones.** Billy, Intuition's CEO, framed the intersection best: today a delegation is explicit — "this address may call this function." With the graph, you can express something fluid instead — "anyone with a reputation above 90 in this domain," or "any member of the MetaMask team may vote on my behalf" — and let on-chain attestations resolve who actually qualifies at execution time. If the network later withdraws its trust from someone, their authority over you evaporates with it. That's how you safely let agents act across broad swaths of activity without hand-compiling the set of contracts they're allowed to touch.
+
+**This lands for consumers, not just DAOs.** The same composability covers everyday cases — delegate a capped budget to three competing ticket-buying agents, pay only the one that lands your seats, and never risk more than you authorized. Kames sketched viral onboarding loops in the same vein: hand a friend a scoped delegation to make their first deposit, and reward yourself on-chain when they do.
+
+The thread the whole hour kept pulling on is where MetaMask is heading — ERC-7715 advanced permissions, x402 payments over ERC-7710, agent wallets and CLI tooling — and a new collaboration came together live on stage: smoother delegation-powered onboarding for Intuition's upcoming consumer app. As Billy put it, these are "objectively good tools to build really cool stuff with together."
+
+Huge thanks to [@dev_exe_mv](https://x.com/dev_exe_mv) ([DevRedious](https://github.com/DevRedious)) for building [Resonance](https://resonance.intuition.box/c/semantic-delegation) — a community-made hub that distills the ecosystem's Spaces so the ideas resonate beyond the live room. Exactly the kind of thing these missions exist to encourage.
+
+## Why now
+
+Smart accounts are reaching their potential right as the question of what agents should be allowed to do on someone's behalf turns urgent. AI agents are becoming economic actors, delegated payments are arriving along the ERC-7710 → x402 path, and cross-protocol composability keeps multiplying the surface area where authority has to be checked. Each of those checks gets easier when the authority in question carries semantic context. The missions in this cohort put that premise to the test.
+
+## How to apply
+
+[intuition.box/missions](/missions) has the full specs, acceptance criteria, and application form. One builder or team is selected per mission. Applications are open now — the first screening round starts Monday, June 22, so get yours in before the weekend is out. Pick one and go deep.
+
+The Intuition Box team — Zet & Saulo — are in the Intuition Discord answering technical questions all week.
+
+Apply at [intuition.box/missions](/missions).
+
+Build with us.
