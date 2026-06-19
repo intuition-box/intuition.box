@@ -26,7 +26,8 @@ export const blog = defineCollections({
     date: z.string().date().or(z.date()),
     // Optional taxonomy + media metadata
     tags: z.array(z.string()).optional(),
-    cover_image: z.string().url().optional(),
+    // Accepts a full URL (external CDN) or a local path under /public.
+    cover_image: z.string().optional(),
     paragraph_url: z.string().url().optional(),
   }),
 });
