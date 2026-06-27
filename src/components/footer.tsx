@@ -8,6 +8,7 @@ const COLUMNS = [
     title: 'Developers',
     links: [
       { label: 'Docs', href: '/docs' },
+      { label: 'Learn', href: '/learn' },
       { label: 'Missions', href: '/missions' },
     ],
   },

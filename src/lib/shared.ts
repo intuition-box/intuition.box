@@ -3,6 +3,9 @@ export const siteUrl = 'https://intuition.box';
 export const docsRoute = '/docs';
 export const docsImageRoute = '/og/docs';
 export const docsContentRoute = '/llms.mdx/docs';
+export const learnRoute = '/learn';
+export const learnImageRoute = '/og/learn';
+export const learnContentRoute = '/llms.mdx/learn';
 export const blogRoute = '/blog';
 export const spotlightsRoute = '/spotlights';
 
