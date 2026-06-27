@@ -1,0 +1,62 @@
+---
+title: Building Your First MCP Server
+description: Learn how to build, test, and deploy an MCP Server from scratch in under 30 minutes.
+category: Workshop
+tags: [mcp server, backend, javascript]
+youtube_id: jNQXAC9IVRw
+---
+
+# Building Your First MCP Server
+
+Watch the workshop recording on the left, and follow along with the notes here!
+
+## Workshop Notes
+Here are the commands we ran during the video:
+```bash
+npx create-mcp-server my-server
+```
+
+### Step 1: Initializing the Server
+
+Once you have run the command above, a new directory will be created. This directory contains all the boilerplate code you need to get started. Navigate into the directory:
+
+```bash
+cd my-server
+npm install
+```
+
+When building an MCP (Model Context Protocol) server, the fundamental idea is to expose a set of tools or resources that the AI can interact with. Your server acts as a bridge between the model's capabilities and your local or remote APIs.
+
+### Step 2: Defining Your Tools
+
+Inside the `src/` directory, you will find an `index.ts` file. This is the entry point. You can define your tools here. A tool consists of a name, a description, and an input schema. The input schema is defined using JSON Schema or Zod, which ensures the model knows exactly what parameters to pass.
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+
+### Step 3: Implementing the Handlers
+
+Every tool needs a handler. When the AI model decides to call your tool, it sends a request containing the arguments. Your handler receives these arguments, performs the necessary operations, and returns a result.
+
+The result can be simple text, JSON data, or even binary data like images depending on how you structure your response. It is crucial to handle errors gracefully, so if the AI passes invalid arguments, you can return a helpful error message instead of crashing the server.
+
+Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+### Step 4: Connecting the Client
+
+Now that your server is running, how do you test it? You need an MCP Client. The easiest way to test your server is using the standard MCP CLI or a compatible application like Cursor or Claude Desktop. 
+
+You simply configure the client to connect to your server's standard input/output (stdio) or over SSE (Server-Sent Events) if you are running it remotely.
+
+Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
+
+### Step 5: Advanced Authentication
+
+For production deployments, you will rarely use `stdio`. Instead, you will host your server on a platform like Fly.io, Vercel, or AWS, and expose it via SSE. When doing this, authentication becomes critical. You don't want just anyone accessing your tools.
+
+Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit.
+
+### Conclusion
+
+Congratulations! You have now built and deployed your first MCP server. Remember to always document your tools clearly in their descriptions, as the AI relies heavily on this text to understand when and how to use them.
+
+Keep experimenting and building!

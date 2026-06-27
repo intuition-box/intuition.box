@@ -17,6 +17,23 @@ export const docs = defineDocs({
   },
 });
 
+export const learn = defineDocs({
+  dir: 'content/learn',
+  docs: {
+    schema: pageSchema.extend({
+      category: z.string().optional(),
+      tags: z.array(z.string()).optional(),
+      youtube_id: z.string().optional(),
+    }),
+    postprocess: {
+      includeProcessedMarkdown: true,
+    },
+  },
+  meta: {
+    schema: metaSchema,
+  },
+});
+
 export const blog = defineCollections({
   type: 'doc',
   dir: 'content/blog',
