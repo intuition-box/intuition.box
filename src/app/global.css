@@ -389,14 +389,14 @@ body:before {
   margin-block: 6rem;
 }
 
-/* Hide all scrollbars globally for a sleek, app-like feel while preserving scroll functionality */
-::-webkit-scrollbar {
+/* Hide scrollbars on root for a sleek, app-like feel while preserving scroll functionality */
+html::-webkit-scrollbar, body::-webkit-scrollbar {
   display: none;
   width: 0;
   height: 0;
 }
 
-* {
+html, body {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }

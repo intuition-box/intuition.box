@@ -59,6 +59,7 @@ export function LearnClient({ tutorials }: { tutorials: Tutorial[] }) {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search in learn..." 
+              aria-label="Search learn content"
               className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-fd-border bg-fd-background text-sm focus:outline-none focus:ring-2 focus:ring-fd-primary transition-all"
             />
           </div>
@@ -67,7 +68,9 @@ export function LearnClient({ tutorials }: { tutorials: Tutorial[] }) {
             {['all', 'tutorial', 'workshop'].map(cat => (
               <button
                 key={cat}
+                type="button"
                 onClick={() => setCategory(cat)}
+                aria-pressed={category === cat}
                 className={cn(
                   "px-4 py-1.5 rounded-lg text-sm font-medium transition-all capitalize",
                   category === cat 
@@ -98,8 +101,8 @@ export function LearnClient({ tutorials }: { tutorials: Tutorial[] }) {
               const displayTags = allTags.slice(0, 3);
               
               return (
-                <Link key={post.url} href={post.url} className="group no-underline outline-none">
-                  <article className="flex flex-col h-full bg-fd-card rounded-2xl border border-fd-border overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)] dark:hover:shadow-[0_8px_30px_rgb(255,255,255,0.04)] focus-visible:ring-2 focus-visible:ring-fd-primary">
+                <Link key={post.url} href={post.url} className="group no-underline outline-none block rounded-2xl focus-visible:ring-2 focus-visible:ring-fd-primary">
+                  <article className="flex flex-col h-full bg-fd-card rounded-2xl border border-fd-border overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)] dark:hover:shadow-[0_8px_30px_rgb(255,255,255,0.04)]">
                     
                     {/* Thumbnail Area */}
                     <div className="aspect-[16/9] w-full bg-fd-muted relative overflow-hidden">
@@ -109,6 +112,8 @@ export function LearnClient({ tutorials }: { tutorials: Tutorial[] }) {
                           <img 
                             src={`https://img.youtube.com/vi/${post.data.youtube_id}/hqdefault.jpg`} 
                             alt={post.data.title}
+                            loading="lazy"
+                            decoding="async"
                             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                           />
                           {/* Subtle overlay to make it look cohesive */}

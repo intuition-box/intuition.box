@@ -12,7 +12,7 @@ import { getMDXComponents } from '@/components/mdx';
 import type { Metadata } from 'next';
 import { createRelativeLink } from 'fumadocs-ui/mdx';
 import { gitConfig } from '@/lib/shared';
-import { GraduationCap, Play, BookOpen } from 'lucide-react';
+import { Play, BookOpen } from 'lucide-react';
 import { StickyVideoPlayer } from './video-player';
 
 export function generateStaticParams() {
