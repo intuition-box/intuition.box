@@ -1,0 +1,109 @@
+---
+title: Triples as claims
+description: Model explicit relationships by connecting subject, predicate, and object atoms.
+slug: triples
+order: 3
+level: Beginner
+durationMinutes: 9
+objectives:
+  - Translate a product statement into subject, predicate, and object atoms.
+  - Explain why all three atoms must exist before a triple is created.
+  - Recognize the triple and counter-triple as separate places for agreement and disagreement.
+concepts:
+  - subject
+  - predicate
+  - object
+  - counter-triple
+outcome: You can turn a clear product claim into a reusable subject-predicate-object graph model.
+---
+
+## Claims are graph sentences
+
+Atoms give the graph vocabulary. Triples use that vocabulary to make explicit claims.
+
+Every triple has the same structure:
+
+**subject → predicate → object**
+
+The subject is the term being described. The predicate names the relationship. The object is the term on the other side of that relationship.
+
+“Builder project uses Intuition SDK” becomes:
+
+- Subject: Builder project
+- Predicate: uses
+- Object: Intuition SDK
+
+This structure is simple enough to understand at a glance and precise enough to traverse. An application can ask which projects use a package, which packages a project uses, or which claims use the “uses” predicate.
+
+<GraphDiagram
+  kind="triple"
+  title="A triple connects three existing atoms"
+  description="Subject, predicate, and object remain independently reusable while the triple gives their relationship its own deterministic identity."
+/>
+
+## Model one claim at a time
+
+A good triple expresses one relationship without hiding several ideas inside a label.
+
+“A useful open-source Intuition app” is ambiguous. It mixes quality, licensing, and protocol use. Prefer separate claims:
+
+- Project → uses → Intuition SDK
+- Project → has license → MIT
+- Project → recommended for → New builders
+
+Smaller claims are easier to query, reuse, support, oppose, and update. They also let products interpret each relationship differently. A directory may care about “recommended for,” while a dependency explorer may care about “uses.”
+
+## Existing atoms are prerequisites
+
+A triple references three bytes32 atom IDs. All three atoms must already exist. If the subject, predicate, or object is missing, the creation transaction reverts.
+
+That makes the safe preparation sequence:
+
+1. Search for all three terms.
+2. Choose canonical term IDs.
+3. Prepare any genuinely missing structured atoms.
+4. Confirm that each atom exists.
+5. Calculate the deterministic triple ID.
+6. Check whether the triple already exists.
+7. Query the current creation cost.
+8. Preview and simulate before asking a wallet to sign.
+
+Creation is batch-only at the V2 contract level. A single triple still uses one-element arrays for subjects, predicates, objects, and assets. Those arrays must remain aligned.
+
+## The counter-triple
+
+Every triple automatically receives a counter-triple vault. Depositing into the triple signals agreement with the claim. Depositing into the counter-triple signals disagreement.
+
+The counter-triple does not reverse the grammar. It represents opposition to the same claim. If the triple is “Project uses SDK,” disagreement means signaling against that statement, not asserting that “SDK uses Project.”
+
+Both sides are useful product context. A claim with strong support and no opposition can be different from a claim with active signal on both sides, even if their total deposits are similar.
+
+## Practical example
+
+Suppose an agent directory wants to represent a capability:
+
+**Research agent → provides capability → Graph discovery**
+
+The directory can reuse the capability atom across many agents. It can list every claim that uses the “provides capability” predicate. It can also show support and opposition for the specific agent-capability relationship without changing either atom.
+
+If the agent later adds another capability, that becomes another triple. The original claim remains stable and addressable.
+
+<KnowledgeCheck
+  id="triple-shape"
+  prompt="Which model is the clearest triple for a guide aimed at new builders?"
+  options={[
+    { id: 'a', label: 'Builder guide → recommended for → New Intuition builders' },
+    { id: 'b', label: 'Useful new builder guide → is → good and current' },
+    { id: 'c', label: 'New Intuition builders → interface state → expanded' },
+  ]}
+  answer="a"
+  explanation="It expresses one clear relationship using three reusable terms. Quality and freshness can be represented through separate claims or product interpretation."
+/>
+
+## Key takeaways
+
+- Triples express one subject-predicate-object relationship.
+- All three component atoms must already exist.
+- Triple IDs are deterministic, so existence checks come before creation.
+- Single triples still use the V2 batch function with aligned one-item arrays.
+- The automatic counter-triple is where disagreement is signaled.

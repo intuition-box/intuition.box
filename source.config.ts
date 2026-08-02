@@ -61,6 +61,20 @@ export const spotlights = defineCollections({
   }),
 });
 
+export const learn = defineCollections({
+  type: 'doc',
+  dir: 'content/learn',
+  schema: pageSchema.extend({
+    slug: z.string().min(1),
+    order: z.number().int().min(1).max(7),
+    level: z.enum(['Beginner', 'Builder']),
+    durationMinutes: z.number().int().positive(),
+    objectives: z.array(z.string().min(1)).min(1),
+    concepts: z.array(z.string().min(1)).min(1),
+    outcome: z.string().min(1),
+  }),
+});
+
 export default defineConfig({
   mdxOptions: {
     // MDX options

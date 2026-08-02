@@ -1,0 +1,120 @@
+---
+title: Building a small app
+description: Turn a focused graph model into a practical React and TypeScript product surface.
+slug: small-app
+order: 7
+level: Builder
+durationMinutes: 12
+objectives:
+  - Define the smallest useful read path for an Intuition-powered product.
+  - Separate graph, protocol, and interface concerns in a React application.
+  - Render claims and signal with enough context for a person to make a decision.
+concepts:
+  - product model
+  - read-first architecture
+  - React state
+  - wallet handoff
+outcome: You can turn one user problem, a few canonical terms, and an explicit claim into a credible small app plan.
+---
+
+## Build around one decision
+
+A first Intuition app does not need to expose the whole graph. It needs to help one person make one decision with shared context.
+
+For the Builder Stack Mapper, that decision might be: **Which ecosystem projects can I study to see the Intuition SDK in use?** The graph relationship is small—project, `uses`, SDK—but the product can make it useful through search, readable metadata, source links, and a clear explanation of signal.
+
+<GraphDiagram
+  kind="small-app"
+  title="A small app turns graph context into a decision"
+  description="Start with the user need, query a focused relationship, shape it into local application state, and present a decision-ready interface."
+/>
+
+## Keep the architecture legible
+
+A React and TypeScript starter can separate responsibilities without becoming elaborate:
+
+```text
+src/
+├─ components/
+│  └─ ClaimCard.tsx
+├─ lib/
+│  ├─ intuition.ts       # Testnet chain, GraphQL, and contract constants
+│  └─ first-claim.ts     # Typed atom/triple model and simulated preparation
+├─ data/
+│  └─ demo-claims.ts     # Static fallback used by this demo
+└─ App.tsx               # Product state and rendered decision surface
+```
+
+`intuition.ts` owns network configuration. The graph query layer owns discovery and response shaping. `first-claim.ts` owns the domain model for the chosen atom and triple. Components receive typed data and communicate what is loaded, simulated, or unavailable.
+
+This boundary prevents a button component from quietly becoming responsible for network selection, fee calculation, transaction preparation, and presentation at once.
+
+## Shape graph data for the interface
+
+Graph responses are optimized for traversal, not necessarily for direct rendering. Map the selected fields into a small application type:
+
+```ts
+type ClaimView = {
+  tripleId: `0x${string}`;
+  subject: { termId: `0x${string}`; label: string };
+  predicate: { termId: `0x${string}`; label: string };
+  object: { termId: `0x${string}`; label: string };
+  supportAssets: string;
+  oppositionAssets: string;
+  network: 'Intuition Testnet';
+};
+```
+
+The interface can render a readable sentence while preserving links to the canonical term and triple IDs. Support and opposition should be labeled as signal, not converted into a universal trust score without an explained ranking model.
+
+## Design the read path first
+
+The smallest useful version can:
+
+1. Search or load existing project-to-SDK claims.
+2. Display the project, relationship, and connected metadata.
+3. Show Testnet and source context.
+4. Present support and opposition without hiding either side.
+5. Link to the Testnet explorer for deeper inspection.
+
+That version already tests whether the graph model helps a user. A future write path can let a wallet-backed user propose a missing project atom, create a claim, or signal in a vault after all required previews and simulations.
+
+## Make every state honest
+
+A protocol product needs precise interface states:
+
+- **Read-only:** data was discovered without a signing request.
+- **Simulated:** the page shows a static example or transaction preview that was not broadcast.
+- **Wallet required later:** a production write would need the builder’s wallet infrastructure and explicit consent.
+- **Pending confirmation:** a submitted transaction is not yet final.
+- **Pending indexing:** on-chain confirmation has occurred, but the graph read model has not caught up.
+
+This V1 uses only the first three. There is no hidden RPC request, live graph fetch, wallet provider, or transaction code in the Learn routes.
+
+## Choose, model, and render
+
+The builder Quickstart is the curriculum’s practical handoff. Choose one of five app ideas, inspect its atom and triple model, and see that selection propagate into the later checkpoint and rendered product example.
+
+<QuickstartEmbed />
+
+The result is intentionally a bootstrap, not a finished production integration. It gives the builder a coherent model, safe Testnet configuration, generated-file boundaries, and a concrete interface to continue from.
+
+<KnowledgeCheck
+  id="small-app-boundary"
+  prompt="What is the best first version of an Intuition-powered app?"
+  options={[
+    { id: 'a', label: 'A focused read path that helps one user decision and explains the graph context it presents.' },
+    { id: 'b', label: 'A wallet button that writes before the app has resolved existing terms.' },
+    { id: 'c', label: 'A universal dashboard containing every atom, triple, and protocol operation.' },
+  ]}
+  answer="a"
+  explanation="A narrow, useful read path validates the product and graph model before introducing the complexity and responsibility of wallet-backed writes."
+/>
+
+## Key takeaways
+
+- Begin with one user problem and one decision-ready graph relationship.
+- Keep network, domain, query, and presentation responsibilities separate.
+- Preserve canonical IDs while shaping graph data for readable components.
+- Label read-only, simulated, and future wallet states precisely.
+- Validate the read experience before adding a production write path.

@@ -1,0 +1,130 @@
+---
+title: Reading and writing the graph
+description: Explore existing graph data, resolve canonical terms, and trace a safe first Testnet claim.
+slug: reading-the-graph
+order: 6
+level: Builder
+durationMinutes: 14
+objectives:
+  - Separate GraphQL discovery from safety-critical on-chain reads.
+  - Resolve canonical bytes32 term IDs before preparing a claim.
+  - Trace the preview and simulation sequence for a first Testnet atom and triple.
+concepts:
+  - GraphQL discovery
+  - canonical term IDs
+  - on-chain revalidation
+  - transaction simulation
+outcome: You can design a read-first graph workflow and explain every guardrail required before a real Testnet write.
+---
+
+## Read paths and write paths have different jobs
+
+An Intuition application usually begins with discovery. It searches for atoms and triples, follows relationships, reads metadata, and presents signal in a form a person can understand. That work belongs in the graph read path.
+
+Writing is a separate, deliberate path. It prepares protocol data, checks deterministic IDs, queries current costs and curve configuration, previews the result, simulates the transaction, and only then asks a wallet to sign.
+
+The distinction matters because a useful product can often deliver value before it writes anything. A directory can help someone find projects, a curator can explain recommendations, and an agent can map capabilities using existing graph data.
+
+<GraphDiagram
+  kind="read-write"
+  title="Discover broadly, revalidate narrowly"
+  description="Use GraphQL to find and compare graph terms, then revalidate canonical IDs and live protocol state before preparing or simulating a write."
+/>
+
+## Discover with GraphQL
+
+Intuition Testnet exposes a GraphQL endpoint at `https://testnet.intuition.sh/v1/graphql`. It is designed for graph exploration: searching terms, traversing triples, inspecting metadata, and comparing activity.
+
+A discovery query can search for a term and return enough context to make a choice:
+
+```graphql
+query FindAtoms($term: String!) {
+  atoms(where: { label: { _ilike: $term } }, limit: 10) {
+    term_id
+    label
+    type
+  }
+}
+```
+
+Treat labels as readable hints, not canonical identity. Two atoms can share a label while representing different metadata. Carry the selected `term_id`—a bytes32 value—through the rest of the workflow.
+
+For predicates, inspect structure and graph usage. Prefer an established structured predicate over a legacy TextObject with the same label. Reuse keeps the graph connected and makes your product easier for other builders to traverse.
+
+## Revalidate against protocol state
+
+GraphQL is the discovery layer. The MultiVault contract is the source of truth for safety-critical state immediately before a write.
+
+Revalidation answers focused questions:
+
+- Does each atom ID exist now?
+- Does the deterministic triple ID already exist?
+- What are the current creation costs and default curve?
+- What would the requested deposit mint under the current vault state?
+
+This protects against stale indexed data and duplicate creation. It also keeps configuration out of source code. Costs, fees, and curve choices are live protocol values rather than constants a tutorial should hardcode.
+
+## A first Testnet claim, traced safely
+
+Suppose the selected model is:
+
+**Builder Stack Mapper → uses → Intuition SDK**
+
+The safest path is read-first:
+
+1. Search for all three terms on Intuition Testnet.
+2. Choose the canonical `uses` and `Intuition SDK` atom IDs.
+3. If the project atom is genuinely missing, prepare structured Thing metadata and pin it to IPFS.
+4. Encode the returned URI and calculate its deterministic atom ID.
+5. Confirm on-chain that the atom does not already exist.
+6. Preview atom creation using current cost and curve configuration.
+7. Simulate the batch atom creation call with one-item arrays.
+8. After the atom exists, calculate the triple ID from the three atom IDs.
+9. Check triple existence, preview current cost, and simulate the batch triple creation call.
+10. Present the prepared request to a wallet only in a real, wallet-enabled product.
+
+<TestnetNotice />
+
+This curriculum stops before step ten. Its output panels are static simulations: they never instantiate a wallet client, request a signature, spend tTRUST, or broadcast a transaction.
+
+## Why the previews come before signatures
+
+A transaction can be structurally valid and still be a poor request to show a user. A current preview lets the interface explain:
+
+- the tTRUST value being supplied;
+- the creation cost and fees;
+- the expected vault shares;
+- the selected bonding curve;
+- the minimum acceptable result after slippage protection.
+
+Simulation then verifies that the prepared call succeeds against current Testnet state. The user should see this explanation before a wallet prompt, not discover it inside one.
+
+## Read again after a successful write
+
+In a production integration, a transaction receipt is not the final product state. The interface should wait for confirmation, then refetch the atom, triple, and vault data it displays. The indexed graph may update shortly afterward, so the app should communicate pending index state without inventing a result.
+
+This creates a dependable bridge:
+
+**discover → resolve → revalidate → preview → simulate → sign → confirm → refetch**
+
+Only the first five stages are demonstrated in this Learn experience, and signing is always described as the builder’s future responsibility.
+
+<KnowledgeCheck
+  id="read-write-boundary"
+  prompt="After finding a promising predicate through GraphQL, what should a write-enabled app do next?"
+  options={[
+    { id: 'a', label: 'Create a new predicate immediately because labels are not unique.' },
+    { id: 'b', label: 'Carry its bytes32 term ID forward and revalidate existence, costs, and configuration on-chain before previewing and simulating.' },
+    { id: 'c', label: 'Ask the wallet to sign before calculating the triple ID.' },
+  ]}
+  answer="b"
+  explanation="GraphQL supports discovery; canonical IDs and current on-chain state drive safe preparation. Preview and simulation happen before any signature request."
+/>
+
+## Key takeaways
+
+- A useful Intuition app can begin as a read-only graph product.
+- GraphQL supports discovery; bytes32 term IDs identify canonical terms.
+- Safety-critical state is revalidated on-chain immediately before writing.
+- Creation uses current costs, previews, batch calls, and simulation.
+- This V1 never connects a wallet or executes a real transaction.

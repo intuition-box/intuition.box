@@ -1,0 +1,136 @@
+---
+title: What this makes possible
+description: Connect Intuition’s primitives to practical product patterns without overclaiming live adoption.
+slug: what-this-makes-possible
+order: 5
+level: Beginner
+durationMinutes: 10
+objectives:
+  - Translate a real user problem into a graph model and a role for signal.
+  - Recognize product categories that benefit from portable claims.
+  - Separate a documented protocol capability from an unsupported adoption claim.
+concepts:
+  - reputation
+  - discovery
+  - curation
+  - agent coordination
+outcome: You can move from a real-world problem to a plausible Intuition product pattern with explicit graph and signal choices.
+---
+
+## Begin with the user problem
+
+Atoms, triples, and vaults are infrastructure. A product becomes useful when those primitives reduce friction for a real person.
+
+A reliable framing sequence is:
+
+**real-world problem → graph model → role of signal → possible product**
+
+This keeps the protocol in service of the experience. It also prevents vague claims that “a knowledge graph can power anything” without explaining what the application would read, what users would do, and why shared context helps.
+
+<GraphDiagram
+  kind="use-case"
+  title="Turn protocol primitives into a product decision"
+  description="A useful concept moves from a concrete problem through a graph model and interpretable signal into an interface people can act on."
+/>
+
+## Reputation with inspectable claims
+
+<UseCaseScenario
+  title="A portable service record"
+  problem="A team evaluating a protocol studio has profile text but little structured context about completed work."
+  subject="Protocol studio"
+  predicate="delivers"
+  object="Intuition integration"
+  signal="Clients and reviewers can support or oppose each delivery claim independently."
+  product="A provider directory that shows the claims behind a reputation view instead of collapsing everything into one score."
+/>
+
+The product does not need to claim that every delivery is verified. It can show the relationship, connected project context, and visible positions so the user can evaluate the evidence.
+
+## Discovery through reusable relationships
+
+<UseCaseScenario
+  title="A builder stack explorer"
+  problem="New builders struggle to find projects using the same SDKs, frameworks, and ecosystem tools."
+  subject="Builder project"
+  predicate="uses"
+  object="Intuition SDK"
+  signal="Maintainers and builders can support current dependency claims or oppose stale ones."
+  product="A stack map that traverses shared dependency relationships and links builders to relevant examples."
+/>
+
+The graph becomes valuable because the SDK atom and “uses” predicate can be reused across many projects. The application can group those claims without owning every underlying record.
+
+## Community curation
+
+<UseCaseScenario
+  title="Resources for a specific audience"
+  problem="Guides and tutorials are scattered, duplicated, and difficult to rank for someone’s current level."
+  subject="Builder guide"
+  predicate="recommended for"
+  object="New Intuition builders"
+  signal="Readers can support recommendations that helped them and oppose those that are outdated or mismatched."
+  product="A learning-resource curator that explains why each item appears for a chosen audience."
+/>
+
+This pattern is stronger than a generic upvote list because the recommendation is explicit. The same guide can be recommended for one audience and not another.
+
+## Agent coordination
+
+<UseCaseScenario
+  title="Capabilities agents can discover"
+  problem="Agents and their users need a structured way to find capabilities beyond self-authored descriptions."
+  subject="Research agent"
+  predicate="provides capability"
+  object="Graph discovery"
+  signal="Users can express confidence or disagreement around the specific capability claim."
+  product="A registry that lets agents discover collaborators or tools by traversing capability relationships."
+/>
+
+This is a product pattern, not a claim that every agent capability has been independently verified. The interface should expose where each relationship came from and what signal exists.
+
+## Trust-aware marketplaces
+
+<UseCaseScenario
+  title="Claims beside marketplace decisions"
+  problem="A marketplace listing rarely explains the portable evidence behind a provider, product, or service."
+  subject="Service provider"
+  predicate="maintains"
+  object="Open source integration"
+  signal="Participants can support or contest maintenance claims while the marketplace applies its own ranking policy."
+  product="A marketplace that places inspectable claims and counter-signal beside each decision surface."
+/>
+
+The marketplace remains responsible for safety, moderation, and user protection. Intuition supplies reusable context and economic signal; it does not replace those product obligations.
+
+## Choose the smallest useful graph
+
+A v1 product rarely needs a large ontology. Start with:
+
+- One user problem.
+- A small set of canonical atoms.
+- One or two predicates that make the product useful.
+- A read path that works before any write path.
+- A clear explanation of what signal means in the interface.
+
+Expand when real use exposes missing context. This keeps the first integration legible and reduces duplicate terms.
+
+<KnowledgeCheck
+  id="product-pattern"
+  prompt="Which proposal is the strongest Intuition product pattern?"
+  options={[
+    { id: 'a', label: 'A universal truth app that accepts the most-funded claim automatically.' },
+    { id: 'b', label: 'A resource curator that models explicit recommendations, shows both sides of signal, and explains its ranking.' },
+    { id: 'c', label: 'A dashboard that creates a new predicate for every page view.' },
+  ]}
+  answer="b"
+  explanation="It starts with a user problem, uses a reusable graph relationship, and treats signal as context that the product explains."
+/>
+
+## Key takeaways
+
+- Start with a concrete problem rather than a broad protocol claim.
+- Make the graph model and role of signal explicit.
+- Frame examples as product patterns unless live adoption is documented.
+- Build a useful read path before asking users to write.
+- Keep the first graph small, canonical, and easy to explain.
