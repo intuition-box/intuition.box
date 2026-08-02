@@ -1,6 +1,7 @@
 export const appName = 'Intuition Box';
 export const siteUrl = 'https://intuition.box';
 export const docsRoute = '/docs';
+export const learnRoute = '/learn';
 export const docsImageRoute = '/og/docs';
 export const docsContentRoute = '/llms.mdx/docs';
 export const blogRoute = '/blog';
