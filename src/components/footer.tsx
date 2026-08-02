@@ -1,12 +1,13 @@
 import Link from 'next/link';
 import { Logomark } from '@/components/logomark';
 import { GOVERNANCE_URL } from '@/lib/github/constants';
-import { spotlightsRoute } from '@/lib/shared';
+import { learnRoute, spotlightsRoute } from '@/lib/shared';
 
 const COLUMNS = [
   {
     title: 'Developers',
     links: [
+      { label: 'Learn', href: learnRoute },
       { label: 'Docs', href: '/docs' },
       { label: 'Missions', href: '/missions' },
     ],

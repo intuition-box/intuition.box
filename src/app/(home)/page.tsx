@@ -17,6 +17,7 @@ import { WeekGrid } from '@/components/events/week-grid';
 import { Logomark } from '@/components/logomark';
 import { PageHero } from '@/components/page-hero';
 import { Code, Coins, Network, Wallet, Signal, Award, Rocket, GitBranch } from 'lucide-react';
+import { learnRoute } from '@/lib/shared';
 import Link from 'next/link';
 
 // ISR: regenerate the homepage at most once per 60s. Keeps the calendar
@@ -179,9 +180,17 @@ export default async function HomePage() {
               <p className="text-fd-muted-foreground m-0">
                 Join the developer community and use Intuition to transform your ideas into products.
               </p>
-              <div className="flex justify-center gap-4 pt-4 max-sm:flex-col max-sm:gap-3">
+              <div className="flex flex-wrap justify-center gap-4 pt-4 max-sm:flex-col max-sm:gap-3">
                 <Button
                   className="bg-ib-brand text-ib-brand-dark hover:opacity-60 hover:bg-ib-brand"
+                  variant="default"
+                  size="lg"
+                  render={<Link href={learnRoute} />}
+                >
+                  Start Learning
+                </Button>
+                <Button
+                  className="bg-ib-white text-ib-brand-dark hover:opacity-60 hover:bg-ib-white"
                   variant="default"
                   size="lg"
                   render={<Link href="/missions" />}
@@ -189,7 +198,7 @@ export default async function HomePage() {
                   Work on a Mission
                 </Button>
                 <Button
-                  className="bg-ib-white text-ib-brand-dark hover:opacity-60 hover:bg-ib-white"
+                  className="bg-fd-card text-fd-foreground border border-fd-border hover:bg-fd-card hover:opacity-70"
                   variant="default"
                   size="lg"
                   render={<a href={GRANTS_URL} target="_blank" rel="noopener noreferrer" />}

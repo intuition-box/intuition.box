@@ -1,6 +1,6 @@
 import type { BaseLayoutProps } from 'fumadocs-ui/layouts/shared';
 import { SearchTrigger } from 'fumadocs-ui/layouts/shared/slots/search-trigger';
-import { discordUrl, gitConfig, spotlightsRoute, twitterUrl } from './shared';
+import { discordUrl, gitConfig, learnRoute, spotlightsRoute, twitterUrl } from './shared';
 import { Logomark } from '@/components/logomark';
 import { DiscordIcon, XIcon } from '@/components/brand-icons';
 import { IconSearchTrigger } from '@/components/icon-search-trigger';
@@ -12,6 +12,7 @@ export function baseOptions(): BaseLayoutProps {
     },
     links: [
       { text: 'Missions', url: '/missions', active: 'nested-url' },
+      { text: 'Learn', url: learnRoute, active: 'nested-url' },
       { text: 'Spotlights', url: spotlightsRoute, active: 'nested-url' },
       { text: 'Blog', url: '/blog', active: 'nested-url' },
       { text: 'Docs', url: '/docs', active: 'nested-url' },
