@@ -388,3 +388,54 @@ body:before {
 .spotlight-prose blockquote {
   margin-block: 6rem;
 }
+
+/* Learn uses the existing editorial type system with a slightly more open
+ * reading rhythm and a stable anchor offset beneath the home navigation. */
+.learn-prose {
+  font-size: 1rem;
+  line-height: 1.8;
+}
+
+.learn-prose :is(h2, h3) {
+  scroll-margin-top: 7rem;
+  text-wrap: balance;
+}
+
+.learn-prose h2 {
+  margin-top: 3.5rem;
+}
+
+.learn-prose h3 {
+  margin-top: 2.25rem;
+}
+
+.learn-prose :is(pre, table) {
+  max-width: 100%;
+}
+
+@keyframes learn-graph-pulse {
+  0%,
+  100% {
+    opacity: 0.45;
+    transform: scale(0.9);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.06);
+  }
+}
+
+.learn-graph-pulse {
+  animation: learn-graph-pulse 2.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .learn-graph-pulse {
+    animation: none;
+    opacity: 0.7;
+    transform: none;
+  }
+}

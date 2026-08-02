@@ -1,0 +1,102 @@
+---
+title: Signals and vaults
+description: Understand how deposits, shares, and counter-triples add interpretable conviction to graph terms.
+slug: signals-and-vaults
+order: 4
+level: Beginner
+durationMinutes: 8
+objectives:
+  - Explain why every atom and triple has a vault.
+  - Distinguish deposited assets from the shares minted by a bonding curve.
+  - Describe agreement and disagreement without treating signal as absolute truth.
+concepts:
+  - vaults
+  - shares
+  - agreement
+  - disagreement
+outcome: You can explain how vault positions add economic context to atoms and claims and how a product might interpret that context.
+---
+
+## Signal makes the graph weighted
+
+A graph of terms and claims can tell an application what relationships exist. Signal helps it understand where people have placed economic weight.
+
+Every atom and triple has a vault. A participant deposits TRUST on Mainnet or tTRUST on Testnet and receives vault shares. Those positions can express relevance, confidence, attention, or conviction depending on the product and the term.
+
+For a triple, the primary vault represents agreement. The automatic counter-triple vault represents disagreement. This creates two independently inspectable sides of the same claim.
+
+<GraphDiagram
+  kind="signal"
+  title="Claims can carry support and opposition"
+  description="Deposits into the triple and counter-triple mint shares on a configured bonding curve, giving applications two sides of signal to interpret."
+/>
+
+## Assets and shares are not the same thing
+
+Assets are the amount of TRUST or tTRUST supplied to a vault. Shares represent the participant’s position after the vault’s bonding curve and fees are applied.
+
+The current share price and the number of shares received can change with vault state. Fees and the default curve are governed configuration, not constants an application should guess. A real integration queries them when needed.
+
+That is why the safe flow uses preview functions:
+
+- Preview atom creation for a new atom vault.
+- Preview triple creation for a new triple vault.
+- Preview a deposit for an existing vault.
+- Preview a redemption before exchanging shares back for assets.
+
+The preview result is still followed by transaction simulation. Only then should a production product ask for a signature.
+
+## What signal can and cannot say
+
+Signal is valuable because it makes participation legible. It does not guarantee that the most supported claim is objectively correct.
+
+Consider three cases:
+
+1. A claim has many supporters and meaningful opposition. The relationship is actively contested.
+2. A claim has support and no opposition. It may be trusted, or it may not have received serious review.
+3. A claim has little signal on either side. It may be new, obscure, or unimportant to the current community.
+
+A product can combine vault state with metadata, recency, source context, and its own ranking rules. The protocol provides raw context; the interface communicates what that context means for a particular decision.
+
+## Curves, costs, and fees are live configuration
+
+An application should not teach a fixed creation cost or assume one curve forever. Before a write session, query:
+
+- Atom and triple creation costs.
+- The default curve ID.
+- Relevant fee configuration.
+- Existing term and vault state.
+
+The value attached to a creation transaction must equal the sum of its assets array. Each item must meet the current creation cost. Deposits and redemptions use slippage parameters based on previews.
+
+This lesson is conceptual, but the distinction matters: a polished interface that hardcodes stale economics can still produce unsafe transactions.
+
+## Practical example
+
+A Community Resource Curator models:
+
+**Builder guide → recommended for → New Intuition builders**
+
+Support in the triple vault can indicate that readers found the recommendation useful. Opposition in the counter-triple can reveal that the guide is outdated, misleading, or unsuitable for that audience.
+
+The product should show both the claim and how it interprets the positions. “12 supporters, 3 opposing positions” is more honest than a universal “trusted” badge. It leaves room for the user to inspect the underlying context.
+
+<KnowledgeCheck
+  id="signal-meaning"
+  prompt="What is the safest interpretation of strong signal on a triple?"
+  options={[
+    { id: 'a', label: 'The claim is mathematically guaranteed to be true.' },
+    { id: 'b', label: 'Participants have placed economic weight behind the claim, which the product should interpret with context.' },
+    { id: 'c', label: 'No counter-triple can exist for the claim.' },
+  ]}
+  answer="b"
+  explanation="Signal makes conviction and opposition visible. It is meaningful context, but applications still need to explain how they interpret it."
+/>
+
+## Key takeaways
+
+- Every atom and triple has a vault.
+- Deposited assets mint shares according to current curve and fee configuration.
+- Triple and counter-triple vaults represent agreement and disagreement.
+- Preview and simulation are mandatory steps before real writes.
+- Signal adds weight and context; it is not an automatic truth label.

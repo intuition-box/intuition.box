@@ -1,0 +1,94 @@
+---
+title: Atoms as concepts and entities
+description: Learn how persistent terms give people, projects, accounts, labels, and ideas an identity in the graph.
+slug: atoms
+order: 2
+level: Beginner
+durationMinutes: 9
+objectives:
+  - Decide what should become an atom in an application model.
+  - Explain how atom data produces a deterministic bytes32 term ID.
+  - Distinguish structured IPFS metadata from the CAIP-10 address exception.
+concepts:
+  - term IDs
+  - IPFS metadata
+  - CAIP-10
+  - canonical identity
+outcome: You can identify the persistent terms in a product and explain how to prepare them without creating avoidable duplicates.
+---
+
+## Atoms are the graph’s vocabulary
+
+Before a graph can say that one thing relates to another, both things need stable identities. Intuition calls those identities atoms.
+
+An atom can represent a concrete entity such as a project, organization, person, URL, or blockchain account. It can also represent a concept such as “graph discovery,” “recommended for,” or “open source.” If a term needs to be referenced by multiple claims, discovered later, or reused by another product, it is a strong atom candidate.
+
+Do not create an atom for every temporary interface value. Search text, a loading state, and a local filter are application details. The project being searched, the capability it offers, and the relationship used to classify it are graph terms.
+
+<GraphDiagram
+  kind="atom"
+  title="An atom has data, identity, and a vault"
+  description="Structured metadata is encoded as bytes, deterministically mapped to a bytes32 term ID, and associated with a protocol vault."
+/>
+
+## From metadata to term ID
+
+For a normal entity, concept, predicate, or label, the canonical preparation path is:
+
+1. Describe it with structured metadata.
+2. Pin that metadata through the Intuition GraphQL pin mutation.
+3. Receive an IPFS URI.
+4. Encode the URI as bytes.
+5. Calculate the deterministic atom ID.
+6. Check whether that term already exists before preparing a creation transaction.
+
+The metadata schema is deliberately simple. A general “Thing” includes a name, description, image, and URL. People and organizations have related schemas. Every field is included in a pin request; unknown optional values use an empty string.
+
+The returned IPFS URI is the atom data. Because the atom ID is calculated from those bytes, different data produces a different ID. Two terms can display the same label while having different term IDs. The label helps a person read the interface; the term ID is the canonical identity.
+
+## The CAIP-10 exception
+
+Blockchain addresses use a deterministic CAIP-10 URI instead of IPFS metadata. The URI identifies the namespace, chain, and account address. This exception is useful because an address already has a canonical machine-readable identity.
+
+Everything else should use structured pinned metadata. Plain strings can create legacy TextObject duplicates with little context. Predicates are atoms too, so “uses” or “recommended for” should be resolved as structured graph terms rather than casually recreated as bare strings.
+
+## Reuse before create
+
+Atom creation is not the first step. Discovery is.
+
+Search the graph by label, inspect the returned type and metadata, and compare usage. The graph may contain multiple atoms with similar names. For predicates, prefer an established structured term over a legacy TextObject. Once a candidate is selected, carry its bytes32 term ID forward.
+
+Before a real write, revalidate existence on-chain. GraphQL is excellent for discovery, while the MultiVault contract remains the source of truth for safety-critical state.
+
+## Practical example
+
+For a Builder Stack Mapper, the likely atoms include:
+
+- The builder project.
+- Intuition SDK.
+- The predicate “uses.”
+- React, if the product wants to describe the application stack.
+
+“Card expanded” should not be an atom. It exists only in the interface. “Intuition SDK” should be an atom because many projects can reference it, builders can discover it, and products can connect it to more claims.
+
+The project atom can use a Thing schema with its name, short description, image, and website. “Intuition SDK” may already exist, so the app should resolve and reuse it. The “uses” predicate should also be searched and ranked by established graph usage before any creation path is considered.
+
+<KnowledgeCheck
+  id="atom-identity"
+  prompt="When two search results share the label “Intuition SDK,” what identifies the canonical graph term?"
+  options={[
+    { id: 'a', label: 'Whichever label appears first alphabetically.' },
+    { id: 'b', label: 'The result with the brightest image.' },
+    { id: 'c', label: 'Its bytes32 term_id, supported by metadata, type, and usage context.' },
+  ]}
+  answer="c"
+  explanation="Labels are display hints and can be duplicated. The bytes32 term_id is the canonical identity that claims and vaults reference."
+/>
+
+## Key takeaways
+
+- Atoms represent persistent, reusable concepts and entities.
+- Structured terms use IPFS metadata; CAIP-10 addresses are the exception.
+- Atom IDs are deterministic bytes32 values derived from the encoded data.
+- Search and resolve existing terms before preparing a new atom.
+- Product-only interface state does not belong in the shared graph.

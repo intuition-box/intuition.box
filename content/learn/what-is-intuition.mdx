@@ -1,0 +1,89 @@
+---
+title: What Intuition is
+description: Understand Intuition as shared knowledge infrastructure with an economic signal layer.
+slug: what-is-intuition
+order: 1
+level: Beginner
+durationMinutes: 7
+objectives:
+  - Explain the difference between an application database and a shared knowledge graph.
+  - Recognize atoms, triples, and signal as the core pieces of the protocol model.
+  - Describe what Intuition gives a builder without treating it as a truth oracle.
+concepts:
+  - shared knowledge graph
+  - claims
+  - signal
+  - portable context
+outcome: You can explain why Intuition is shared knowledge infrastructure with signal, not simply another application database.
+---
+
+## Start with the problem
+
+Most applications rebuild the same context in isolation. A marketplace keeps its own reputation records. A community directory keeps another list of projects. An agent registry describes capabilities in a third format. Even when those records describe the same people, tools, and relationships, they are difficult to reuse outside the application that created them.
+
+Intuition offers a shared protocol for representing that context. Builders can refer to persistent concepts and entities, connect them with explicit claims, and read the signal attached to those terms. The result is a knowledge graph that can be used by more than one interface.
+
+The important shift is ownership of context. Your product still decides what to show, how to rank it, and what experience to create. The underlying terms and claims can remain portable.
+
+<GraphDiagram
+  kind="overview"
+  title="From concepts to useful context"
+  description="Atoms identify concepts, triples connect them as claims, and signal adds an economic layer that applications can interpret."
+/>
+
+## The three-part mental model
+
+### Atoms give things an identity
+
+An atom represents an entity or concept: a project, person, account, URL, label, protocol, capability, or idea. It gives the graph a persistent term that other claims can reference.
+
+### Triples turn terms into claims
+
+A triple links three atoms in the form subject, predicate, object. “Builder project uses Intuition SDK” is a triple. Each part is independently addressable, which means another application can reuse the same project, predicate, or SDK atom.
+
+### Signal gives claims weight
+
+Every atom and triple has a vault. People can deposit TRUST, or tTRUST on Testnet, and receive shares. A triple also has an automatic counter-triple where participants can signal disagreement.
+
+Signal is context, not a universal verdict. A heavily supported claim may be useful evidence, popular opinion, or an unchallenged assumption. Products still need to interpret the graph for their users.
+
+## What a builder receives
+
+Intuition gives builders a few unusually composable primitives:
+
+- Persistent identifiers for concepts and entities.
+- Structured claims that can be traversed and reused.
+- Public graph discovery through GraphQL.
+- On-chain vault state for inspecting positions, shares, and configurable costs.
+- A way to build interfaces around agreement, disagreement, relevance, or conviction.
+
+It does not prescribe one ranking algorithm or product category. A builder might create a discovery surface, curation tool, agent registry, reputation view, or marketplace. The protocol supplies shared context; the application supplies judgment and experience.
+
+## Practical example
+
+Imagine a directory that helps new builders find ecosystem tools. A conventional directory stores a project name, category, and description in one private table. An Intuition-shaped version can model:
+
+**Builder Stack Mapper → uses → Intuition SDK**
+
+The directory can read that claim, follow the connected atoms, and inspect signal. Another application can reuse the same terms without copying the directory’s database. The claim also remains independently addressable: users can support it, oppose it through the counter-triple, or connect it to more context.
+
+That portability is the core idea. The first version of a product may be small, but the context it contributes can participate in a larger graph.
+
+<KnowledgeCheck
+  id="intuition-mental-model"
+  prompt="Which description best captures Intuition’s role for a builder?"
+  options={[
+    { id: 'a', label: 'A private database that automatically decides which records are true.' },
+    { id: 'b', label: 'Shared infrastructure for persistent terms, explicit claims, and interpretable signal.' },
+    { id: 'c', label: 'A wallet library whose only purpose is sending tokens.' },
+  ]}
+  answer="b"
+  explanation="Intuition provides shared terms, claims, and signal. Applications still decide how that context should be interpreted and presented."
+/>
+
+## Key takeaways
+
+- Intuition separates reusable knowledge from any single application.
+- Atoms identify terms, triples express claims, and vaults hold signal.
+- Signal adds context but does not remove the need for product judgment.
+- Builders create the interface, interpretation, and user value around the shared graph.
