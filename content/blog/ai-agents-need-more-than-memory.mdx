@@ -1,0 +1,140 @@
+---
+title: "AI Agents Need More Than Memory"
+date: 2026-08-09
+author: Zet, Saulo, Pixi3
+tags: [AI Agents, Memory, Trust, Provenance, Reputation]
+cover_image: /images/blog_ai_agents_memory.png
+description: "Why agent memory needs provenance, contextual reputation, and action-aware trust policies."
+---
+
+An agent remembers that a certain API endpoint worked before.
+
+Useful? Yes.
+
+Enough to act on? Not necessarily.
+
+Was that endpoint used in production or a sandbox? Who supplied it? Is it still current? Did the previous call succeed because the source was reliable, or because the agent got lucky once?
+
+This is the gap between **remembering information** and **knowing how much weight to give it**.
+
+Long-term memory is becoming a core part of agent infrastructure. It helps agents retain preferences, preserve decisions, learn from prior work, and operate across sessions. But storage and retrieval only solve part of the problem.
+
+An agent can retrieve the right memory and still make the wrong decision.
+
+## Memory solves continuity, not authority
+
+A single context window cannot carry everything an agent has observed or learned. Memory systems help agents persist, organize, and selectively recall information across interactions. [Memory for Autonomous LLM Agents](https://arxiv.org/abs/2603.07670) describes that work as a write-manage-read loop connected to perception and action.
+
+But recall introduces another set of questions:
+
+- Where did this information come from?
+- Under what conditions was it true?
+- Is the source credible for this particular task?
+- Has the claim been challenged or updated?
+- Should the agent use it for a low-risk suggestion or a high-risk action?
+
+Without answers, a memory can be relevant without being reliable.
+
+The distinction matters more as agents gain access to wallets, codebases, business systems, and other agents. Information that survives from one session into the next can influence a decision long after its original context has disappeared.
+
+## Every durable memory needs lineage
+
+A useful memory should be more than a detached sentence. It should retain enough lineage to say what it is, where it came from, and what it is allowed to influence.
+
+For example, a durable memory about an API endpoint might carry:
+
+- **Claim:** “Endpoint X accepted this request format.”
+- **Source:** the official API documentation or a named tool response.
+- **Timestamp:** when the source was retrieved or the action was observed.
+- **Environment:** production, testnet, staging, or a local sandbox.
+- **Evidence:** a linked document, request trace, or successful result.
+- **Confidence:** the system’s assessment, with a reason.
+- **Authority / use restriction:** “May inform a draft” or “Do not use to initiate a transaction without current verification.”
+
+That is provenance: not just a citation, but the boundary between evidence, interpretation, and action.
+
+The point is practical. In *Memory Provenance Laundering in LLM Agents*, Jinghan Xu and co-authors describe how memory consolidation can preserve an instruction-like trigger while stripping away the low-trust source that should have limited its authority. The authors propose risk-sensitive authorization based on provenance-bearing memory.
+
+When memory loses its source, it can gain authority it never earned.
+
+## Trust is contextual
+
+Provenance answers: **Where did this information come from?**
+
+Reputation asks a different question: **How credible is this source in this context?**
+
+A builder may be highly credible on smart-contract security and have little relevant experience in agent UX. A recommendation that worked on testnet may be unsafe on mainnet. A decision made for one community may not transfer cleanly to another.
+
+So reputation should not collapse into one universal score. The more useful question is relational:
+
+**Trusted by whom, for what, based on which evidence, and in what context?**
+
+For agents, that means source weight can change with the task. It also means credibility should be inspectable. A score without its inputs may be convenient, but it can hide disagreement, recency, topic boundaries, and manipulation.
+
+## Trust depends on the action
+
+The same retrieved information should not clear every decision threshold.
+
+An agent recommending a restaurant can work with lighter, current evidence. An agent about to approve a large payment, deploy code, or change production access needs stronger provenance, more relevant reputation, and a stricter decision rule.
+
+That decision rule is a **trust policy**: the local policy that determines how much a piece of information may influence a particular action.
+
+A sensible policy might allow a low-confidence memory to generate a suggestion, require current official confirmation before a production change, and require user approval before a financial action. Provenance and reputation supply inputs; policy decides the consequence.
+
+This is why final-answer accuracy is not enough. *From Agent Traces to Trust*, a survey by Yiqi Wang and co-authors, argues that trustworthy agents also need to show which evidence supported a claim, how memory influenced a decision, and whether a tool call was justified.
+
+## Scoring is a policy, not ground truth
+
+Once provenance, context, and risk are available, a system still has to decide how to weigh them.
+
+Should recent evidence matter more than old evidence? Should several independent sources outweigh one established expert? How should the system handle conflicting claims? What prevents a coordinated group from manufacturing credibility?
+
+There is no neutral answer. Every ranking, confidence score, and curation mechanism encodes choices about what counts, who counts, and how disagreement is resolved.
+
+A useful trust layer should make those inputs available and inspectable, while letting applications apply policies suited to their own risks. A restaurant recommender, a code-deployment agent, and a DAO treasury agent should not be forced into one global verdict.
+
+## Why shared trust infrastructure matters
+
+Private memory is still necessary. An agent should retain a user’s preferences, private working context, and its own action history without publishing them to a shared graph.
+
+But private memory alone is not enough when trust context needs to move across agents and applications.
+
+If an agent needs to evaluate an external claim, understand the relationships around a source, compare community signals, or carry a portable identity and reputation context into a new application, the supporting trust data cannot live only in one agent’s private store.
+
+This is where shared, structured trust infrastructure becomes useful.
+
+## Where Intuition fits
+
+Intuition is building a semantic knowledge graph with three core primitives: **Atoms** identify entities and concepts; subject-predicate-object **Triples** express structured claims and relationships; and **Signals** express community confidence, relevance, or support around those objects.
+
+That does not replace an agent’s private memory. It provides a possible shared layer for portable claims, identities, relationships, and Signals that different applications and agents can query and interpret.
+
+In practice, an agent could:
+
+1. Query a structured claim and the entities or relationships around it.
+2. Read relevant Signals, including support or rejection of that claim.
+3. Inspect the provenance fields its application has modeled alongside the claim: source, timestamp, evidence, and environment.
+4. Apply its own local policy before it acts.
+
+The important distinction is that a Signal is not automatically truth. It is evidence about how participants have weighted an entity or claim. Intuition’s documentation describes Signals as community-assigned trust, confidence, or relevance; applications still decide which sources, communities, and forms of evidence matter for their use case.
+
+That leaves room for plural reputation models rather than a single score pretending to work everywhere.
+
+## Questions builders should answer
+
+For builders working on memory, identity, provenance, reputation, scoring, or curation:
+
+- Can each durable memory explain where it came from?
+- Does the system preserve the difference between observation, inference, and instruction?
+- Can credibility change by topic, task, community, or risk level?
+- What evidence threshold is required for each class of action?
+- How are updates and contradictions handled?
+- Can another agent or application inspect the evidence behind a score?
+- What prevents weak information from becoming more authoritative each time it is summarized?
+- Which trust decisions should remain local, and which data should be portable?
+
+Better memory will help agents remember more.
+
+The next challenge is helping them understand **what deserves to influence an action, in which context, and why**.
+
+We are interested in how other builders are approaching that distinction. What does your agent carry alongside a memory before it is allowed to shape a consequential decision?
