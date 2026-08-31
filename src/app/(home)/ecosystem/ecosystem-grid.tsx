@@ -1,9 +1,8 @@
 'use client';
 
-import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowRight, ExternalLink, Search, X } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { ArrowRight, ExternalLink, Globe2, Search, X } from 'lucide-react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   Card,
   CardContent,
@@ -13,14 +12,6 @@ import {
 } from '@/components/card';
 import { cn } from '@/lib/cn';
 import type { EcosystemProject } from '@/lib/ecosystem';
-
-const PLACEHOLDER_GRADIENTS = [
-  'from-ib-brand-dark via-[#13251f] to-[#172f29]',
-  'from-ib-yellow-dark via-[#27230c] to-[#3b3010]',
-  'from-ib-purple-dark via-[#1f1e36] to-[#29264c]',
-  'from-[#10252c] via-[#102d35] to-[#123e47]',
-  'from-[#27151f] via-[#351725] to-[#4a1b2f]',
-] as const;
 
 interface EcosystemGridProps {
   projects: EcosystemProject[];
@@ -35,7 +26,7 @@ export function EcosystemGrid({ projects }: EcosystemGridProps) {
     return projects.filter((project) => {
       const searchableText = [
         project.name,
-        project.description ?? '',
+        project.description,
         project.builder ?? '',
         getProjectHost(project.website),
         ...(project.tags ?? []),
@@ -89,8 +80,8 @@ export function EcosystemGrid({ projects }: EcosystemGridProps) {
 
       {filteredProjects.length > 0 ? (
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {filteredProjects.map((project, index) => (
-            <ProjectCard key={project.slug} project={project} index={index} />
+          {filteredProjects.map((project) => (
+            <ProjectCard key={project.slug} project={project} />
           ))}
         </div>
       ) : (
@@ -112,50 +103,28 @@ export function EcosystemGrid({ projects }: EcosystemGridProps) {
   );
 }
 
-function ProjectCard({
-  project,
-  index,
-}: {
-  project: EcosystemProject;
-  index: number;
-}) {
+function ProjectCard({ project }: { project: EcosystemProject }) {
   const host = getProjectHost(project.website);
 
   return (
-    <Card className="group h-full overflow-hidden pt-0 transition-colors hover:border-fd-foreground/20">
+    <Card className="group relative h-full overflow-hidden transition-all duration-300 hover:-translate-y-0.5 hover:border-fd-foreground/20 hover:shadow-[0_18px_50px_-28px_rgba(141,241,201,0.35)]">
       <div
-        className={cn(
-          'relative aspect-[16/9] overflow-hidden bg-linear-to-br',
-          !project.image &&
-            PLACEHOLDER_GRADIENTS[index % PLACEHOLDER_GRADIENTS.length],
-        )}
-      >
-        {project.image ? (
-          <Image
-            src={project.image}
-            alt={project.imageAlt ?? ''}
-            fill
-            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 340px"
-            className="object-cover transition-transform duration-500 group-hover:scale-[1.025]"
-          />
-        ) : (
-          <>
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_75%_25%,rgba(255,255,255,0.12),transparent_40%)]" />
-            <div className="absolute inset-0 flex items-center justify-center">
-              <span className="select-none text-5xl font-semibold tracking-tight text-white/85 transition-transform duration-500 group-hover:scale-105">
-                {getProjectInitials(project.name)}
-              </span>
-            </div>
-          </>
-        )}
-        <div className="absolute inset-x-0 bottom-0 h-20 bg-linear-to-t from-fd-card to-transparent" />
-        <span className="absolute left-4 top-4 rounded-full border border-white/10 bg-black/65 px-2.5 py-1 text-[11px] font-medium text-white backdrop-blur-md">
-          {host}
-        </span>
-      </div>
+        aria-hidden
+        className="pointer-events-none absolute -right-16 -top-16 size-40 rounded-full bg-ib-brand/0 blur-3xl transition-colors duration-300 group-hover:bg-ib-brand/10"
+      />
 
-      <CardHeader className="gap-2">
-        <CardTitle className="text-xl font-semibold">{project.name}</CardTitle>
+      <CardHeader className="relative gap-3">
+        <div className="flex min-w-0 items-center gap-3">
+          <ProjectFavicon website={project.website} />
+          <div className="min-w-0">
+            <CardTitle className="truncate text-lg font-semibold">
+              {project.name}
+            </CardTitle>
+            <p className="mt-1 truncate text-xs text-fd-muted-foreground">
+              {host}
+            </p>
+          </div>
+        </div>
         {project.builder && (
           <p className="text-xs text-fd-muted-foreground">
             Built by {project.builder}
@@ -163,9 +132,9 @@ function ProjectCard({
         )}
       </CardHeader>
 
-      <CardContent className="flex-1">
+      <CardContent className="relative flex-1">
         <p className="m-0 text-sm leading-6 text-fd-muted-foreground">
-          {project.description ?? `Explore ${project.name} at ${host}.`}
+          {project.description}
         </p>
         {project.tags && project.tags.length > 0 && (
           <div className="mt-4 flex flex-wrap gap-1.5">
@@ -181,7 +150,7 @@ function ProjectCard({
         )}
       </CardContent>
 
-      <CardFooter className="flex-wrap gap-x-4 gap-y-2 bg-transparent pt-1">
+      <CardFooter className="relative flex-wrap gap-x-4 gap-y-2 bg-transparent pt-1">
         <a
           href={project.website}
           target="_blank"
@@ -208,18 +177,70 @@ function ProjectCard({
   );
 }
 
+function ProjectFavicon({ website }: { website: string }) {
+  const [loadedUrl, setLoadedUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    let active = true;
+    const candidates = getFaviconCandidates(website);
+    let candidateIndex = 0;
+
+    const loadNextCandidate = () => {
+      if (!active) return;
+
+      const candidate = candidates[candidateIndex];
+      candidateIndex += 1;
+
+      if (!candidate) {
+        setLoadedUrl(null);
+        return;
+      }
+
+      const favicon = new window.Image();
+      favicon.onload = () => {
+        if (active) setLoadedUrl(candidate);
+      };
+      favicon.onerror = loadNextCandidate;
+      favicon.src = candidate;
+    };
+
+    setLoadedUrl(null);
+    loadNextCandidate();
+
+    return () => {
+      active = false;
+    };
+  }, [website]);
+
+  return (
+    <div className="relative flex size-11 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-fd-border bg-fd-muted/70 transition-colors group-hover:border-ib-brand/20 group-hover:bg-ib-brand-alpha">
+      <Globe2 aria-hidden className="size-5 text-fd-muted-foreground" />
+      {loadedUrl && (
+        <span
+          aria-hidden
+          className="absolute inset-0 bg-fd-muted bg-center bg-no-repeat"
+          style={{
+            backgroundImage: `url(${JSON.stringify(loadedUrl)})`,
+            backgroundSize: '28px 28px',
+          }}
+        />
+      )}
+    </div>
+  );
+}
+
 function getProjectHost(website: string): string {
   return new URL(website).hostname.replace(/^www\./, '');
 }
 
-function getProjectInitials(name: string): string {
-  const words = name.split(/\s+/).filter(Boolean);
+function getFaviconCandidates(website: string): string[] {
+  const googleFavicon = new URL('https://www.google.com/s2/favicons');
+  googleFavicon.searchParams.set('domain_url', website);
+  googleFavicon.searchParams.set('sz', '128');
 
-  if (words.length === 1) return words[0].slice(0, 2).toUpperCase();
-
-  return words
-    .slice(0, 2)
-    .map((word) => word[0])
-    .join('')
-    .toUpperCase();
+  return [
+    new URL('/icon.svg', website).toString(),
+    new URL('/favicon.ico', website).toString(),
+    googleFavicon.toString(),
+  ];
 }
