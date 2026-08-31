@@ -15,6 +15,34 @@ export interface EcosystemProject {
  */
 export const ECOSYSTEM_PROJECTS: EcosystemProject[] = [
   {
+    slug: 'hunch',
+    name: 'Hunch',
+    website: 'https://ideation.intuition.box/',
+    description:
+      'Turn raw hunches into structured ideas through AI brainstorming, GitHub proposals, and onchain attestations.',
+  },
+  {
+    slug: 'hourglass',
+    name: 'Hourglass',
+    website: 'https://hourglass.box/',
+    description:
+      'Set up recurring onchain Safe payments with capped charges and IPFS-pinned agreements.',
+  },
+  {
+    slug: 'collate',
+    name: 'Collate',
+    website: 'https://collate.intuition.box/',
+    description:
+      'Use review-first community tools to create atoms and curated lists on Intuition.',
+  },
+  {
+    slug: 'atlas',
+    name: 'Atlas',
+    website: 'https://atlas.box/',
+    description:
+      'A framework for communities to build and manage reputation across their shared spaces.',
+  },
+  {
     slug: 'sofia',
     name: 'Sofia',
     website: 'https://sofia.intuition.box/',
@@ -52,20 +80,6 @@ export const ECOSYSTEM_PROJECTS: EcosystemProject[] = [
     tags: ['Identity', 'Names', 'Onchain'],
   },
   {
-    slug: 'atlas',
-    name: 'Atlas',
-    website: 'https://atlas.box/',
-    description:
-      'A framework for communities to build and manage reputation across their shared spaces.',
-  },
-  {
-    slug: 'hourglass',
-    name: 'Hourglass',
-    website: 'https://hourglass.box/',
-    description:
-      'Set up recurring onchain Safe payments with capped charges and IPFS-pinned agreements.',
-  },
-  {
     slug: 'ourglass',
     name: 'OurGlass',
     website: 'https://ourglass.intuition.box/',
@@ -78,20 +92,6 @@ export const ECOSYSTEM_PROJECTS: EcosystemProject[] = [
     website: 'https://ontology.intuition.box/',
     description:
       'Explore entity schemas, predicate relationships, and build valid claims for the Intuition graph.',
-  },
-  {
-    slug: 'hunch',
-    name: 'Hunch',
-    website: 'https://ideation.intuition.box/',
-    description:
-      'Turn raw hunches into structured ideas through AI brainstorming, GitHub proposals, and onchain attestations.',
-  },
-  {
-    slug: 'collate',
-    name: 'Collate',
-    website: 'https://collate.intuition.box/',
-    description:
-      'Use review-first community tools to create atoms and curated lists on Intuition.',
   },
   {
     slug: 'graph',
