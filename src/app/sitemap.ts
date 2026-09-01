@@ -4,7 +4,14 @@ import { blogSource } from '@/lib/blog-source';
 import { getPublishedSpotlights } from '@/lib/spotlights-source';
 import { siteUrl } from '@/lib/shared';
 
-const STATIC_ROUTES = ['', '/docs', '/blog', '/missions', '/spotlights'] as const;
+const STATIC_ROUTES = [
+  '',
+  '/docs',
+  '/blog',
+  '/missions',
+  '/spotlights',
+  '/ecosystem',
+] as const;
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();

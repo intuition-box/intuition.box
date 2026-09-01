@@ -5,6 +5,7 @@ export const docsImageRoute = '/og/docs';
 export const docsContentRoute = '/llms.mdx/docs';
 export const blogRoute = '/blog';
 export const spotlightsRoute = '/spotlights';
+export const ecosystemRoute = '/ecosystem';
 
 export const discordUrl = 'https://discord.gg/0xintuition';
 export const twitterUrl = 'https://x.com/intuition_box';
