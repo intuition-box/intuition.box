@@ -1,8 +1,21 @@
+export const ECOSYSTEM_CATEGORIES = [
+  'AI & Agents',
+  'Curation & Discovery',
+  'Identity & Reputation',
+  'Data & Developer Tools',
+  'Community & Media',
+  'Payments & Finance',
+  'Creative Tools',
+] as const;
+
+export type EcosystemCategory = (typeof ECOSYSTEM_CATEGORIES)[number];
+
 export interface EcosystemProject {
   slug: string;
   name: string;
   website: string;
   description: string;
+  category: EcosystemCategory;
   builder?: string;
   spotlight?: string;
   tags?: string[];
@@ -20,6 +33,7 @@ export const ECOSYSTEM_PROJECTS: EcosystemProject[] = [
     website: 'https://ideation.intuition.box/',
     description:
       'Turn raw hunches into structured ideas through AI brainstorming, GitHub proposals, and onchain attestations.',
+    category: 'Curation & Discovery',
   },
   {
     slug: 'hourglass',
@@ -27,6 +41,7 @@ export const ECOSYSTEM_PROJECTS: EcosystemProject[] = [
     website: 'https://hourglass.box/',
     description:
       'Set up recurring onchain Safe payments with capped charges and IPFS-pinned agreements.',
+    category: 'Payments & Finance',
   },
   {
     slug: 'collate',
@@ -34,6 +49,7 @@ export const ECOSYSTEM_PROJECTS: EcosystemProject[] = [
     website: 'https://collate.intuition.box/',
     description:
       'Use review-first community tools to create atoms and curated lists on Intuition.',
+    category: 'Curation & Discovery',
   },
   {
     slug: 'atlas',
@@ -41,6 +57,7 @@ export const ECOSYSTEM_PROJECTS: EcosystemProject[] = [
     website: 'https://atlas.box/',
     description:
       'A framework for communities to build and manage reputation across their shared spaces.',
+    category: 'Identity & Reputation',
   },
   {
     slug: 'sofia',
@@ -48,6 +65,7 @@ export const ECOSYSTEM_PROJECTS: EcosystemProject[] = [
     website: 'https://sofia.intuition.box/',
     description:
       'Save and certify useful pages, turning personal curation into shared, onchain intelligence.',
+    category: 'Curation & Discovery',
     builder: 'Samuel Chauche & Maxime Saint-Joannis',
     spotlight: '/spotlights/sofia',
     tags: ['Curation', 'Reputation', 'Browser'],
@@ -58,6 +76,7 @@ export const ECOSYSTEM_PROJECTS: EcosystemProject[] = [
     website: 'https://nexura.intuition.box/',
     description:
       'Discover ecosystem apps, join quests, and turn participation into a rewarding daily habit.',
+    category: 'Curation & Discovery',
     builder: 'Reuben O. Christopher & Onuigbo Emmanuel',
     spotlight: '/spotlights/nexura',
     tags: ['Discovery', 'Quests', 'Engagement'],
@@ -68,6 +87,7 @@ export const ECOSYSTEM_PROJECTS: EcosystemProject[] = [
     website: 'https://inturank.intuition.box/',
     description:
       'Analyze knowledge-graph signals to rank identities and surface actionable credibility metrics.',
+    category: 'Identity & Reputation',
   },
   {
     slug: 'tns',
@@ -75,6 +95,7 @@ export const ECOSYSTEM_PROJECTS: EcosystemProject[] = [
     website: 'https://tns.intuition.box/',
     description:
       'Register human-readable .trust names for wallets, profiles, apps, and other onchain resources.',
+    category: 'Identity & Reputation',
     builder: 'Oriola Samson Omobolaji',
     spotlight: '/spotlights/tns',
     tags: ['Identity', 'Names', 'Onchain'],
@@ -85,6 +106,7 @@ export const ECOSYSTEM_PROJECTS: EcosystemProject[] = [
     website: 'https://ourglass.intuition.box/',
     description:
       'Set up recurring onchain Safe payments with capped charges and IPFS-pinned agreements.',
+    category: 'Payments & Finance',
   },
   {
     slug: 'ontology',
@@ -92,6 +114,7 @@ export const ECOSYSTEM_PROJECTS: EcosystemProject[] = [
     website: 'https://ontology.intuition.box/',
     description:
       'Explore entity schemas, predicate relationships, and build valid claims for the Intuition graph.',
+    category: 'Data & Developer Tools',
   },
   {
     slug: 'graph',
@@ -99,6 +122,7 @@ export const ECOSYSTEM_PROJECTS: EcosystemProject[] = [
     website: 'https://graph.intuition.box/',
     description:
       'Visualize and explore connections across the Intuition knowledge graph.',
+    category: 'Data & Developer Tools',
   },
   {
     slug: 'pulse',
@@ -106,6 +130,7 @@ export const ECOSYSTEM_PROJECTS: EcosystemProject[] = [
     website: 'https://pulse.intuition.box/',
     description:
       'Take a position on what you believe and see where the wider community stands.',
+    category: 'Community & Media',
   },
   {
     slug: 'mcp-playground',
@@ -113,6 +138,7 @@ export const ECOSYSTEM_PROJECTS: EcosystemProject[] = [
     website: 'https://mcp.intuition.box/',
     description:
       'Give AI agents natural-language access to onchain trust scores and reputation signals.',
+    category: 'AI & Agents',
     builder: 'Elijah Esin',
     spotlight: '/spotlights/mcp',
     tags: ['AI Agents', 'MCP', 'Trust'],
@@ -123,6 +149,7 @@ export const ECOSYSTEM_PROJECTS: EcosystemProject[] = [
     website: 'https://caveat-enforcers-registry.vercel.app/',
     description:
       'Discover ERC-7710 caveat enforcers by purpose, chain, terms, and community evidence.',
+    category: 'Data & Developer Tools',
   },
   {
     slug: 'agentid',
@@ -130,6 +157,7 @@ export const ECOSYSTEM_PROJECTS: EcosystemProject[] = [
     website: 'https://agentids.xyz/',
     description:
       'Register, stake on, and discover AI agents with portable identity and reputation on Intuition.',
+    category: 'AI & Agents',
   },
   {
     slug: 'trustnomiks',
@@ -137,6 +165,7 @@ export const ECOSYSTEM_PROJECTS: EcosystemProject[] = [
     website: 'https://trustnomiks-app.vercel.app/',
     description:
       'Turn fragmented tokenomics into verifiable onchain claims curated through the Intuition graph.',
+    category: 'Payments & Finance',
   },
   {
     slug: 'hive-mind',
@@ -144,6 +173,7 @@ export const ECOSYSTEM_PROJECTS: EcosystemProject[] = [
     website: 'https://hivemindhq.io/',
     description:
       'See reputation and context from the Intuition network while you browse the open web.',
+    category: 'Curation & Discovery',
     builder: 'Kylan Hurt',
     spotlight: '/spotlights/hivemind',
     tags: ['Reputation', 'Browser', 'Safety'],
@@ -154,6 +184,7 @@ export const ECOSYSTEM_PROJECTS: EcosystemProject[] = [
     website: 'https://signal-finder.intuition.box/',
     description:
       'Track live staking velocity to find signals of emerging trust across Intuition.',
+    category: 'Identity & Reputation',
   },
   {
     slug: 'resonance',
@@ -161,6 +192,7 @@ export const ECOSYSTEM_PROJECTS: EcosystemProject[] = [
     website: 'https://resonance.intuition.box/',
     description:
       'Revisit ecosystem talks and AMAs through curated context, speakers, themes, and missions.',
+    category: 'Community & Media',
   },
   {
     slug: 'intuition-reviews',
@@ -168,6 +200,7 @@ export const ECOSYSTEM_PROJECTS: EcosystemProject[] = [
     website: 'https://review.intuition.box/',
     description:
       'Review and discover dApps built on the Intuition network.',
+    category: 'Curation & Discovery',
   },
   {
     slug: 'quiz',
@@ -175,6 +208,7 @@ export const ECOSYSTEM_PROJECTS: EcosystemProject[] = [
     website: 'https://quiz.intuition.box/',
     description:
       'Test your Intuition knowledge with timed quizzes, difficulty levels, and a community leaderboard.',
+    category: 'Community & Media',
   },
   {
     slug: 'pfp-generator',
@@ -182,6 +216,7 @@ export const ECOSYSTEM_PROJECTS: EcosystemProject[] = [
     website: 'https://pfp.intuition.box/',
     description:
       'Create a custom Intuition profile picture by adding branded frames to your image.',
+    category: 'Creative Tools',
   },
   {
     slug: 'banner',
@@ -189,5 +224,6 @@ export const ECOSYSTEM_PROJECTS: EcosystemProject[] = [
     website: 'https://banner.intuition.box/',
     description:
       'Create downloadable $TRUST community banners sized for Discord and X.',
+    category: 'Creative Tools',
   },
 ];
