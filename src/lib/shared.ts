@@ -8,6 +8,7 @@ export const learnImageRoute = '/og/learn';
 export const learnContentRoute = '/llms.mdx/learn';
 export const blogRoute = '/blog';
 export const spotlightsRoute = '/spotlights';
+export const ecosystemRoute = '/ecosystem';
 
 export const discordUrl = 'https://discord.gg/0xintuition';
 export const twitterUrl = 'https://x.com/intuition_box';
