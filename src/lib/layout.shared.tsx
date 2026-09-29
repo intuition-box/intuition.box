@@ -18,6 +18,7 @@ export function baseOptions(): BaseLayoutProps {
     },
     links: [
       { text: 'Missions', url: '/missions', active: 'nested-url' },
+      { text: 'Learn', url: '/learn', active: 'nested-url' },
       { text: 'Spotlights', url: spotlightsRoute, active: 'nested-url' },
       { text: 'Blog', url: '/blog', active: 'nested-url' },
       { text: 'Docs', url: '/docs', active: 'nested-url' },

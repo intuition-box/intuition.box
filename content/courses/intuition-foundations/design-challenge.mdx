@@ -1,0 +1,110 @@
+---
+title: Design challenge and final knowledge check
+description: Apply the complete Foundations model to a package-trust directory, then test the distinctions that make Intuition products credible.
+course: intuition-foundations
+module: from-protocol-to-products
+order: 12
+duration: 14
+objectives:
+  - Map a product concept into atoms, triples, provenance, and signals
+  - Identify semantic, economic, and interface failure modes
+  - Demonstrate mastery of the course's central distinctions
+references:
+  - title: Intuition use cases
+    url: https://www.docs.intuition.systems/docs/getting-started/use-cases
+  - title: Intuition primitives
+    url: https://www.docs.intuition.systems/docs/intuition-concepts/primitives
+  - title: Intuition economics
+    url: https://www.docs.intuition.systems/docs/intuition-concepts/economics
+---
+
+This final lesson is a design exercise, not a coding project. Its purpose is to test whether you can reason from Intuition's primitives to a responsible product model.
+
+## The brief
+
+Design a public directory that helps teams evaluate open-source packages. It should combine maintainership, audits, compatibility, recommendations, and warnings contributed by independent communities. No organization is the universal authority.
+
+Before reading the worked model, write down:
+
+1. the important entities and concepts;
+2. three useful relationship types;
+3. which claims require scope or time context;
+4. who might support or oppose them;
+5. what the interface must never imply.
+
+## A worked knowledge model
+
+Possible atoms include packages, repositories, versions, maintainers, auditors, programming ecosystems, licenses, vulnerabilities, and concepts such as “production ready.” Some should remain distinct: a package is not its repository, and a package family is not a specific release.
+
+Possible triples include:
+
+- Nova — maintains → Atlas;
+- Atlas 2.1 — audited by → Secure Labs;
+- Atlas — compatible with → Helix;
+- Mira — recommends → Atlas 2.1;
+- Atlas 2.1 — affected by → vulnerability Q.
+
+The version-specific terms prevent an old audit from silently applying to new code. Attributable recommendation triples preserve who made subjective judgments.
+
+## Signal and interpretation
+
+Participants may signal support or opposition around identifiers and claims. The directory can use this activity for discovery, but raw totals should not become a safety score. A security view might prioritize recent auditor evidence; a maintenance view might prioritize current maintainers and release activity.
+
+The interface should disclose the ranking policy and let users inspect evidence, sources, dates, opposition, and signal concentration.
+
+## Failure review
+
+Before launch, test at least these risks:
+
+- duplicate atoms split the package's history;
+- a malicious atom impersonates a real repository;
+- old claims appear current;
+- wealthy participants dominate rankings;
+- coordinated accounts manufacture support;
+- a broad predicate such as “safe” hides audit scope;
+- derived summaries lose their provenance;
+- users read market activity as verification.
+
+<CaseStudy title="A responsible result card">
+  Instead of “Atlas: 94% trusted,” show “Atlas 2.1 has one audit claim from Secure Labs, current maintainer support, two unresolved opposing claims, and concentrated economic signal.” The longer summary is less magical and more useful because each statement can be inspected.
+</CaseStudy>
+
+## Final knowledge check
+
+<ConceptCheck question="1. What is the difference between an atom and the real-world thing it identifies?">
+  An atom is an addressable protocol identifier. Its metadata and relationships may help connect it to a real subject, but the identifier is not the subject and does not prove authenticity by itself.
+</ConceptCheck>
+
+<ConceptCheck question="2. What does creating a triple establish?">
+  It establishes that a structured subject–predicate–object claim exists with recorded provenance. It does not automatically establish that the assertion is true.
+</ConceptCheck>
+
+<ConceptCheck question="3. Why does predicate choice matter?">
+  The predicate defines the relationship's meaning and direction. Vague or fragmented predicates make reuse and interpretation unreliable.
+</ConceptCheck>
+
+<ConceptCheck question="4. What information does economic signal add?">
+  It records economically backed positions, which may reveal conviction, attention, coordination, or opposition. It is evidence about participation, not certainty about the underlying meaning.
+</ConceptCheck>
+
+<ConceptCheck question="5. Why can a high-signal claim still be wrong?">
+  Participants may be mistaken, strategic, coordinated, or unequally wealthy. Market state captures behavior under incentives, not all external evidence.
+</ConceptCheck>
+
+<ConceptCheck question="6. Why is an indexer distinct from the protocol?">
+  The protocol governs authoritative state transitions. An indexer derives a convenient read model and may introduce latency, transformations, or calculated fields.
+</ConceptCheck>
+
+<ConceptCheck question="7. Name two signs of a strong Intuition use case.">
+  Any two of these: independent parties share identifiers, claims need portable attribution, support and opposition matter, or multiple applications can compose the knowledge.
+</ConceptCheck>
+
+<ConceptCheck question="8. What is an application's central responsibility when presenting the graph?">
+  It must make its interpretation honest: preserve relevant provenance and context, distinguish signal from verification, communicate limitations, and explain consequential ranking choices.
+</ConceptCheck>
+
+<KeyTakeaways items={[
+  'A credible design begins with precise identities and claims, then adds signal and interpretation deliberately.',
+  'Every aggregation should be tested for lost context, concentrated power, stale evidence, and misleading labels.',
+  'You now have the conceptual foundation needed to choose a specialized theory course or move into Build.',
+]} />

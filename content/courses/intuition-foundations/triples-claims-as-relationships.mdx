@@ -1,0 +1,71 @@
+---
+title: "Triples: claims as relationships"
+description: How subject-predicate-object structure turns human assertions into explicit, reusable graph relationships.
+course: intuition-foundations
+module: language-of-knowledge
+order: 5
+duration: 13
+objectives:
+  - Read a triple as a subject-predicate-object claim
+  - Explain why predicates determine the meaning of a relationship
+  - Distinguish the existence of a claim from agreement with it
+references:
+  - title: Triples
+    url: https://www.docs.intuition.systems/docs/intuition-concepts/primitives/triples
+  - title: Intuition primitives
+    url: https://www.docs.intuition.systems/docs/intuition-concepts/primitives
+---
+
+Atoms give the graph nouns. **Triples** give it statements.
+
+A triple connects three terms in a subject–predicate–object form:
+
+> **subject** — **predicate** → **object**
+
+For example:
+
+> Atlas — audited by → Secure Labs
+
+Each position matters. “Atlas audited Secure Labs” is a different claim from “Atlas was audited by Secure Labs.” The predicate is not decorative text; it defines how the subject and object are related.
+
+## Claims, not facts by declaration
+
+Creating a triple records that a particular relationship has been asserted. It does not automatically establish the relationship as objective truth. A triple might express a verifiable event, an opinion, a classification, a prediction, or a disputed allegation.
+
+This distinction keeps the data model honest. The graph can preserve contradictory or competing positions without silently choosing one. Readers inspect provenance, context, evidence, and signals to decide what the claim means for them.
+
+## Predicates are semantic infrastructure
+
+Compare these claims:
+
+- Atlas — **uses** → Intuition
+- Atlas — **recommends** → Intuition
+- Atlas — **is compatible with** → Intuition
+
+They connect the same subject and object but make materially different assertions. Reusable, well-scoped predicates reduce ambiguity. Vague relationships such as “related to” may be easy to create but difficult for applications to interpret consistently.
+
+Predicate design also encodes direction. “employs” and “employed by” may describe the same real-world connection from opposite perspectives, yet fragmented conventions make graph queries harder. Communities benefit from discovering and reusing established relationship terms.
+
+<CaseStudy title="A recommendation is not a property">
+  “Mira recommends Atlas” preserves Mira as part of the claim's structure. “Atlas is recommended” erases who made the judgment and invites an interface to present an opinion as an intrinsic property. The first model is usually more useful for contextual trust.
+</CaseStudy>
+
+## Objective-looking and subjective claims
+
+Some triples look straightforward: a package has a repository URL, or an organization issued a credential. Others are explicitly evaluative: a developer is skilled at auditing, or a source is trustworthy.
+
+Even objective-looking claims need provenance and time. A URL can change. A credential can expire. An audit can cover an old version. Structure improves machine readability, but correct interpretation still depends on context.
+
+<ThinkAbout>
+  Rewrite “Atlas is secure” into two or three narrower claims. Who could make each claim, and what evidence would help a reader evaluate it?
+</ThinkAbout>
+
+<ConceptCheck question="What does the existence of a triple prove?">
+  It proves that the structured claim exists in protocol data under its recorded provenance. It does not, by itself, prove that the claim's real-world assertion is correct.
+</ConceptCheck>
+
+<KeyTakeaways items={[
+  'A triple expresses a claim through subject, predicate, and object terms.',
+  'Predicates carry meaning and direction; careful reuse improves interoperability.',
+  'Recording a claim is different from endorsing or proving the claim.',
+]} />

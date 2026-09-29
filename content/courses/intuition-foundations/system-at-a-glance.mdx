@@ -1,0 +1,68 @@
+---
+title: The Intuition system at a glance
+description: A high-level map of the network, protocol, indexing, and application layers—and the boundaries between them.
+course: intuition-foundations
+module: why-intuition
+order: 3
+duration: 13
+objectives:
+  - Name the major layers of the Intuition system
+  - Trace a conceptual write and read through those layers
+  - Identify which guarantees come from the protocol and which come from applications
+references:
+  - title: Intuition architecture
+    url: https://www.docs.intuition.systems/docs/getting-started/architecture
+  - title: Intuition SDK overview
+    url: https://www.docs.intuition.systems/docs/developer-tools/intuition-sdk
+  - title: GraphQL API overview
+    url: https://www.docs.intuition.systems/docs/developer-tools/graphql-api
+---
+
+A useful mental model separates Intuition into layers. Each layer solves a different problem, and confusing them leads to incorrect assumptions about speed, authority, or trust.
+
+## 1. The network layer
+
+The Intuition Network provides the blockchain environment in which protocol state changes are executed and settled. It supplies ordering, transaction execution, and durable state. At this layer, the important question is: **what actions were accepted by the network?**
+
+## 2. The protocol layer
+
+Protocol contracts define the shared primitives and rules: how identifiers and claims are represented, how vault interactions work, and which events are emitted. This is where a request becomes a protocol state transition rather than an application-specific database mutation.
+
+The network confirms that a valid transition occurred under the contracts' rules. It does not decide whether the human meaning of a claim is wise, accurate, or useful.
+
+## 3. The indexing and query layer
+
+Raw chain state and event logs are authoritative but inconvenient for most product reads. An indexing pipeline organizes protocol data into a graph that applications can query efficiently, including through GraphQL.
+
+An indexer is a **read model**. It can make rich relationships easy to retrieve, but it can lag behind the chain, omit an event due to a fault, or present derived fields. For high-stakes operations, applications should understand which values are indexed interpretations and which must be verified against protocol state.
+
+## 4. The interface layer
+
+SDKs, APIs, wallets, agents, and user interfaces make the lower layers usable. They may resolve metadata, construct transactions, rank results, or explain claims. These conveniences do not inherit automatic neutrality merely because they use an open protocol; every interface makes choices about defaults and presentation.
+
+## Following a write
+
+Suppose a participant creates a claim:
+
+1. An interface turns the intention into a protocol action.
+2. A signed transaction is submitted to the network.
+3. Protocol contracts validate and record the state transition.
+4. Events expose the change for downstream systems.
+5. An indexer processes those events into queryable graph data.
+6. Interfaces retrieve and present the result.
+
+A read usually travels in the opposite direction: an application queries an indexed view, interprets the response, and may verify critical details against the underlying protocol.
+
+<CaseStudy title="Why a new claim may not appear immediately">
+  A wallet reports a successful transaction, but a search interface cannot find the claim for several seconds. Both can be behaving correctly: the protocol write is confirmed while the indexer is still processing the corresponding event. The interface should communicate this boundary instead of implying failure or instant finality.
+</CaseStudy>
+
+<ConceptCheck question="Which layer decides how prominently a claim appears in search results?">
+  Usually the interface or application layer, using indexed data and its own ranking policy. The protocol preserves shared objects and state but does not dictate every product's presentation.
+</ConceptCheck>
+
+<KeyTakeaways items={[
+  'Network, protocol, indexer, and interface layers provide different guarantees.',
+  'Writes become protocol state; indexers turn that state into convenient read models.',
+  'Applications remain responsible for ranking, interpretation, and honest communication of latency.',
+]} />

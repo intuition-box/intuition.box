@@ -1,0 +1,75 @@
+---
+title: Reading the graph responsibly
+description: How applications move from indexed protocol data to interpretations without concealing provenance, latency, or uncertainty.
+course: intuition-foundations
+module: from-protocol-to-products
+order: 10
+duration: 12
+objectives:
+  - Distinguish protocol state, indexed data, and application interpretation
+  - List the context needed to present a claim responsibly
+  - Evaluate labels and rankings for hidden trust assumptions
+references:
+  - title: GraphQL API
+    url: https://www.docs.intuition.systems/docs/developer-tools/graphql-api
+  - title: Intuition architecture
+    url: https://www.docs.intuition.systems/docs/getting-started/architecture
+---
+
+Reading Intuition data is not a neutral act. The moment an application filters claims, resolves metadata, ranks results, or chooses a label, it turns protocol data into a product interpretation.
+
+That is necessary—raw data is rarely a good interface. The responsibility is to make the transformation understandable and avoid claiming more authority than the evidence supports.
+
+## Three levels of a read
+
+It helps to separate:
+
+1. **Protocol state:** accepted state transitions, identifiers, positions, and events governed by the protocol.
+2. **Indexed representation:** a query-friendly model derived from protocol activity, potentially with latency or calculated fields.
+3. **Application view:** selection, aggregation, ranking, labels, and explanations chosen for a specific audience.
+
+If a product shows “trusted by the community,” that phrase is not raw protocol state. It is a conclusion based on a definition of community, a weighting method, a time window, and perhaps excluded data. Those assumptions should be inspectable.
+
+## A responsible claim view
+
+Depending on context, a useful presentation may include:
+
+- the subject, predicate, and object;
+- who created or supported the claim;
+- supporting and opposing positions;
+- when relevant activity occurred;
+- linked evidence or related claims;
+- concentration or diversity of signal;
+- the application's ranking or verification policy.
+
+Not every screen needs every field. Progressive disclosure can keep an interface calm while giving users a path to examine provenance.
+
+## Recency and change
+
+Knowledge ages. “Maintains project” can stop being true. “Audited version” may not cover the current release. A signal made before new evidence appeared has a different meaning afterward. Applications should use timestamps and scope instead of presenting all historical claims as equally current.
+
+## The ethics of labels
+
+Small words carry large assumptions. Compare:
+
+- **verified** — implies a defined verification procedure;
+- **supported** — indicates positive positions without proving accuracy;
+- **popular** — describes attention but not quality;
+- **recommended by maintainers** — specifies a source group;
+- **high signal** — describes protocol state while leaving interpretation open.
+
+Precise labels make the product more trustworthy because they preserve the boundary between observation and inference.
+
+<CaseStudy title="Two honest interfaces, two different rankings">
+  A package explorer ranks by recent maintainer support. A security dashboard ranks the same claims by signals from recognized auditors and penalizes stale evidence. Both use the shared graph; neither ranking is protocol truth. Each can be responsible if its policy and inputs are clear.
+</CaseStudy>
+
+<ConceptCheck question="Is a GraphQL response the same thing as the chain's raw authoritative state?">
+  No. It is an indexed representation optimized for reads. It derives from protocol activity but can include latency, transformations, and calculated relationships that applications should understand.
+</ConceptCheck>
+
+<KeyTakeaways items={[
+  'Applications transform protocol and indexed data into context-specific interpretations.',
+  'Good interfaces preserve access to provenance, opposition, time, and policy.',
+  'Labels should describe what the evidence establishes without silently upgrading signal into verification.',
+]} />

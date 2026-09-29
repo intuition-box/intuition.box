@@ -1,0 +1,65 @@
+---
+title: "Atoms: identity for anything"
+description: How Intuition gives people, concepts, files, and claims reusable identifiers—and why canonical identity is a design problem.
+course: intuition-foundations
+module: language-of-knowledge
+order: 4
+duration: 12
+objectives:
+  - Define an atom without confusing it with the thing it identifies
+  - Explain why stable shared identifiers enable composition
+  - Recognize duplicate and metadata risks in atom design
+references:
+  - title: Intuition primitives
+    url: https://www.docs.intuition.systems/docs/intuition-concepts/primitives
+  - title: Atoms
+    url: https://www.docs.intuition.systems/docs/intuition-concepts/primitives/atoms
+---
+
+Before applications can share claims about something, they need a shared way to refer to it. Intuition calls this foundational primitive an **atom**.
+
+An atom can identify many kinds of things: a person, organization, URL, product, skill, concept, document, wallet, or another piece of structured data. It is an addressable term in the graph—the smallest reusable unit from which relationships are built.
+
+## The identifier is not the thing
+
+An atom for “Ada” is not Ada herself. It is a protocol object used to refer to her. This distinction prevents a common category error: treating an onchain record as proof that it perfectly represents a real-world entity.
+
+Metadata can describe an atom or connect it to external evidence, but applications must still determine whether the identifier refers to the intended subject. Ownership of a wallet, control of a domain, or a credential may strengthen that determination; a label alone may not.
+
+## Why shared identity matters
+
+Suppose three applications each create a private record for the same open-source library. Their reviews cannot be combined without a reconciliation process. If they reuse one atom for the library, their claims become naturally composable: audits, recommendations, dependencies, and maintainership can connect to the same subject.
+
+The value is not merely shorter database keys. A shared identifier creates a meeting point for knowledge contributed by independent participants.
+
+## Canonicalization is coordination
+
+Open creation introduces a challenge: multiple atoms may appear to identify the same thing. Differences in capitalization, URLs, metadata, or malicious impersonation can fragment activity.
+
+Applications therefore need canonicalization policies. They might prefer the earliest well-formed atom, one linked from an authoritative source, or the atom with the strongest relevant usage and signal. No heuristic is universally safe. High economic signal can indicate coordination while still being manipulated; self-verification can be strong for a domain and weak for a subjective concept.
+
+<CaseStudy title="Two atoms named Atlas">
+  One Atlas atom identifies a database tool; another identifies a contributor with the same display name. A third is a duplicate of the tool created with a different URL. A careful interface compares type, metadata, provenance, and external references instead of merging records based on labels.
+</CaseStudy>
+
+## Good atom hygiene
+
+When reasoning about an atom, ask:
+
+- What exactly does it identify?
+- Is its representation stable enough to be reused?
+- What evidence connects it to the real-world subject?
+- Does a better-established atom already exist?
+- Could two legitimate subjects share this label?
+
+These are semantic questions, not just technical ones. A graph becomes more useful when participants converge on durable identifiers and less useful when every application creates near-duplicates.
+
+<ConceptCheck question="Does creating an atom for a person prove their identity?">
+  No. It creates an addressable identifier. Verification requires additional evidence, relationships, or application policy that links the identifier to the intended person.
+</ConceptCheck>
+
+<KeyTakeaways items={[
+  'An atom is a reusable identifier for an entity, concept, or piece of data.',
+  'Shared atoms let independent applications compose knowledge around the same subject.',
+  'Duplicates and ambiguous labels make canonicalization an ongoing coordination problem.',
+]} />

@@ -1,0 +1,332 @@
+---
+title: Build an Intuition Atom Explorer
+description: Create a searchable Next.js interface that reads live atoms from the Intuition knowledge graph and renders their identity safely.
+order: 1
+kind: Quickstart
+level: Beginner
+duration: 35
+stack:
+  - Next.js
+  - TypeScript
+  - GraphQL
+outcome: A working, read-only atom search experience powered by the Intuition GraphQL API.
+network: Intuition Mainnet (read-only)
+prerequisites:
+  - Basic familiarity with React and TypeScript
+  - Node.js 20 or newer and npm
+  - A code editor and terminal
+  - No wallet, private key, or TRUST tokens
+testedVersions:
+  - name: Next.js
+    version: 16.3.4
+  - name: React
+    version: 19.2.4
+  - name: GraphQL API
+    version: Mainnet v1
+lastTested: 2026-09-08
+references:
+  - title: Atom Search
+    url: https://www.docs.intuition.systems/docs/graphql-api/queries/atoms/search
+  - title: GraphQL Client Setup
+    url: https://www.docs.intuition.systems/docs/graphql-api/getting-started/client-setup
+  - title: Request Only Needed Fields
+    url: https://www.docs.intuition.systems/docs/graphql-api/best-practices/request-only-needed
+---
+
+This is the smallest useful Intuition application: a person enters a phrase, your server searches the public knowledge graph, and the interface returns matching atoms with their protocol identifiers.
+
+It deliberately performs **reads only**. That keeps the first build focused on the data model and removes wallets, gas, signatures, and Testnet funds from the critical path.
+
+## What you are building
+
+The finished page has four meaningful states:
+
+1. An initial prompt before a search has been submitted.
+2. A grid of matching atoms when the graph returns results.
+3. An explicit empty state when nothing matches.
+4. A recoverable error state when the query service is unavailable.
+
+Each result displays a human-readable label and the full `term_id`. The label helps a person scan; the identifier is what makes the atom unambiguous and reusable across applications.
+
+<ExpectedResult>
+  Visiting the app and searching for a common term such as **ethereum** should render up to eight live atom cards. Every card should include a label and a 32-byte hexadecimal term identifier. No wallet prompt should appear.
+</ExpectedResult>
+
+## 1. Create a clean Next.js project
+
+Run the following commands in a directory where you keep development projects:
+
+```bash
+npx create-next-app@16.3.4 intuition-atom-explorer --ts --tailwind --eslint --app --src-dir --import-alias "@/*"
+cd intuition-atom-explorer
+```
+
+No protocol package is needed for this build. The GraphQL API accepts ordinary HTTP requests, and Next.js already provides the server-side `fetch` implementation we need.
+
+<BuildCheckpoint title="The untouched app builds">
+  Run `npm run build` before changing any files. If the generated project does not build now, resolve the local Node or package-manager problem before adding protocol code.
+</BuildCheckpoint>
+
+## 2. Create the Intuition read layer
+
+Create `src/lib/intuition.ts`:
+
+```ts
+const INTUITION_GRAPHQL_URL =
+  process.env.INTUITION_GRAPHQL_URL ??
+  'https://mainnet.intuition.sh/v1/graphql'
+
+const SEARCH_ATOMS = `
+  query SearchAtoms($search: String!, $limit: Int!) {
+    atoms(
+      where: {
+        _or: [
+          { label: { _ilike: $search } }
+          { data: { _ilike: $search } }
+        ]
+      }
+      order_by: { created_at: desc }
+      limit: $limit
+    ) {
+      term_id
+      label
+      type
+    }
+  }
+`
+
+export type AtomSearchResult = {
+  term_id: string
+  label: string | null
+  type: string
+}
+
+type SearchResponse = {
+  data?: { atoms: AtomSearchResult[] }
+  errors?: Array<{ message: string }>
+}
+
+export async function searchAtoms(
+  query: string,
+): Promise<AtomSearchResult[]> {
+  const normalized = query.trim()
+  if (!normalized) return []
+
+  const response = await fetch(INTUITION_GRAPHQL_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      query: SEARCH_ATOMS,
+      variables: { search: `%${normalized}%`, limit: 8 },
+    }),
+    cache: 'no-store',
+  })
+
+  if (!response.ok) {
+    throw new Error(`Intuition search failed with ${response.status}`)
+  }
+
+  const result = (await response.json()) as SearchResponse
+  if (result.errors?.length || !result.data) {
+    throw new Error(result.errors?.[0]?.message ?? 'Invalid search response')
+  }
+
+  return result.data.atoms
+}
+```
+
+There are three intentional decisions here:
+
+- The endpoint is explicit and can be overridden by `INTUITION_GRAPHQL_URL`; the application never silently changes networks.
+- The query requests only the three fields the card renders and always applies an eight-result limit.
+- Dynamic text is passed as a GraphQL variable. It is never interpolated into the query document.
+
+<BuildCheckpoint title="The data boundary is explicit">
+  Confirm that this file contains no private key, wallet client, or contract address. The only network configuration should be the documented public Mainnet endpoint and its environment-variable override.
+</BuildCheckpoint>
+
+## 3. Build the searchable interface
+
+Replace `src/app/page.tsx` with the following server component:
+
+```tsx
+import { searchAtoms } from '@/lib/intuition'
+
+type HomeProps = {
+  searchParams: Promise<{ q?: string }>
+}
+
+export default async function Home({ searchParams }: HomeProps) {
+  const value = (await searchParams).q
+  const query = typeof value === 'string' ? value.trim() : ''
+
+  let atoms: Awaited<ReturnType<typeof searchAtoms>> = []
+  let failed = false
+
+  if (query) {
+    try {
+      atoms = await searchAtoms(query)
+    } catch {
+      failed = true
+    }
+  }
+
+  return (
+    <main className="min-h-screen bg-zinc-950 px-6 py-16 text-zinc-50">
+      <div className="mx-auto max-w-4xl">
+        <p className="text-sm font-medium text-emerald-400">
+          Intuition Mainnet · read only
+        </p>
+        <h1 className="mt-3 text-4xl font-semibold tracking-tight">
+          Explore the knowledge graph
+        </h1>
+        <p className="mt-3 max-w-2xl text-zinc-400">
+          Search for a concept, person, project, or account and inspect the
+          atoms that give it persistent identity.
+        </p>
+
+        <form className="mt-8 flex gap-3">
+          <label htmlFor="query" className="sr-only">
+            Search atoms
+          </label>
+          <input
+            id="query"
+            name="q"
+            defaultValue={query}
+            placeholder="Try ethereum"
+            className="min-w-0 flex-1 rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 outline-none focus:border-emerald-400"
+          />
+          <button className="rounded-xl bg-emerald-400 px-5 py-3 font-medium text-zinc-950">
+            Search
+          </button>
+        </form>
+
+        <section aria-live="polite" className="mt-10">
+          {!query && (
+            <StateMessage>Enter a term to search public atoms.</StateMessage>
+          )}
+
+          {failed && (
+            <StateMessage>
+              Search is temporarily unavailable. Your query was not lost;
+              try submitting it again.
+            </StateMessage>
+          )}
+
+          {query && !failed && atoms.length === 0 && (
+            <StateMessage>No atoms matched “{query}”.</StateMessage>
+          )}
+
+          {!failed && atoms.length > 0 && (
+            <>
+              <p className="mb-4 text-sm text-zinc-400">
+                {atoms.length} atom{atoms.length === 1 ? '' : 's'} found
+              </p>
+              <ul className="grid list-none gap-4 p-0 sm:grid-cols-2">
+                {atoms.map((atom) => {
+                  const label = atom.label ?? 'Unnamed atom'
+
+                  return (
+                    <li
+                      key={atom.term_id}
+                      className="rounded-xl border border-zinc-800 bg-zinc-900 p-5"
+                    >
+                      <p className="font-medium">{label}</p>
+                      <p className="mt-3 break-all font-mono text-xs leading-5 text-zinc-500">
+                        {atom.term_id}
+                      </p>
+                    </li>
+                  )
+                })}
+              </ul>
+            </>
+          )}
+        </section>
+      </div>
+    </main>
+  )
+}
+
+function StateMessage({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="rounded-xl border border-dashed border-zinc-700 px-5 py-10 text-center text-sm text-zinc-400">
+      {children}
+    </div>
+  )
+}
+```
+
+This page keeps the GraphQL request on the server. The browser submits a normal `GET` request containing `?q=...`, so a search can be bookmarked, shared, refreshed, and progressively enhanced later.
+
+The UI does not pretend missing metadata is an application failure. An atom can still be valuable and addressable when it has no friendly label, which is why the card falls back to `Unnamed atom` but always displays `term_id`.
+
+## 4. Run the acceptance checks
+
+Start the development server:
+
+```bash
+npm run dev
+```
+
+Open `http://localhost:3000` and verify all four cases:
+
+| Test | Action | Expected behavior |
+| --- | --- | --- |
+| Initial | Load `/` | Prompt appears; no graph request is needed |
+| Results | Search `ethereum` | Up to eight cards show labels and term IDs |
+| Empty | Search a long random string | A clear zero-results message appears |
+| Repeat | Change the query and submit | The URL and results both update |
+
+Then run the production gate:
+
+```bash
+npm run build
+```
+
+<BuildCheckpoint title="The result is reproducible">
+  A clean production build must pass, the page must work without a wallet extension, and every returned card must expose its complete `term_id`. Treat all three as required—not optional polish.
+</BuildCheckpoint>
+
+## 5. Understand the trust boundary
+
+Your interface now contains both protocol-derived facts and application-level presentation:
+
+| Displayed element | What it means |
+| --- | --- |
+| `term_id` | The persistent identifier returned for this atom |
+| Label | Human-readable atom metadata; useful, but not proof of identity or truth |
+| Result order | The current search service’s ordering, not a universal trust ranking |
+| “Intuition Mainnet” badge | The graph endpoint selected by your application |
+
+Do not label a search result “verified” simply because it exists onchain or appears first. Identity metadata, provenance, evidence, and economic signal require separate inspection.
+
+## Troubleshooting
+
+<Troubleshooting title="TypeScript rejects the fetch cache option">
+  Confirm the file lives inside the generated Next.js project and that the project uses the tested Next.js version. The `cache` option shown here is supported by Next.js server-side `fetch`.
+</Troubleshooting>
+
+<Troubleshooting title="Search always shows the error state">
+  Confirm the Mainnet endpoint is unchanged, your machine has outbound internet access, and the request includes the JSON content-type header. Inspect the server terminal for the HTTP status or GraphQL error while keeping the visitor-facing message generic.
+</Troubleshooting>
+
+<Troubleshooting title="A result has no readable label">
+  That is a valid data state. Keep the full `term_id` visible and retain the fallback label. Do not invent a name from a shortened identifier or silently remove the result.
+</Troubleshooting>
+
+<Troubleshooting title="Next.js reports that searchParams must be awaited">
+  This guide targets Next.js 16, where `searchParams` is asynchronous. Keep the `Promise` in `HomeProps` and read it with `await searchParams` exactly as shown.
+</Troubleshooting>
+
+## Definition of done
+
+You have completed this build when:
+
+- a visitor can search Mainnet atoms without connecting a wallet;
+- empty, successful, and failed searches produce distinct interface states;
+- every result retains its complete protocol identifier;
+- your code explicitly selects the intended Intuition network;
+- `npm run build` completes successfully; and
+- your copy does not equate graph presence or search position with verification.
+
+The next practical step is to select one returned atom, query its connected triples, and render a claim with enough context for a person to interpret it responsibly.

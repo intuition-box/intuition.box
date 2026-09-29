@@ -1,0 +1,59 @@
+---
+title: The internet's information problem
+description: Why abundant information can still be difficult to identify, verify, reuse, and trust across applications.
+course: intuition-foundations
+module: why-intuition
+order: 1
+duration: 12
+objectives:
+  - Separate information abundance from information quality and portability
+  - Identify the structural problems created by application-owned data silos
+  - Explain why provenance and incentives matter to shared knowledge
+references:
+  - title: Why Intuition
+    url: https://www.docs.intuition.systems/docs/getting-started/why-intuition
+  - title: Intuition overview
+    url: https://www.docs.intuition.systems/docs
+---
+
+The internet is exceptionally good at publishing information. It is less reliable at helping different applications agree on what a piece of information refers to, who asserted it, and how much weight it deserves.
+
+Imagine researching a software package. Its repository contains stars and contributors. A package registry contains downloads. A security service publishes audits. Developers recommend—or warn against—it in forums. These observations may all be useful, but they live in separate systems, use different identifiers, and rarely travel with a common record of origin.
+
+This creates four related problems.
+
+## Information is trapped in applications
+
+Most platforms store knowledge in schemas designed for their own products. A review, follow, rating, credential, or moderation decision may be visible to users while remaining difficult for another application to interpret or reuse. Even when an API exists, the platform controls its availability and meaning.
+
+This is not merely a data-export problem. A CSV can move values, but it does not automatically preserve a shared identity for each subject, the semantics of each relationship, or the authority behind each claim.
+
+## Meaning is inconsistent
+
+Two services may refer to the same person, project, or organization differently. Even when they agree on the subject, a label such as “trusted” can mean secure, competent, authentic, or personally recommended. Without explicit identifiers and relationships, software has to infer meaning from prose or platform-specific fields.
+
+## Provenance is easy to lose
+
+A claim becomes more useful when you can ask: Who made it? In what context? When? Is there supporting evidence? Has anyone taken an opposing position? Copying a statement without this context turns attributable knowledge into an unattributed fact-shaped object.
+
+## Contribution is poorly coordinated
+
+Shared knowledge requires work: naming things, linking them, correcting errors, and evaluating claims. Conventional systems often reward the platform that captures this work more directly than the people who produce it. Intuition's thesis is that incentives can help coordinate the creation and curation of reusable knowledge.
+
+<CaseStudy title="One package, four disconnected reputations">
+  A team choosing an authentication library finds a positive audit, a recent maintainer dispute, strong adoption, and a respected engineer's recommendation. No single signal settles the decision. The useful object is the complete, attributable set of claims—not a universal score that hides their context.
+</CaseStudy>
+
+## The problem is not “false data” alone
+
+It is tempting to describe the goal as putting truth onchain. That framing is too strong. Many valuable claims are subjective, time-dependent, disputed, or only valid in a particular context. A protocol can make claims structured, attributable, composable, and costly to signal around. It cannot guarantee that every claim is true.
+
+<ConceptCheck question="Why is exporting every platform's data into one database not a complete solution?">
+  Because shared knowledge also needs stable identifiers, explicit semantics, provenance, and rules for interpreting disagreement. Moving values alone does not make their meaning interoperable.
+</ConceptCheck>
+
+<KeyTakeaways items={[
+  'Information can be abundant while identity, meaning, and provenance remain fragmented.',
+  'Portable knowledge needs more than access: it needs reusable identifiers and explicit relationships.',
+  'Intuition is designed to coordinate claims and signals, not to declare objective truth.',
+]} />

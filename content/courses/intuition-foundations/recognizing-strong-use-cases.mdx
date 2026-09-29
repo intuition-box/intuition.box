@@ -1,0 +1,71 @@
+---
+title: Recognizing strong Intuition use cases
+description: A framework for deciding when shared identifiers, claims, provenance, and economic signal materially improve a product.
+course: intuition-foundations
+module: from-protocol-to-products
+order: 11
+duration: 13
+objectives:
+  - Apply a four-part fit test to an Intuition product idea
+  - Recognize cases where an ordinary database is the better tool
+  - Separate a protocol-shaped problem from a fashionable integration
+references:
+  - title: Intuition use cases
+    url: https://www.docs.intuition.systems/docs/getting-started/use-cases
+  - title: Why Intuition
+    url: https://www.docs.intuition.systems/docs/getting-started/why-intuition
+---
+
+Not every product needs Intuition. Shared protocols add coordination power, but they also introduce wallets, public state, economic mechanics, indexing boundaries, and new interpretation risks. A strong use case gains enough from the shared graph to justify those costs.
+
+## The four-part fit test
+
+### 1. Shared identity
+
+Do independent participants or applications need to refer to the same people, projects, concepts, or artifacts? If every record matters only inside one private workflow, a conventional database may be simpler.
+
+### 2. Portable claims
+
+Would statements become more useful if they could travel with their attribution across products? Credentials, recommendations, classifications, moderation decisions, and dependency relationships often benefit from portability.
+
+### 3. Plural signal
+
+Does the product benefit from visible support and opposition by multiple parties? Intuition is strongest when disagreement and source context matter. If one trusted authority simply publishes a fixed registry, economic positions may add little.
+
+### 4. Composition
+
+Can future applications reuse and extend the knowledge? A graph earns leverage when one contributor's identifier or claim becomes a building block for others.
+
+## Promising families of use cases
+
+- **Reputation and credentials:** contextual, attributable evidence of skills or experience.
+- **Curation and discovery:** shared directories where communities coordinate around useful resources.
+- **Question and answer systems:** structured claims, competing answers, and source-aware confidence.
+- **Identity and social context:** portable relationships rather than one platform's follower graph.
+- **Agent knowledge:** attributable context that software agents can query and evaluate.
+
+These are families, not guarantees. A reputation product that collapses all context into one score can still be harmful. An agent that treats high signal as fact can still produce unreliable decisions.
+
+## Weak fits and anti-patterns
+
+Use caution when the data is private, highly sensitive, short-lived, controlled by one authority, or valuable only to one application. Payroll records, draft documents, ephemeral UI state, and internal analytics usually do not become better merely by being public and economically signalable.
+
+Another anti-pattern is “protocol decoration”: storing a token reference onchain while all meaningful identity, semantics, and provenance remain in a closed database. The integration exists, but the shared knowledge layer provides little value.
+
+<CaseStudy title="Should a restaurant app use Intuition?">
+  A private meal planner probably should not. A portable food-safety and accessibility graph might: restaurants have shared identities, inspectors and diners make attributable claims, evidence changes over time, disagreement matters, and many discovery applications could reuse the knowledge.
+</CaseStudy>
+
+<ThinkAbout>
+  Take one feature from a product you use. Which of the four fit conditions does it satisfy? What new risk appears if its data and signals become public?
+</ThinkAbout>
+
+<ConceptCheck question="What is the clearest sign that a normal database may be enough?">
+  The information has one legitimate owner, serves one application, needs no portable provenance or plural positions, and gains little from reuse by independent parties.
+</ConceptCheck>
+
+<KeyTakeaways items={[
+  'Strong Intuition use cases need shared identity, portable claims, plural signal, or cross-application composition.',
+  'Public protocol state and economic mechanics introduce costs that must be justified.',
+  'The right question is what the shared knowledge layer enables—not whether an integration is possible.',
+]} />

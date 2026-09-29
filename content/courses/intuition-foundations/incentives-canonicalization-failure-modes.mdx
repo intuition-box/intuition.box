@@ -1,0 +1,75 @@
+---
+title: Incentives, canonicalization, and failure modes
+description: How economic coordination can strengthen a knowledge graph—and the manipulation, fragmentation, and bias it can introduce.
+course: intuition-foundations
+module: economic-trust
+order: 9
+duration: 14
+objectives:
+  - Explain how incentives can promote discovery and convergence
+  - Identify major economic and semantic failure modes
+  - Propose safeguards without hiding uncertainty from users
+references:
+  - title: Intuition economics
+    url: https://www.docs.intuition.systems/docs/intuition-concepts/economics
+  - title: Bonding curves
+    url: https://www.docs.intuition.systems/docs/intuition-concepts/bonding-curves
+  - title: Why Intuition
+    url: https://www.docs.intuition.systems/docs/getting-started/why-intuition
+---
+
+An open knowledge graph needs coordination. Participants must decide which identifiers to reuse, which claims deserve attention, and which contributions are worth maintaining. Intuition adds economic mechanisms to this process, but incentives are tools—not automatic alignment.
+
+## The intended coordination loop
+
+A healthy loop might look like this:
+
+1. Someone discovers or creates a useful identifier or claim.
+2. Others reuse it and take visible positions.
+3. Activity makes the object easier for applications to discover.
+4. Contributors receive value for work that benefits the shared graph.
+5. Convergence reduces duplicate representations and increases composition.
+
+This is sometimes described as a fork-choice process for knowledge: communities coordinate around more useful representations while alternatives remain inspectable.
+
+## Failure mode: duplicate farming
+
+If early creation is rewarded, participants may create many near-identical atoms hoping one becomes canonical. The result is fragmentation rather than convergence. Interfaces can mitigate this by searching before creation, surfacing likely matches, and showing provenance—not by pretending duplicates cannot exist.
+
+## Failure mode: capital-weighted visibility
+
+When ranking follows raw economic weight, wealthy participants can dominate attention. Their stake may contain information, but it should not erase expertise, evidence, recency, or broad participation. Product teams should test whether normalization, source-aware views, or multiple ranking modes better fit their context.
+
+## Failure mode: coordination and manipulation
+
+Sybil accounts, colluding groups, or strategic traders may manufacture the appearance of consensus. Onchain visibility helps analysis but does not eliminate coordinated behavior. Sudden position changes, concentrated ownership, related accounts, and thin activity are relevant risk signals.
+
+## Failure mode: semantic capture
+
+A popular atom or predicate can still encode a misleading frame. If a community converges on an ambiguous “is trustworthy” relationship, network effects may entrench poor semantics. Canonicalization should not make refinement impossible.
+
+<CaseStudy title="A reputation leaderboard goes wrong">
+  A hiring product ranks developers by total positive signal. It rewards wealth and popularity, ignores whether supporters have relevant expertise, and hides credible counterclaims. A revised design presents several contextual views—peer signal, verified work, recent claims, and disagreements—while keeping the underlying provenance inspectable.
+</CaseStudy>
+
+## Responsible safeguards
+
+No single mechanism fixes all of these risks. Strong designs combine:
+
+- explicit labels that distinguish signal from verification;
+- provenance and concentration indicators;
+- domain-specific trust policies;
+- duplicate detection and canonical suggestions;
+- evidence links and time-aware views;
+- ways to inspect opposition and minority positions;
+- monitoring and transparent ranking documentation.
+
+<ConceptCheck question="Why not simply hide low-signal alternatives to enforce one canonical term?">
+  Because a low-signal alternative may be more accurate, newer, or meaningful to a different community. Convergence helps composition, but suppressing alternatives can entrench mistakes and power imbalances.
+</ConceptCheck>
+
+<KeyTakeaways items={[
+  'Incentives can reward useful discovery and help communities converge on reusable knowledge.',
+  'The same incentives can produce duplicates, manipulation, wealth bias, and semantic capture.',
+  'Responsible products expose provenance and uncertainty and use context-sensitive interpretation.',
+]} />

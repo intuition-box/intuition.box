@@ -61,6 +61,56 @@ export const spotlights = defineCollections({
   }),
 });
 
+export const courseLessons = defineCollections({
+  type: 'doc',
+  dir: 'content/courses',
+  schema: pageSchema.extend({
+    course: z.string(),
+    module: z.string(),
+    order: z.number().int().positive(),
+    duration: z.number().int().positive(),
+    objectives: z.array(z.string()),
+    references: z
+      .array(
+        z.object({
+          title: z.string(),
+          url: z.string().url(),
+        }),
+      )
+      .optional(),
+    draft: z.boolean().optional(),
+  }),
+});
+
+export const buildGuides = defineCollections({
+  type: 'doc',
+  dir: 'content/build',
+  schema: pageSchema.extend({
+    order: z.number().int().positive(),
+    kind: z.enum(['Quickstart', 'Tutorial', 'Project', 'AI workflow']),
+    level: z.enum(['Beginner', 'Intermediate', 'Advanced']),
+    duration: z.number().int().positive(),
+    stack: z.array(z.string()),
+    outcome: z.string(),
+    network: z.string(),
+    prerequisites: z.array(z.string()),
+    testedVersions: z.array(
+      z.object({
+        name: z.string(),
+        version: z.string(),
+      }),
+    ),
+    lastTested: z.string().date().or(z.date()),
+    references: z.array(
+      z.object({
+        title: z.string(),
+        url: z.string().url(),
+      }),
+    ),
+    draft: z.boolean().optional(),
+  }),
+});
+
 export default defineConfig({
   mdxOptions: {
     // MDX options

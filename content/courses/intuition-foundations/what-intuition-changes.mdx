@@ -1,0 +1,67 @@
+---
+title: What Intuition changes
+description: "The protocol thesis: make claims structured, attributable, composable, and economically signalable."
+course: intuition-foundations
+module: why-intuition
+order: 2
+duration: 12
+objectives:
+  - Describe Intuition as shared infrastructure rather than a single application
+  - Explain the four properties of protocol-native knowledge
+  - Distinguish credible neutrality from an oracle of truth
+references:
+  - title: Why Intuition
+    url: https://www.docs.intuition.systems/docs/getting-started/why-intuition
+  - title: Intuition use cases
+    url: https://www.docs.intuition.systems/docs/getting-started/use-cases
+---
+
+Intuition changes the unit of knowledge from a platform-owned record into a shared, addressable object. Applications can create and read the same identifiers, claims, and economic signals instead of rebuilding isolated reputation systems.
+
+The protocol is better understood as a **public knowledge layer** than as a social network, review site, or database product. Those applications can be built on top, but no single interface defines the entire graph.
+
+## Four properties of protocol-native knowledge
+
+### Structured
+
+Knowledge is expressed through explicit primitives. An entity or concept receives an identifier; a claim connects identifiers through a relationship. Software can inspect that structure without guessing what a paragraph means.
+
+### Attributable
+
+Protocol actions have an origin. Applications can preserve who created or signaled around a claim instead of presenting it as context-free truth. Attribution enables trust policies: one reader may prioritize domain experts while another prefers people in their social graph.
+
+### Composable
+
+The output of one application can become input to another. A project directory, an agent, and a governance interface can refer to the same project identifier and reuse relevant claims without asking one platform to become the permanent owner of the data.
+
+### Economically signalable
+
+Participants can place economic weight behind positions. This creates information about conviction and attention and gives contributors a reason to discover useful identifiers and claims early. Economic weight is one input into interpretation—not a guarantee of correctness.
+
+## Shared substrate, plural interpretations
+
+The same graph can support different views. An application may rank claims by recency, another by the reputation of attestors, and another by economic signal. This pluralism is important: credible shared infrastructure should let applications compete over interpretation while preserving access to the underlying objects and provenance.
+
+<CaseStudy title="A portable developer reputation">
+  A hackathon platform records that Ada won a security prize. A hiring tool can reuse that attributable claim, combine it with other evidence, and apply its own relevance rules. Ada does not need the hackathon platform to become the universal judge of her ability, and the hiring tool does not need to copy an opaque score.
+</CaseStudy>
+
+## A protocol, not a truth machine
+
+Intuition can make the history of a claim and the positions around it visible. It cannot prove that “Ada is an excellent auditor” is objectively correct. The statement may be well supported, poorly supported, outdated, or meaningful only for a particular kind of audit.
+
+The useful shift is from **“the platform says so”** to **“these identifiable participants made these structured claims and expressed these positions.”** Applications and users still make the final judgment.
+
+<ThinkAbout>
+  Consider a five-star rating. What useful context disappears when the interface shows only the average rather than the raters, criteria, dates, and disagreements?
+</ThinkAbout>
+
+<ConceptCheck question="If two applications interpret the same claim differently, has the shared protocol failed?">
+  No. Shared identifiers and provenance allow applications to agree on what was asserted while choosing different trust policies. Interpretation remains an application-level responsibility.
+</ConceptCheck>
+
+<KeyTakeaways items={[
+  'Intuition is infrastructure for shared knowledge, not one canonical front end.',
+  'Its primitives make information structured, attributable, composable, and signalable.',
+  'The protocol records claims and positions; applications decide how to interpret them.',
+]} />

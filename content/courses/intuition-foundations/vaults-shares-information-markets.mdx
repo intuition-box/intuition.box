@@ -1,0 +1,66 @@
+---
+title: Vaults, shares, and information markets
+description: A conceptual model of the containers and accounting that let participants take economic positions around knowledge.
+course: intuition-foundations
+module: economic-trust
+order: 8
+duration: 14
+objectives:
+  - Describe the role of vaults in Intuition's economic layer
+  - Explain deposits, shares, and redemptions conceptually
+  - Recognize the difference between market state and semantic truth
+references:
+  - title: Vaults
+    url: https://www.docs.intuition.systems/docs/intuition-concepts/vaults
+  - title: Intuition economics
+    url: https://www.docs.intuition.systems/docs/intuition-concepts/economics
+  - title: Bonding curves
+    url: https://www.docs.intuition.systems/docs/intuition-concepts/bonding-curves
+---
+
+Intuition's graph is not only semantic. Its terms and claims connect to **vaults** that account for economic positions. Vaults provide a shared mechanism through which participants can deposit assets, receive shares, and later redeem according to protocol rules.
+
+The exact parameters and fees belong to the live protocol and can change. This lesson focuses on the durable mental model rather than transaction instructions.
+
+## From a claim to a position
+
+An atom or triple identifies something in the knowledge graph. Its associated vault represents economic activity around that object or position. When a participant deposits, the protocol issues vault shares that represent their proportional stake under the vault's accounting.
+
+Shares are not a vote certificate saying “this claim is true.” They are a financial position. Their value depends on the vault's assets, share supply, curve mechanics, fees, and subsequent activity.
+
+## Deposits and redemptions
+
+Conceptually:
+
+1. A participant selects a vault or position.
+2. They deposit supported assets under the current protocol terms.
+3. The vault mints shares according to its accounting and pricing function.
+4. Later, shares can be redeemed subject to the applicable curve, liquidity, and fees.
+
+A bonding curve makes price responsive to supply. Early and later participants can therefore receive different quantities or prices for similar deposits. This design can encourage discovery and coordination, while also creating financial risk.
+
+## Markets produce signals, not semantic guarantees
+
+Market state can tell us that participants allocated capital in a certain way. It cannot tell us why. A deposit may reflect belief in a claim, expectation of future demand, support for an identifier's adoption, speculation, or a strategic attempt to influence visibility.
+
+Applications should avoid collapsing these motives into one moral or epistemic judgment.
+
+<CaseStudy title="The price of a canonical identifier">
+  Two atoms represent the same project. Participants concentrate activity around one because its metadata and provenance are stronger. Its vault becomes more active. That activity helps applications discover community coordination, but it still does not prove that every attached metadata field is accurate.
+</CaseStudy>
+
+## Fees and incentives
+
+Economic interactions may distribute fees among protocol participants according to current rules. Fees can compensate creators or contributors and support protocol operation. They also shape behavior: if rewards favor early creation, people may create useful terms early—or flood the graph with speculative duplicates.
+
+The design question is therefore not “are incentives good?” but “which actions do these incentives reward, under what conditions, and what unintended behaviors become profitable?”
+
+<ConceptCheck question="If a vault's share price rises, what can you safely conclude?">
+  You can conclude that the market state changed under its deposit, redemption, curve, and fee mechanics. You cannot conclude from price alone that the associated identifier is authentic or the associated claim is true.
+</ConceptCheck>
+
+<KeyTakeaways items={[
+  'Vaults connect graph objects and positions to shared economic accounting.',
+  'Shares represent a stake under protocol mechanics, not a truth certificate.',
+  'Bonding curves and fees coordinate participation while introducing financial and behavioral risks.',
+]} />

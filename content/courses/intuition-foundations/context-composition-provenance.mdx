@@ -1,0 +1,68 @@
+---
+title: Context, composition, and provenance
+description: How graph relationships become more expressive without losing who asserted what and under which conditions.
+course: intuition-foundations
+module: language-of-knowledge
+order: 6
+duration: 13
+objectives:
+  - Explain how reusable terms make graph knowledge composable
+  - Identify the contextual details needed to interpret a claim
+  - Describe why provenance must travel with derived knowledge
+references:
+  - title: Intuition primitives
+    url: https://www.docs.intuition.systems/docs/intuition-concepts/primitives
+  - title: Triples
+    url: https://www.docs.intuition.systems/docs/intuition-concepts/primitives/triples
+---
+
+One triple can express a simple relationship. Useful knowledge systems emerge when many relationships reuse the same terms and remain traceable to their sources.
+
+## Composition creates leverage
+
+Suppose the graph contains these claims:
+
+- Nova — maintains → Atlas
+- Atlas — depends on → Helix
+- Secure Labs — audited → Helix
+
+Because the claims reuse atoms, an application can traverse the graph from Nova to a dependency and then to an auditor. None of the contributors needed to coordinate inside one application. Shared identifiers make their separate contributions composable.
+
+Composition does **not** mean every path implies a valid new fact. “Nova maintains Atlas” and “Atlas depends on Helix” do not mean Nova maintains Helix. Graph traversal discovers relationships; interpretation determines whether a derived conclusion is justified.
+
+## Context changes meaning
+
+A claim can be technically well formed and still underspecified. Consider “Mira trusts Atlas.” Trust for what—security, maintainership, documentation, or investment judgment? For which version? At what time? Based on direct experience or another source?
+
+Context can be represented through narrower predicates, related claims, metadata, evidence, or application conventions. The goal is not to encode every nuance onchain. It is to preserve enough structure that consumers do not mistake a local judgment for a universal one.
+
+## Provenance is part of the knowledge
+
+Provenance answers where an assertion came from and how it changed. An application deriving “popular among auditors” from several recommendations should retain links to those underlying claims, their authors, and the method used to aggregate them.
+
+Without provenance, derived knowledge becomes an opaque score. With provenance, another application can audit the inputs, exclude irrelevant sources, or compute a different view.
+
+<CaseStudy title="The disappearing caveat">
+  An auditor says, “Version 2.1 passed the reviewed checks, excluding the experimental plugin.” A directory shortens this to “Atlas is secure.” Structure alone did not protect the meaning; the directory discarded version, scope, and source. Responsible graph products preserve those distinctions.
+</CaseStudy>
+
+## Semantic reuse has tradeoffs
+
+Reusing established atoms and predicates strengthens interoperability, but forcing every community into one vocabulary can erase legitimate distinctions. Creating new terms preserves nuance, but excessive variation fragments the graph.
+
+Good semantic design balances convergence with specificity:
+
+- reuse a term when its existing meaning fits;
+- create a narrower term when the distinction affects interpretation;
+- document relationships between overlapping terms;
+- avoid silently treating “similar” as “identical.”
+
+<ConceptCheck question="Can an application safely infer every relationship reachable through a graph path?">
+  No. A path reveals connected claims, but composing their meanings requires explicit reasoning. Some predicates are transitive; many are not, and contextual limits can invalidate a derived conclusion.
+</ConceptCheck>
+
+<KeyTakeaways items={[
+  'Shared terms let independently created claims become a composable graph.',
+  'Context determines the scope in which a claim should be interpreted.',
+  'Derived views should preserve their sources and aggregation method.',
+]} />
