@@ -17,6 +17,23 @@ export const docs = defineDocs({
   },
 });
 
+export const learn = defineDocs({
+  dir: 'content/learn',
+  docs: {
+    schema: pageSchema.extend({
+      category: z.string().optional(),
+      tags: z.array(z.string()).optional(),
+      youtube_id: z.string().optional(),
+    }),
+    postprocess: {
+      includeProcessedMarkdown: true,
+    },
+  },
+  meta: {
+    schema: metaSchema,
+  },
+});
+
 export const blog = defineCollections({
   type: 'doc',
   dir: 'content/blog',
@@ -63,6 +80,15 @@ export const spotlights = defineCollections({
 
 export default defineConfig({
   mdxOptions: {
-    // MDX options
+    rehypeCodeOptions: {
+      // Default (github-light/github-dark) leaves object keys and other
+      // plain identifiers uncolored, so they render at the same low
+      // contrast as comments. one-light/one-dark-pro give object keys
+      // their own distinct color in both modes.
+      themes: {
+        light: 'one-light',
+        dark: 'one-dark-pro',
+      },
+    },
   },
 });

@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 380" font-family="ui-sans-serif,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 10 5 0 10z" fill="#64748b"/>
+    </marker>
+  </defs>
+
+  <rect width="860" height="380" rx="10" fill="#f6f7f9"/>
+  <text x="28" y="34" font-size="16" font-weight="700" fill="#0f172a">Delegated staking setup — one-time</text>
+  <text x="28" y="54" font-size="12" fill="#64748b">Four steps signed by the user's wallet. The result is an off-chain delegation saved locally.</text>
+
+  <!-- step cards -->
+  <g font-size="12">
+    <!-- 1 -->
+    <rect x="28" y="76" width="184" height="96" rx="8" fill="#fff" stroke="#334155"/>
+    <text x="40" y="98" font-weight="700" fill="#0f172a">1 · Deploy HSA</text>
+    <text x="40" y="120" fill="#475569">ERC-7702 upgrade of the</text>
+    <text x="40" y="136" fill="#475569">user's EOA. Same address,</text>
+    <text x="40" y="152" fill="#475569">no funds moved.</text>
+
+    <!-- 2 -->
+    <rect x="240" y="76" width="184" height="96" rx="8" fill="#fff" stroke="#334155"/>
+    <text x="252" y="98" font-weight="700" fill="#0f172a">2 · Fund HSA</text>
+    <text x="252" y="120" fill="#475569">EOA transfers TRUST into</text>
+    <text x="252" y="136" fill="#475569">the smart account — the</text>
+    <text x="252" y="152" fill="#475569">staking balance.</text>
+
+    <!-- 3 -->
+    <rect x="452" y="76" width="184" height="96" rx="8" fill="#fff" stroke="#334155"/>
+    <text x="464" y="98" font-weight="700" fill="#0f172a">3 · Approve MultiVault</text>
+    <text x="464" y="120" fill="#475569">EOA calls approve(HSA,</text>
+    <text x="464" y="136" fill="#475569">DEPOSIT) so deposits can</text>
+    <text x="464" y="152" fill="#475569">credit the EOA.</text>
+
+    <!-- 4 -->
+    <rect x="664" y="76" width="168" height="96" rx="8" fill="#eef2ff" stroke="#334155"/>
+    <text x="676" y="98" font-weight="700" fill="#0f172a">4 · Sign delegation</text>
+    <text x="676" y="120" fill="#475569">HSA signs an EIP-712</text>
+    <text x="676" y="136" fill="#475569">message off-chain.</text>
+    <text x="676" y="152" fill="#475569">No gas, no popup.</text>
+  </g>
+
+  <!-- connectors between cards -->
+  <g stroke="#64748b" stroke-width="1.5" marker-end="url(#arrow)">
+    <line x1="212" y1="124" x2="238" y2="124"/>
+    <line x1="424" y1="124" x2="450" y2="124"/>
+    <line x1="636" y1="124" x2="662" y2="124"/>
+  </g>
+
+  <!-- arrow down to scope -->
+  <path d="M748 172 V 210" stroke="#64748b" stroke-width="1.5" fill="none" marker-end="url(#arrow)"/>
+
+  <!-- delegation scope panel -->
+  <rect x="28" y="212" width="804" height="104" rx="8" fill="#fff" stroke="#334155"/>
+  <text x="44" y="234" font-size="13" font-weight="700" fill="#0f172a">Delegation scope (caveat enforcers)</text>
+  <g font-size="12" fill="#475569">
+    <text x="44" y="258"><tspan fill="#0f172a" font-weight="600">from</tspan>  HSA</text>
+    <text x="44" y="278"><tspan fill="#0f172a" font-weight="600">to</tspan>  Admin relayer wallet</text>
+    <text x="300" y="258"><tspan fill="#0f172a" font-weight="600">target</tspan>  MultiVault.deposit() only</text>
+    <text x="300" y="278"><tspan fill="#0f172a" font-weight="600">receiver</tspan>  pinned to the user's EOA</text>
+    <text x="596" y="258"><tspan fill="#0f172a" font-weight="600">cap</tspan>  N TRUST / day, auto-resets</text>
+    <text x="596" y="278"><tspan fill="#0f172a" font-weight="600">expires</tspan>  30 days</text>
+  </g>
+  <text x="44" y="300" font-size="11" fill="#64748b">Signed payload is stored in the browser (localStorage) — reused for every stake with no further signatures.</text>
+</svg>
