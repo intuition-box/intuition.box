@@ -101,14 +101,6 @@ export const ECOSYSTEM_PROJECTS: EcosystemProject[] = [
     tags: ['Identity', 'Names', 'Onchain'],
   },
   {
-    slug: 'ourglass',
-    name: 'OurGlass',
-    website: 'https://ourglass.intuition.box/',
-    description:
-      'Set up recurring onchain Safe payments with capped charges and IPFS-pinned agreements.',
-    category: 'Payments & Finance',
-  },
-  {
     slug: 'ontology',
     name: 'Ontology',
     website: 'https://ontology.intuition.box/',
